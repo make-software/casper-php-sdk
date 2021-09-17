@@ -2,10 +2,9 @@
 
 namespace Casper\Rpc;
 
-use Casper\Error\RPCError;
 use Casper\CLType\CLPublicKey;
 
-class Client
+class RpcClient
 {
     private const ID = 1;
     private const JSON_RPC = '2.0';
@@ -33,9 +32,9 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getDeployInfo(string $blockHashBase16): RPCResponse
+    public function getDeployInfo(string $blockHashBase16): RpcResponse
     {
         return $this->rpcCallMethod(
             self::RPC_METHOD_GET_DEPLOY_INFO,
@@ -46,9 +45,9 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getBlockInfo(string $deployHashBase16): RPCResponse
+    public function getBlockInfo(string $deployHashBase16): RpcResponse
     {
         $result = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -61,16 +60,16 @@ class Client
         $data = $result->getData();
 
         if (isset($data['block']) && $data['block']['hash'] !== $deployHashBase16) {
-            throw new RPCError('Returned block does not have a matching hash');
+            throw new RpcError('Returned block does not have a matching hash');
         }
 
         return $result;
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getBlockInfoByHeight(int $height): RPCResponse
+    public function getBlockInfoByHeight(int $height): RpcResponse
     {
         $result = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -83,46 +82,46 @@ class Client
         $data = $result->getData();
 
         if (isset($data['block']) && $data['block']['header']['height'] !== $height) {
-            throw new RPCError('Returned block does not have a matching height');
+            throw new RpcError('Returned block does not have a matching height');
         }
 
         return $result;
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getLatestBlockInfo(): RPCResponse
+    public function getLatestBlockInfo(): RpcResponse
     {
         return $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO);
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getPeers(): RPCResponse
+    public function getPeers(): RpcResponse
     {
         return $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS);
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getStatus(): RPCResponse
+    public function getStatus(): RpcResponse
     {
         return $this->rpcCallMethod(self::RPC_METHOD_GET_STATUS);
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getValidatorsInfo(): RPCResponse
+    public function getValidatorsInfo(): RpcResponse
     {
         return $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO);
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getStateRootHash(string $blockHashBase16): string
     {
@@ -138,7 +137,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getAccountBalance(string $stateRootHash, string $balanceUref): string
     {
@@ -155,7 +154,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getAccountBalanceUrefByPublicKeyHash(string $stateRootHash, string $accountHash): string
     {
@@ -169,7 +168,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): string
     {
@@ -177,7 +176,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getBlockState(string $stateRootHash, string $key, array $path = []): array
     {
@@ -195,9 +194,9 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    public function getBlockTransfers(string $blockHash = null): RPCResponse
+    public function getBlockTransfers(string $blockHash = null): RpcResponse
     {
         return $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_TRANSFERS,
@@ -208,7 +207,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getEraInfoBySwitchBlock(string $blockHash = null): ?array
     {
@@ -224,7 +223,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getEraInfoBySwitchBlockHeight(int $height): ?array
     {
@@ -242,7 +241,7 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
     public function getDictionaryItemByURef(string $stateRootHash, string $dictionaryItemKey, string $seedUref): array
     {
@@ -264,9 +263,9 @@ class Client
     }
 
     /**
-     * @throws RPCError
+     * @throws RpcError
      */
-    private function rpcCallMethod(string $method, array $params = array()): RPCResponse
+    private function rpcCallMethod(string $method, array $params = array()): RpcResponse
     {
         $url = $this->nodePort ? $this->nodeUrl . ':' . $this->nodePort : $this->nodeUrl;
         $curl = curl_init($url);
@@ -292,13 +291,13 @@ class Client
         $decodedResponse = json_decode($response, true);
 
         if (isset($decodedResponse['error'])) {
-            throw new RPCError($decodedResponse['error']['message'], $decodedResponse['error']['code']);
+            throw new RpcError($decodedResponse['error']['message'], $decodedResponse['error']['code']);
         }
 
         $apiVersion = $decodedResponse['result']['api_version'];
         unset($decodedResponse['result']['api_version']);
 
-        $rpcResult = new RPCResponse();
+        $rpcResult = new RpcResponse();
         $rpcResult->setApiVersion($apiVersion);
         $rpcResult->setData($decodedResponse['result']);
 

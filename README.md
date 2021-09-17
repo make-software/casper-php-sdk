@@ -9,7 +9,7 @@ PHP SDK to interact with Casper Network nodes via RPC
 ## Examples
 RPC Client:
 ```php
-$client = new \Casper\Rpc\Client('https://node-clarity-testnet.make.services');
+$client = new \Casper\Rpc\RpcClient('https://node-clarity-testnet.make.services');
 
 $validatorsInfo = $client->getValidatorsInfo();
 $peers = $client->getPeers();

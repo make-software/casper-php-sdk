@@ -1,10 +1,10 @@
 <?php
 
-namespace Casper\Error;
+namespace Casper\Rpc;
 
 use Throwable;
 
-class RPCError extends \Exception
+class RpcError extends \Exception
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {

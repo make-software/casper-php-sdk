@@ -2,7 +2,7 @@
 
 namespace Casper\Rpc;
 
-class RPCResponse
+class RpcResponse
 {
     private string $apiVersion;
 
