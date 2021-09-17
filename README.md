@@ -2,10 +2,6 @@
 PHP SDK to interact with Casper Network nodes via RPC
 
 ---
-## Installation
-```composer require casper/sdk```
-
----
 ## Examples
 RPC Client:
 ```php
