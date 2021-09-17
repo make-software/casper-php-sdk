@@ -1,0 +1,73 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "3427a2883183e33bb42a56d665e635c3",
+    "packages": [
+        {
+            "name": "deemru/blake2b",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deemru/Blake2b.git",
+                "reference": "d7bd270d820fcad53b9a30a620075f4039cd6967"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deemru/Blake2b/zipball/d7bd270d820fcad53b9a30a620075f4039cd6967",
+                "reference": "d7bd270d820fcad53b9a30a620075f4039cd6967",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "deemru\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitrii Pichulin",
+                    "email": "deem@deem.ru"
+                }
+            ],
+            "description": "BLAKE2 hash function on pure PHP",
+            "homepage": "https://github.com/deemru/Blake2b",
+            "keywords": [
+                "BLAKE2",
+                "BLAKE2b",
+                "blake2b256",
+                "hash",
+                "wavesplatform"
+            ],
+            "support": {
+                "issues": "https://github.com/deemru/Blake2b/issues",
+                "source": "https://github.com/deemru/Blake2b/tree/master"
+            },
+            "time": "2019-02-03T14:36:24+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "ext-sodium": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
+}
