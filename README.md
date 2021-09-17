@@ -1,7 +1,6 @@
 # casper-php-sdk
 PHP SDK to interact with Casper Network nodes via RPC
 
----
 ## Examples
 RPC Client:
 ```php
@@ -29,7 +28,6 @@ $signature = $keyPair->sign($message);
 $verified = $keyPair->verify($signature, $message);
 ```
 
----
 ## Roadmap
 - [x] Create an RPC client that returns array responses
 - [x] Implement all GET requests
