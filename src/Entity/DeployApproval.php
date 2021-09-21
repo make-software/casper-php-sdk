@@ -1,5 +1,5 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 class DeployApproval {}

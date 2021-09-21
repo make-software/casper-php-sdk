@@ -10,10 +10,22 @@ abstract class CLType implements ToBytesInterface
 
     protected string $linkTo;
 
-    abstract public function toString(): string;
+    public function toString(): string
+    {
+        return $this->tag->getTagName();
+    }
 
-    abstract public function toJSON(): string;
+    /**
+     * @return string|array
+     */
+    public function toJSON()
+    {
+        return $this->toString();
+    }
 
+    /**
+     * @return int[]
+     */
     public function toBytes(): array
     {
         return [$this->tag->getTagValue()];

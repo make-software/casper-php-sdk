@@ -1,9 +1,8 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 use Casper\CLType\CLPublicKey;
-use Casper\Entity\DeployHash;
 use Casper\Interfaces\ToBytesInterface;
 use Casper\Util\ByteUtil;
 

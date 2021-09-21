@@ -1,6 +1,6 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 use Casper\CLType\CLValue;
 use Casper\Interfaces\ToBytesInterface;

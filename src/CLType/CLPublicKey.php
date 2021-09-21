@@ -2,10 +2,11 @@
 
 namespace Casper\CLType;
 
+use Casper\Interfaces\ToBytesInterface;
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
 
-class CLPublicKey extends CLValue
+final class CLPublicKey extends CLValue implements ToBytesInterface
 {
     protected const ED25519_LENGTH = 32;
     protected const SECP256K1_LENGTH = 33;

@@ -54,27 +54,61 @@ class CLTypeTag
         self::PUBLIC_KEY,
     ];
 
+    private const TAG_TO_NAME_MAP = [
+        self::BOOL => 'Bool',
+        self::I32 => 'I32',
+        self::I64 => 'I64',
+        self::U8 => 'U8',
+        self::U32 => 'U32',
+        self::U64 => 'U64',
+        self::U128 => 'U128',
+        self::U256 => 'U256',
+        self::U512 => 'U512',
+        self::UNIT => 'Unit',
+        self::STRING => 'String',
+        self::KEY => 'Key',
+        self::UREF => 'URef',
+        self::OPTION => 'Option',
+        self::LIST => 'List',
+        self::BYTE_ARRAY => 'ByteArray',
+        self::RESULT => 'Result',
+        self::MAP => 'Map',
+        self::TUPLE1 => 'Tuple1',
+        self::TUPLE2 => 'Tuple2',
+        self::TUPLE3 => 'Tuple3',
+        self::ANY => 'Any',
+        self::PUBLIC_KEY => 'PublicKey',
+    ];
+
+    private int $tagValue;
+
+    /**
+     * @param int $tagValue
+     * @throws \Exception
+     */
+    public function __construct(int $tagValue)
+    {
+        $this->assertTagValueIsValid($tagValue);
+        $this->tagValue = $tagValue;
+    }
+
     /**
      * @throws \Exception
      */
-    public static function new(int $tagValue): self
+    private function assertTagValueIsValid(int $tagValue): void
     {
         if (!in_array($tagValue, self::TAGS)) {
             throw new \Exception($tagValue . ' is invalid CLType tag. Available tags: ' . join(', ', self::TAGS));
         }
-
-        return new static($tagValue);
-    }
-
-    private int $tagValue;
-
-    private function __construct(int $tagValue)
-    {
-        $this->tagValue = $tagValue;
     }
 
     public function getTagValue(): int
     {
         return $this->tagValue;
+    }
+
+    public function getTagName(): string
+    {
+        return self::TAG_TO_NAME_MAP[$this->tagValue];
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 
 final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
 {
-    protected const TAG = 1;
+    protected const TAG = 0;
 
     /**
      * @var int[]
@@ -15,12 +15,10 @@ final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
 
     /**
      * @param int[] $moduleBytes
-     * @param DeployNamedArg[] $args
      */
-    public function __construct(array $moduleBytes, array $args)
+    public function __construct(array $moduleBytes)
     {
         $this->moduleBytes = $moduleBytes;
-        $this->args = $args;
     }
 
     /**

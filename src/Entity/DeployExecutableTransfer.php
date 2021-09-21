@@ -2,7 +2,6 @@
 
 namespace Casper\Entity;
 
-use Casper\Model\DeployExecutableItemInternal;
 use Casper\Util\ByteUtil;
 
 class DeployExecutableTransfer extends DeployExecutableItemInternal

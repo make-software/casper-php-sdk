@@ -1,6 +1,6 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 use Casper\Interfaces\ToBytesInterface;
 
@@ -14,6 +14,7 @@ abstract class DeployExecutableItemInternal implements ToBytesInterface
     public function setArg(DeployNamedArg $deployNamedArg): self
     {
         $this->args[] = $deployNamedArg;
+        return $this;
     }
 
     public function getArgByName(string $name): ?DeployNamedArg

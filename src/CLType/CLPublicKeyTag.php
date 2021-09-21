@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLPublicKeyTag
+final class CLPublicKeyTag
 {
     public const ED25519 = 1;
     public const SECP256K1 = 2;

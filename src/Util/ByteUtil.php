@@ -6,6 +6,17 @@ use Casper\Interfaces\ToBytesInterface;
 
 class ByteUtil
 {
+    public static function isByteArray(array $bytes): bool
+    {
+        foreach ($bytes as $byte) {
+            if (!is_int($byte) || $byte < 0 || $byte > 255) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @throws \Exception
      */
@@ -124,14 +135,20 @@ class ByteUtil
     /**
      * @param int $bitSize
      * @param bool $signed
-     * @param int|string $value
+     * @param int|string|\GMP $value
      * @return int[]
      *
      * @throws \Exception
      */
-    protected static function toBytesNumber(int $bitSize, bool $signed, $value): array
+    public static function toBytesNumber(int $bitSize, bool $signed, $value): array
     {
-        $bnValue = gmp_init($value);
+        if (gettype($value) === 'object' && get_class($value) === 'GMP') {
+            $bnValue = $value;
+        }
+        else {
+            $bnValue = gmp_init($value);
+        }
+
         $maxUIntValue = gmp_pow(2, $bitSize) - 1;
 
         if ($signed) {

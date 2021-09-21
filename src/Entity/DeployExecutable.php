@@ -1,8 +1,7 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
-use Casper\Entity\DeployExecutableTransfer;
 use Casper\Interfaces\ToBytesInterface;
 
 class DeployExecutable implements ToBytesInterface
@@ -10,6 +9,28 @@ class DeployExecutable implements ToBytesInterface
     private ?DeployExecutableModuleBytes $moduleBytes = null;
 
     private ?DeployExecutableTransfer $transfer = null;
+
+    public function setModuleBytes(?DeployExecutableModuleBytes $moduleBytes): self
+    {
+        $this->moduleBytes = $moduleBytes;
+        return $this;
+    }
+
+    public function setTransfer(?DeployExecutableTransfer $transfer): self
+    {
+        $this->transfer = $transfer;
+        return $this;
+    }
+
+    public function isModuleBytes(): bool
+    {
+        return isset($this->moduleBytes);
+    }
+
+    public function isTransfer(): bool
+    {
+        return isset($this->transfer);
+    }
 
     /**
      * @return int[]
@@ -25,15 +46,5 @@ class DeployExecutable implements ToBytesInterface
         }
 
         throw new \Exception('Failed to serialize ExecutableDeployItemJsonWrapper');
-    }
-
-    public function isModuleBytes(): bool
-    {
-        return isset($this->moduleBytes);
-    }
-
-    public function isTransfer(): bool
-    {
-        return isset($this->transfer);
     }
 }

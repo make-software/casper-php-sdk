@@ -1,13 +1,13 @@
 <?php
 
-namespace Casper\Model;
+namespace Casper\Entity;
 
 use Casper\CLType\CLPublicKey;
 
 class DeployParams
 {
-    const DEFAULT_GAS_PRICE = 1;
-    const DEFAULT_TTL = 1800000;
+    public const DEFAULT_GAS_PRICE = 1;
+    public const DEFAULT_TTL = 1800000;
 
     /**
      * The public key of the account
