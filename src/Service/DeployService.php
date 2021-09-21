@@ -77,14 +77,10 @@ class DeployService
             throw new \Exception('Please specify target');
         }
 
-        $idArg = new DeployNamedArg('id', new CLOption(new CLU64($id)));
-        $amountArg = new DeployNamedArg('amount', new CLU512($amount));
-        $targetArg = new DeployNamedArg('target', $targetValue);
-
         $transfer = (new DeployExecutableTransfer())
-            ->setArg($amountArg)
-            ->setArg($targetArg)
-            ->setArg($idArg);
+            ->setArg(new DeployNamedArg('target', $targetValue))
+            ->setArg(new DeployNamedArg('amount', new CLU512($amount)))
+            ->setArg(new DeployNamedArg('id', new CLOption(new CLU64($id))));
 
         if ($sourcePurse !== null) {
             $transfer->setArg(new DeployNamedArg('source', $sourcePurse));
