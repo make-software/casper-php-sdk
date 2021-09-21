@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLU512Type extends CLType
+final class CLU512Type extends CLType
 {
     public function __construct()
     {

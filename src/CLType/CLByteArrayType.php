@@ -4,7 +4,7 @@ namespace Casper\CLType;
 
 use Casper\Util\ByteUtil;
 
-class CLByteArrayType extends CLType
+final class CLByteArrayType extends CLType
 {
     private int $size;
 

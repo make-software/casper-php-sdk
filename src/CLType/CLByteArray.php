@@ -4,7 +4,7 @@ namespace Casper\CLType;
 
 use Casper\Util\ByteUtil;
 
-class CLByteArray extends CLValue
+final class CLByteArray extends CLValue
 {
     protected const CL_BYTE_ARRAY_MAX_LENGTH = 32;
 

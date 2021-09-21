@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLU64 extends Numeric
+final class CLU64 extends Numeric
 {
     /**
      * @param string|int|\GMP $value

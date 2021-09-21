@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLU512 extends Numeric
+final class CLU512 extends Numeric
 {
     /**
      * @param string|int|\GMP $value
