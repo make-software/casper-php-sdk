@@ -2,7 +2,10 @@
 
 namespace Casper\CLType;
 
-abstract class CLValue
+use Casper\Interfaces\ToBytesInterface;
+use Casper\Util\ByteUtil;
+
+abstract class CLValue implements ToBytesInterface
 {
     /**
      * @var mixed
@@ -15,4 +18,16 @@ abstract class CLValue
     abstract public function value();
 
     abstract public function clType(): CLType;
+
+    /**
+     * @return int[]
+     * @throws \Exception
+     */
+    public function toBytesWithType(): array
+    {
+        return array_merge(
+            ByteUtil::toBytesArrayU8($this->toBytes()),
+            $this->clType()->toBytes()
+        );
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace Casper\CLType;
 
-abstract class CLType
+use Casper\Interfaces\ToBytesInterface;
+
+abstract class CLType implements ToBytesInterface
 {
     protected CLTypeTag $tag;
 

@@ -17,12 +17,19 @@ abstract class AsymmetricKey
     protected array $privateKey;
     protected int $signatureAlgorithm;
 
+    /**
+     * @param int[] $publicKey
+     * @param int[] $privateKey
+     * @param int $signatureAlgorithm
+     *
+     * @throws \Exception
+     */
     public function __construct(
         array $publicKey,
         array $privateKey,
         int $signatureAlgorithm
     ) {
-        $this->publicKey = new CLPublicKey($publicKey, CLPublicKeyTag::new($signatureAlgorithm));
+        $this->publicKey = new CLPublicKey($publicKey, new CLPublicKeyTag($signatureAlgorithm));
         $this->privateKey = $privateKey;
         $this->signatureAlgorithm = $signatureAlgorithm;
     }

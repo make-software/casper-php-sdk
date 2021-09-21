@@ -10,6 +10,7 @@
     "ext-json": "*",
     "ext-openssl": "*",
     "ext-sodium": "*",
+    "ext-gmp": "*",
     "deemru/blake2b": "^1.0"
   },
   "autoload": {

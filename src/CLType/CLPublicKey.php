@@ -54,7 +54,7 @@ class CLPublicKey extends CLValue
         $bytes = ByteUtil::hexToByteArray($publicKeyHex);
         return new self(
             array_slice($bytes, 1),
-            CLPublicKeyTag::new($bytes[1])
+            new CLPublicKeyTag($bytes[1])
         );
     }
 
@@ -63,7 +63,7 @@ class CLPublicKey extends CLValue
      */
     public static function fromED5519(array $publicKey): self
     {
-        return new self($publicKey, CLPublicKeyTag::new(CLPublicKeyTag::ED25519));
+        return new self($publicKey, new CLPublicKeyTag(CLPublicKeyTag::ED25519));
     }
 
     /**
@@ -71,9 +71,12 @@ class CLPublicKey extends CLValue
      */
     public static function fromSECP256K1(array $publicKey): self
     {
-        return new self($publicKey, CLPublicKeyTag::new(CLPublicKeyTag::SECP256K1));
+        return new self($publicKey, new CLPublicKeyTag(CLPublicKeyTag::SECP256K1));
     }
 
+    /**
+     * @return int[]
+     */
     public function value(): array
     {
         return $this->data;
@@ -82,6 +85,14 @@ class CLPublicKey extends CLValue
     public function clType(): CLPublicKeyType
     {
         return new CLPublicKeyType();
+    }
+
+    /**
+     * @return int[]
+     */
+    public function toBytes(): array
+    {
+        return array_merge([$this->tag->getTagValue()], $this->data);
     }
 
     public function isED25519(): bool
@@ -102,6 +113,7 @@ class CLPublicKey extends CLValue
     }
 
     /**
+     * @return int[]
      * @throws \Exception
      */
     public function toAccountHash(): array

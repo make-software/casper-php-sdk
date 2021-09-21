@@ -17,13 +17,15 @@ class CLPublicKeyTag
         self::SECP256K1 => 'SECP256K1',
     );
 
-    public static function new(int $tagValue): self
+    private int $tagValue;
+
+    public function __construct(int $tagValue)
     {
         if (!in_array($tagValue, self::TAGS)) {
             throw new \Exception($tagValue . ' is invalid CLPublicKeyTag tag. Available tags: ' . join(', ', self::TAGS));
         }
 
-        return new self($tagValue);
+        $this->tagValue = $tagValue;
     }
 
     public function getTagValue(): int
@@ -34,12 +36,5 @@ class CLPublicKeyTag
     public function getTagName(): string
     {
         return self::TAG_NAME_MAP[$this->getTagValue()];
-    }
-
-    private int $tagValue;
-
-    private function __construct(int $tagValue)
-    {
-        $this->tagValue = $tagValue;
     }
 }
