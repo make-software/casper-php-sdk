@@ -32,7 +32,7 @@ $verified = $keyPair->verify($signature, $message);
 - [x] Create an RPC client that returns array responses
 - [x] Implement all GET requests
 - [x] Add Ed25519 key support
-- [ ] Add CLType primitives
+- [x] Add CLType primitives
 - [ ] Add domain-specific entities
 - [ ] Add deploy creation related services
 - [ ] Add Secp256k1 key support
