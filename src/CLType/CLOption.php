@@ -4,8 +4,8 @@ namespace Casper\CLType;
 
 final class CLOption extends CLValue
 {
-    protected const NONE = 0;
-    protected const SOME = 1;
+    private const NONE = 0;
+    private const SOME = 1;
 
     private CLType $innerType;
 
@@ -34,7 +34,7 @@ final class CLOption extends CLValue
         return $this->data;
     }
 
-    public function clType(): CLType
+    public function clType(): CLOptionType
     {
         return new CLOptionType($this->innerType);
     }

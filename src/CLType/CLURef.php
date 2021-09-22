@@ -6,33 +6,33 @@ use Casper\Util\ByteUtil;
 
 final class CLURef extends CLValue
 {
-    protected const UREF_ADDRESS_LENGTH = 32;
+    private const UREF_ADDRESS_LENGTH = 32;
 
     // No permissions
-    const ACCESS_NONE = 0b0;
+    public const ACCESS_NONE = 0b0;
 
     // Permission to read the value under the associated [[URef]].
-    const ACCESS_READ = 0b001;
+    public const ACCESS_READ = 0b001;
 
     // Permission to write a value under the associated [[URef]].
-    const ACCESS_WRITE = 0b010;
+    public const ACCESS_WRITE = 0b010;
 
     // Permission to add to the value under the associated [[URef]].
-    const ACCESS_ADD = 0b100;
+    public const ACCESS_ADD = 0b100;
 
     // Permission to read or write the value under the associated [[URef]].
-    const ACCESS_READ_WRITE = self::ACCESS_READ | self::ACCESS_WRITE;
+    public const ACCESS_READ_WRITE = self::ACCESS_READ | self::ACCESS_WRITE;
 
     // Permission to read or add to the value under the associated [[URef]].
-    const ACCESS_READ_ADD = self::ACCESS_READ | self::ACCESS_ADD;
+    public const ACCESS_READ_ADD = self::ACCESS_READ | self::ACCESS_ADD;
 
     // Permission to add to, or write the value under the associated [[URef]].
-    const ACCESS_ADD_WRITE = self::ACCESS_ADD | self::ACCESS_WRITE;
+    public const ACCESS_ADD_WRITE = self::ACCESS_ADD | self::ACCESS_WRITE;
 
     // Permission to read, add to, or write the value under the associated [[URef]].
-    const ACCESS_READ_ADD_WRITE = self::ACCESS_READ | self::ACCESS_ADD | self::ACCESS_WRITE;
+    public const ACCESS_READ_ADD_WRITE = self::ACCESS_READ | self::ACCESS_ADD | self::ACCESS_WRITE;
 
-    protected const ACCESS_RIGHTS = [
+    private const ACCESS_RIGHTS = [
         self::ACCESS_NONE,
         self::ACCESS_READ,
         self::ACCESS_WRITE,

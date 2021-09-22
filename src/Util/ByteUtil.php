@@ -142,11 +142,12 @@ class ByteUtil
      */
     public static function toBytesNumber(int $bitSize, bool $signed, $value): array
     {
-        if (gettype($value) === 'object' && get_class($value) === 'GMP') {
-            $bnValue = $value;
-        }
-        else {
-            $bnValue = gmp_init($value);
+        $bnValue = $value instanceof \GMP
+            ? $value
+            : gmp_init($value);
+
+        if (!$bnValue instanceof \GMP) {
+            throw new \Exception("Unable to convert variable to GMP. Invalid value: $value");
         }
 
         $maxUIntValue = gmp_pow(2, $bitSize) - 1;

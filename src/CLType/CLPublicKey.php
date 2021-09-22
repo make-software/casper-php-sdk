@@ -8,8 +8,8 @@ use Casper\Util\HashUtil;
 
 final class CLPublicKey extends CLValue implements ToBytesInterface
 {
-    protected const ED25519_LENGTH = 32;
-    protected const SECP256K1_LENGTH = 33;
+    private const ED25519_LENGTH = 32;
+    private const SECP256K1_LENGTH = 33;
 
     protected CLPublicKeyTag $tag;
 

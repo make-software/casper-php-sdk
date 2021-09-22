@@ -16,7 +16,7 @@ class CLTypeTag
     public const UNIT = 9;          // A unit type, i.e. type with no values (analogous to `void` in C and `()` in Rust)
     public const STRING = 10;       // A string of characters
     public const KEY = 11;          // A key in the global state - URef/hash/etc.
-    public const UREF = 12;         // An Unforgetable Reference (URef)
+    public const UREF = 12;         // An Unforgettable Reference (URef)
     public const OPTION = 13;       // An [[Option]], i.e. a type that can contain a value or nothing at all
     public const LIST = 14;         // A list of values
     public const BYTE_ARRAY = 15;   // A fixed-length array of bytes

@@ -4,10 +4,8 @@ namespace Casper\CLType;
 
 use Casper\Util\ByteUtil;
 
-final class CLByteArray extends CLValue
+final class CLAccountHash extends CLValue
 {
-    private const CL_BYTE_ARRAY_MAX_LENGTH = 32;
-
     /**
      * @param int[] $byteArray
      * @throws \Exception
@@ -25,33 +23,20 @@ final class CLByteArray extends CLValue
     private function assertByteArrayIsValid(array $byteArray): void
     {
         if (!ByteUtil::isByteArray($byteArray)) {
-            $message = 'Incorrect byte array: ' . join(',', $byteArray);
-        }
-        elseif ($length = count($byteArray) > self::CL_BYTE_ARRAY_MAX_LENGTH) {
-            $message = 'Provided value has length ' . $length . ' which exceeded the limit ' . self::CL_BYTE_ARRAY_MAX_LENGTH;
-        }
-
-        if (isset($message)) {
-            throw new \Exception($message);
+            throw new \Exception('Incorrect byte array: ' . join(',', $byteArray));
         }
     }
 
-    /**
-     * @return int[]
-     */
     public function value(): array
     {
         return $this->data;
     }
 
-    public function clType(): CLByteArrayType
+    public function clType(): CLAccountHashType
     {
-        return new CLByteArrayType(count($this->data));
+        return new CLAccountHashType();
     }
 
-    /**
-     * @return int[]
-     */
     public function toBytes(): array
     {
         return $this->data;
