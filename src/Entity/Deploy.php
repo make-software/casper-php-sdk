@@ -41,4 +41,21 @@ class Deploy
         $this->session = $session;
         $this->approvals = $approvals;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function size(): int
+    {
+        $hashSize = count($this->hash);
+        $bodySize = count(array_merge($this->payment->toBytes(), $this->session->toBytes()));
+        $headerSize = count($this->header->toBytes());
+        $approvalsSize = 0;
+
+        foreach ($this->approvals as $approval) {
+            $approvalsSize += (strlen($approval->getSigner()) + strlen($approval->getSignature())) / 2;
+        }
+
+        return $hashSize + $bodySize + $headerSize + $approvalsSize;
+    }
 }
