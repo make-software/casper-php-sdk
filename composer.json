@@ -1,5 +1,5 @@
 {
-  "name": "casper/sdk",
+  "name": "make-software/casper-php-sdk",
   "description": "Casper SDK",
   "type": "library",
   "license": "proprietary",
