@@ -2,6 +2,7 @@
 
 namespace Casper\Entity;
 
+use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
 
 class Deploy
@@ -56,9 +57,27 @@ class Deploy
         return $this->payment;
     }
 
+    public function isStandardPayment(): bool
+    {
+        if ($this->payment->isModuleBytes()) {
+            $moduleBytesEntity = $this->payment->getModuleBytes();
+
+            if ($moduleBytesEntity && count($moduleBytesEntity->getModuleBytes()) !== 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getSession(): DeployExecutable
     {
         return $this->session;
+    }
+
+    public function isTransfer(): bool
+    {
+        return $this->session->isTransfer();
     }
 
     public function pushApproval(DeployApproval $approval): self
@@ -73,24 +92,6 @@ class Deploy
     public function getApprovals(): array
     {
         return $this->approvals;
-    }
-
-    public function isTransfer(): bool
-    {
-        return $this->session->isTransfer();
-    }
-
-    public function isStandardPayment(): bool
-    {
-        if ($this->payment->isModuleBytes()) {
-            $moduleBytesEntity = $this->payment->getModuleBytes();
-
-            if ($moduleBytesEntity && count($moduleBytesEntity->getModuleBytes()) !== 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -108,6 +109,27 @@ class Deploy
         }
 
         return $hashSize + $bodySize + $headerSize + $approvalsSize;
+    }
+
+    public function toBytes(): array
+    {
+        $approvalsBytes = ByteUtil::toBytesU32(count($this->approvals));
+
+        foreach ($this->approvals as $approval) {
+            $signerAndSignatureBytes = array_merge(
+                ByteUtil::hexToByteArray($approval->getSigner()),
+                ByteUtil::hexToByteArray($approval->getSignature())
+            );
+
+            $approvalsBytes = array_merge($approvalsBytes, $signerAndSignatureBytes);
+        }
+
+        return array_merge(
+            $this->header->toBytes(),
+            $this->hash,
+            array_merge($this->payment->toBytes(), $this->session->toBytes()),
+            $approvalsBytes
+        );
     }
 
     public function validate(): bool
