@@ -52,13 +52,15 @@ class DeployExecutable implements ToBytesInterface
         }
 
         $transfer = (new DeployExecutableTransfer())
-            ->setArg(new DeployNamedArg('target', $targetValue))
-            ->setArg(new DeployNamedArg('amount', new CLU512($amount)))
-            ->setArg(new DeployNamedArg('id', new CLOption(new CLU64($id))));
+            ->setArg(new DeployNamedArg('amount', new CLU512($amount)));
 
         if ($sourcePurse !== null) {
             $transfer->setArg(new DeployNamedArg('source', $sourcePurse));
         }
+
+        $transfer
+            ->setArg(new DeployNamedArg('target', $targetValue))
+            ->setArg(new DeployNamedArg('id', new CLOption(new CLU64($id))));
 
         return (new self())
             ->setTransfer($transfer);

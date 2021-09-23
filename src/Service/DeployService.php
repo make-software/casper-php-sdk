@@ -2,22 +2,15 @@
 
 namespace Casper\Service;
 
-use Casper\Entity\DeployExecutableModuleBytes;
+use Casper\Entity\DeployApproval;
 use Casper\Util\HashUtil;
 
-use Casper\CLType\CLByteArray;
-use Casper\CLType\CLOption;
-use Casper\CLType\CLPublicKey;
-use Casper\CLType\CLU512;
-use Casper\CLType\CLU64;
-use Casper\CLType\CLURef;
-
-use Casper\Entity\DeployExecutableTransfer;
+use Casper\Entity\AsymmetricKey;
 use Casper\Entity\Deploy;
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployHeader;
-use Casper\Entity\DeployNamedArg;
 use Casper\Entity\DeployParams;
+use Casper\Util\KeysUtil;
 
 class DeployService
 {
@@ -47,8 +40,16 @@ class DeployService
             HashUtil::blake2bHash($header->toBytes()),
             $header,
             $payment,
-            $session,
-            []
+            $session
         );
+    }
+
+    public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
+    {
+        $signer = $key->accountHex();
+        $signature = KeysUtil::accountHex($key->getSignatureAlgorithm(), $key->sign($deploy->getHash()));
+
+        return $deploy
+            ->pushApproval(new DeployApproval($signer, $signature));
     }
 }

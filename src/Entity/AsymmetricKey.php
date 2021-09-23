@@ -7,6 +7,11 @@ use Casper\CLType\CLPublicKeyTag;
 
 abstract class AsymmetricKey
 {
+    public const SUPPORTED_SIGNATURE_ALGORITHM = [
+        self::ALGO_ED25519,
+        self::ALGO_SECP255K1,
+    ];
+
     protected const PEM_PUBLIC_KEY_TAG = 'PUBLIC KEY';
     protected const PEM_PRIVATE_KEY_TAG = 'PRIVATE KEY';
 
@@ -57,6 +62,11 @@ abstract class AsymmetricKey
     public function getPublicKey(): CLPublicKey
     {
         return $this->publicKey;
+    }
+
+    public function getSignatureAlgorithm(): int
+    {
+        return $this->signatureAlgorithm;
     }
 
     /**

@@ -29,11 +29,6 @@ final class Ed25519Key extends AsymmetricKey
         );
     }
 
-    public static function accountHexForPublicKey(array $publicKey): string
-    {
-        return '0' . self::ALGO_ED25519 . ByteUtil::byteArrayToHex($publicKey);
-    }
-
     /**
      * @throws \Exception
      */

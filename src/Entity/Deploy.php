@@ -18,28 +18,59 @@ class Deploy
     /**
      * @var DeployApproval[]
      */
-    private array $approvals;
+    private array $approvals = [];
 
     /**
      * @param int[] $hash
      * @param DeployHeader $header
      * @param DeployExecutable $payment
      * @param DeployExecutable $session
-     * @param DeployApproval[] $approvals
      */
     public function __construct(
         array $hash,
         DeployHeader $header,
         DeployExecutable $payment,
-        DeployExecutable $session,
-        array $approvals
+        DeployExecutable $session
     )
     {
         $this->hash = $hash;
         $this->header = $header;
         $this->payment = $payment;
         $this->session = $session;
-        $this->approvals = $approvals;
+    }
+
+    public function getHash(): array
+    {
+        return $this->hash;
+    }
+
+    public function getHeader(): DeployHeader
+    {
+        return $this->header;
+    }
+
+    public function getPayment(): DeployExecutable
+    {
+        return $this->payment;
+    }
+
+    public function getSession(): DeployExecutable
+    {
+        return $this->session;
+    }
+
+    public function pushApproval(DeployApproval $approval): self
+    {
+        $this->approvals[] = $approval;
+        return $this;
+    }
+
+    /**
+     * @return DeployApproval[]
+     */
+    public function getApprovals(): array
+    {
+        return $this->approvals;
     }
 
     /**
