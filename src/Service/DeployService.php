@@ -23,8 +23,9 @@ class DeployService
         DeployExecutable $payment
     ): Deploy
     {
-        $serializedBody = array_merge($payment->toBytes(), $session->toBytes());
-        $bodyHash = HashUtil::blake2bHash($serializedBody);
+        $bodyHash = HashUtil::blake2bHash(
+            array_merge($payment->toBytes(), $session->toBytes())
+        );
 
         $header = new DeployHeader(
             $deployParams->getAccountPublicKey(),
@@ -36,12 +37,7 @@ class DeployService
             $deployParams->getChainName()
         );
 
-        return new Deploy(
-            HashUtil::blake2bHash($header->toBytes()),
-            $header,
-            $payment,
-            $session
-        );
+        return new Deploy(HashUtil::blake2bHash($header->toBytes()), $header, $payment, $session);
     }
 
     public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy

@@ -2,6 +2,8 @@
 
 namespace Casper\Entity;
 
+use Casper\Util\HashUtil;
+
 class Deploy
 {
     /**
@@ -73,6 +75,24 @@ class Deploy
         return $this->approvals;
     }
 
+    public function isTransfer(): bool
+    {
+        return $this->session->isTransfer();
+    }
+
+    public function isStandardPayment(): bool
+    {
+        if ($this->payment->isModuleBytes()) {
+            $moduleBytesEntity = $this->payment->getModuleBytes();
+
+            if ($moduleBytesEntity && count($moduleBytesEntity->getModuleBytes()) !== 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @throws \Exception
      */
@@ -88,5 +108,24 @@ class Deploy
         }
 
         return $hashSize + $bodySize + $headerSize + $approvalsSize;
+    }
+
+    public function validate(): bool
+    {
+        $bodyHash = HashUtil::blake2bHash(
+            array_merge($this->payment->toBytes(), $this->session->toBytes())
+        );
+
+        if ($this->header->getBodyHash() !== $bodyHash) {
+            return false;
+        }
+
+        $deployHash = HashUtil::blake2bHash($this->header->toBytes());
+
+        if ($this->hash !== $deployHash) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -21,6 +21,11 @@ final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
         $this->moduleBytes = $moduleBytes;
     }
 
+    public function getModuleBytes(): array
+    {
+        return $this->moduleBytes;
+    }
+
     /**
      * @return int[]
      * @throws \Exception

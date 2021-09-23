@@ -72,15 +72,25 @@ class DeployExecutable implements ToBytesInterface
         return $this;
     }
 
+    public function getModuleBytes(): ?DeployExecutableModuleBytes
+    {
+        return $this->moduleBytes;
+    }
+
+    public function isModuleBytes(): bool
+    {
+        return isset($this->moduleBytes);
+    }
+
     public function setTransfer(?DeployExecutableTransfer $transfer): self
     {
         $this->transfer = $transfer;
         return $this;
     }
 
-    public function isModuleBytes(): bool
+    public function getTransfer(): ?DeployExecutableTransfer
     {
-        return isset($this->moduleBytes);
+        return $this->transfer;
     }
 
     public function isTransfer(): bool

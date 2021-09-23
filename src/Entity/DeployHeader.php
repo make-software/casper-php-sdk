@@ -56,6 +56,41 @@ class DeployHeader implements ToBytesInterface
         $this->chainName = $chainName;
     }
 
+    public function getAccount(): CLPublicKey
+    {
+        return $this->account;
+    }
+
+    public function getTimestamp(): int
+    {
+        return $this->timestamp;
+    }
+
+    public function getTtl(): int
+    {
+        return $this->ttl;
+    }
+
+    public function getGasPrice(): int
+    {
+        return $this->gasPrice;
+    }
+
+    public function getBodyHash(): array
+    {
+        return $this->bodyHash;
+    }
+
+    public function getDependencies(): array
+    {
+        return $this->dependencies;
+    }
+
+    public function getChainName(): string
+    {
+        return $this->chainName;
+    }
+
     /**
      * @return int[]
      * @throws \Exception
