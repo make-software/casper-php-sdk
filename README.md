@@ -34,7 +34,7 @@ $verified = $keyPair->verify($signature, $message);
 - [x] Add Ed25519 key support
 - [x] Add CLType primitives
 - [ ] Add domain-specific entities
-- [ ] Add deploy creation related services
+- [x] Add deploy creation related services
 - [ ] Add Secp256k1 key support
 - [ ] Add extensive validations
 - [ ] Add automated tests
