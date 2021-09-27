@@ -28,6 +28,35 @@ abstract class CLTuple extends CLValue
     }
 
     /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        if ($innerType === null) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+        }
+
+        $values = [];
+        $remainder = $bytes;
+
+        foreach ($innerType->getInner() as $inner) {
+            $clValueClass = $inner->getLinkTo();
+            $result = $clValueClass::fromBytesWithRemainder($remainder);
+
+            $remainder = $result->getRemainder();
+            $values[] = $result->getClValue();
+        }
+
+        $valuesCount = count($values);
+        if ($valuesCount < 1 || $valuesCount > 3) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+        }
+
+        $clTupleClass = "Casper\CLType\CLTuple$valuesCount";
+        return new CLValueWithRemainder(new $clTupleClass($values), []);
+    }
+
+    /**
      * @return CLValue[]
      */
     public function value(): array

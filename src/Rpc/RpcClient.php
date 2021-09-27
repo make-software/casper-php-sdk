@@ -3,6 +3,8 @@
 namespace Casper\Rpc;
 
 use Casper\CLType\CLPublicKey;
+use Casper\Entity\Deploy;
+use Casper\Serializer\DeploySerializer;
 
 class RpcClient
 {
@@ -32,16 +34,25 @@ class RpcClient
     }
 
     /**
-     * @throws RpcError
+     * @throws \Exception
      */
     public function getDeployInfo(string $blockHashBase16): RpcResponse
     {
-        return $this->rpcCallMethod(
+        $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DEPLOY_INFO,
             array(
                 'deploy_hash' => $blockHashBase16
             )
         );
+        $responseData = $response->getData();
+        $response->setData(
+            array_merge(
+                $responseData,
+                array('deploy' => DeploySerializer::fromJson($responseData['deploy']))
+            )
+        );
+
+        return $response;
     }
 
     /**

@@ -13,6 +13,11 @@ final class CLListType extends CLType
         $this->inner = $inner;
     }
 
+    public function getInner(): CLType
+    {
+        return $this->inner;
+    }
+
     public function toString(): string
     {
         return parent::toString() . ' (' . $this->inner->toString() . ')';

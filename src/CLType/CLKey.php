@@ -76,4 +76,32 @@ final class CLKey extends CLValue
     {
         return $this->data instanceof CLAccountHash;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        if (count($bytes) < 1) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        }
+
+        $tag = $bytes[0];
+
+        switch ($tag) {
+            case self::KEY_TYPE_HASH:
+                $value = new self(CLByteArray::fromBytes(array_slice($bytes, 1, CLAccountHash::ACCOUNT_HASH_LENGTH)));
+                break;
+            case self::KEY_TYPE_UREF:
+                $value = new self(CLURef::fromBytes(array_slice($bytes, 1)));
+                break;
+            case self::KEY_TYPE_ACCOUNT:
+                $value = new self(CLAccountHash::fromBytes(array_slice($bytes, 1)));
+                break;
+            default:
+                self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+        }
+
+        return new CLValueWithRemainder($value, []);
+    }
 }

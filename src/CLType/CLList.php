@@ -36,6 +36,35 @@ final class CLList extends CLValue
     }
 
     /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $listType = null): CLValueWithRemainder
+    {
+        $u32Result = CLU32::fromBytesWithRemainder($bytes);
+        $size = (int) $u32Result->getClValue()->value();
+        $remainder = $u32Result->getRemainder();
+        $vector = [];
+
+        for ($i = 0; $i < $size; $i++) {
+            if (!$remainder) {
+                self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+            }
+
+            $clValueClass = $listType->getInner()->getLinkTo();
+            $result = $clValueClass::fromBytesWithRemainder($remainder, $listType->getInner());
+
+            $vector[] = $result->getClValue();
+            $remainder = $result->getRemainder();
+        }
+
+        $value = count($vector) === 0
+            ? new self($listType->getInner())
+            : new self($vector);
+
+        return new CLValueWithRemainder($value, []);
+    }
+
+    /**
      * @return CLType|CLValue[]
      */
     public function value()

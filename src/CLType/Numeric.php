@@ -48,4 +48,35 @@ abstract class Numeric extends CLValue
     {
         return ByteUtil::toBytesNumber($this->bitSize, $this->signed, $this->data);
     }
+
+    /**
+     * @param int[] $bytes
+     * @param int $bitSize
+     * @return Numeric
+     * @throws \Exception
+     */
+    protected static function fromBytesBigInt(array $bytes, int $bitSize): CLValueWithRemainder
+    {
+        if (count($bytes) < 1) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        }
+
+        $byteSize = $bitSize / 8;
+        $n = $bytes[0];
+
+        if ($n > $byteSize) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+        }
+
+        if (($n + 1) > count($bytes)) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        }
+
+        $bigIntBytes = $n === 0 ? [0] : array_slice($bytes, 1, $n);
+
+        return new CLValueWithRemainder(
+            new static(gmp_import(ByteUtil::byteArrayToString(array_reverse($bigIntBytes)))),
+            array_slice($bytes, $n + 1)
+        );
+    }
 }

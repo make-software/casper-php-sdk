@@ -28,7 +28,7 @@ class ByteUtil
             throw new \Exception("Can't convert $string to byte array");
         }
 
-        return $byteArray;
+        return array_values($byteArray);
     }
 
     public static function byteArrayToString(array $byteArray): string
@@ -58,7 +58,7 @@ class ByteUtil
             throw new \Exception("Can't convert $hexString to byte array");
         }
 
-        return $byteArray;
+        return array_values($byteArray);
     }
 
     public static function stringToHex(string $string): string

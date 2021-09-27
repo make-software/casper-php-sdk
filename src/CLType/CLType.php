@@ -10,6 +10,16 @@ abstract class CLType implements ToBytesInterface
 
     protected string $linkTo;
 
+    public function getTag(): CLTypeTag
+    {
+        return $this->tag;
+    }
+
+    public function getLinkTo(): string
+    {
+        return $this->linkTo;
+    }
+
     public function toString(): string
     {
         return $this->tag->getTagName();

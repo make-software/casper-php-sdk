@@ -6,6 +6,8 @@ use Casper\Util\ByteUtil;
 
 final class CLAccountHash extends CLValue
 {
+    public const ACCOUNT_HASH_LENGTH = 32;
+
     /**
      * @param int[] $byteArray
      * @throws \Exception
@@ -14,6 +16,22 @@ final class CLAccountHash extends CLValue
     {
         $this->assertByteArrayIsValid($byteArray);
         $this->data = $byteArray;
+    }
+
+    /**
+     * @param int[] $bytes
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        if (count($bytes) < self::ACCOUNT_HASH_LENGTH) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        }
+
+        return new CLValueWithRemainder(
+            new self(array_slice($bytes, 0, self::ACCOUNT_HASH_LENGTH)),
+            []
+        );
     }
 
     /**

@@ -29,6 +29,33 @@ final class CLOption extends CLValue
         }
     }
 
+    /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        $u8Result = CLU8::fromBytesWithRemainder($bytes);
+        $optionTag = (int) $u8Result->getClValue()->value();
+
+        if ($optionTag === self::NONE) {
+            $value = new self(null, $innerType);
+        }
+        elseif ($optionTag === self::SOME) {
+            if (!$u8Result->getRemainder()) {
+                self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+            }
+
+            $clValueClass = $innerType->getLinkTo();
+            $value = new self($clValueClass::fromBytes($u8Result->getRemainder()));
+        }
+
+        if (isset($value)) {
+            return new CLValueWithRemainder($value, []);
+        }
+
+        self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+    }
+
     public function value(): ?CLValue
     {
         return $this->data;

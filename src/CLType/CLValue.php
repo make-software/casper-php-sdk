@@ -19,6 +19,23 @@ abstract class CLValue implements ToBytesInterface
 
     abstract public function clType(): CLType;
 
+    abstract public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder;
+
+    /**
+     * @param int[] $bytes
+     * @throws \Exception
+     */
+    public static function fromBytes(array $bytes, ?CLType $innerType = null): CLValue
+    {
+        $clValueWithRemainder = static::fromBytesWithRemainder($bytes, $innerType);
+
+        if (count($clValueWithRemainder->getRemainder())) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_LEFT_OVER_BYTES);
+        }
+
+        return $clValueWithRemainder->getClValue();
+    }
+
     /**
      * @return int[]
      * @throws \Exception
@@ -29,5 +46,14 @@ abstract class CLValue implements ToBytesInterface
             ByteUtil::toBytesArrayU8($this->toBytes()),
             $this->clType()->toBytes()
         );
+    }
+
+    /**
+     * @param int|string $errorCode
+     * @throws \Exception
+     */
+    protected static function throwFromBytesCreationError($errorCode): void
+    {
+        throw new \Exception("From bytes creation error. Error code: $errorCode");
     }
 }

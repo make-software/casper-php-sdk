@@ -6,6 +6,7 @@ use Casper\Util\ByteUtil;
 
 final class CLURef extends CLValue
 {
+    private const UREF_ACCESS_RIGHTS_LENGTH = 1;
     private const UREF_ADDRESS_LENGTH = 32;
 
     // No permissions
@@ -58,6 +59,26 @@ final class CLURef extends CLValue
 
         $this->data = $urefAddress;
         $this->accessRights = $accessRights;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        $bytesLength = self::UREF_ADDRESS_LENGTH + self::UREF_ACCESS_RIGHTS_LENGTH;
+
+        if (count($bytes) < $bytesLength) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        }
+
+        $urefBytes = array_slice($bytes, 0, self::UREF_ADDRESS_LENGTH);
+        $accessRightsByte = $bytes[$bytesLength - 1];
+
+        return new CLValueWithRemainder(
+            new self($urefBytes, $accessRightsByte),
+            array_slice($bytes, $bytesLength)
+        );
     }
 
     /**

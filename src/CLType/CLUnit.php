@@ -18,4 +18,9 @@ final class CLUnit extends CLValue
     {
         return [];
     }
+
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        return new CLValueWithRemainder(new self(), $bytes);
+    }
 }

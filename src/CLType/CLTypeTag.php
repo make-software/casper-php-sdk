@@ -4,6 +4,13 @@ namespace Casper\CLType;
 
 class CLTypeTag
 {
+
+    public const CL_ERROR_CODE_EARLY_END_OF_STREAM = '0';
+    public const CL_ERROR_CODE_FORMATTING = '1';
+    public const CL_ERROR_CODE_LEFT_OVER_BYTES = 'Left over bytes';
+    public const CL_ERROR_CODE_OUT_OF_MEMORY = 'Out of memory exception';
+    public const CL_ERROR_CODE_UNKNOWN_VALUE = 'Unknown value';
+
     public const BOOL = 0;          // A boolean value
     public const I32 = 1;           // A 32-bit signed integer
     public const I64 = 2;           // A 64-bit signed integer

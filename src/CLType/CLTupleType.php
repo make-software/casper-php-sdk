@@ -29,6 +29,14 @@ abstract class CLTupleType extends CLType
         $this->linkTo = $linksTo;
     }
 
+    /**
+     * @return CLType[]
+     */
+    public function getInner(): array
+    {
+        return $this->inner;
+    }
+
     public function toString(): string
     {
         return parent::toString() . ' (' . join(', ', array_map(

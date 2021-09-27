@@ -17,4 +17,12 @@ final class CLU128 extends Numeric
     {
         return new CLU128Type();
     }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        return self::fromBytesBigInt($bytes, 128);
+    }
 }

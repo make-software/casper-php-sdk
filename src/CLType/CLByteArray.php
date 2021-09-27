@@ -37,6 +37,17 @@ final class CLByteArray extends CLValue
     }
 
     /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        return new CLValueWithRemainder(
+            new self(array_slice($bytes, 0, self::CL_BYTE_ARRAY_MAX_LENGTH)),
+            array_slice($bytes, self::CL_BYTE_ARRAY_MAX_LENGTH)
+        );
+    }
+
+    /**
      * @return int[]
      */
     public function value(): array

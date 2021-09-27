@@ -21,25 +21,44 @@ class Deploy
     /**
      * @var DeployApproval[]
      */
-    private array $approvals = [];
+    private array $approvals;
 
     /**
      * @param int[] $hash
      * @param DeployHeader $header
      * @param DeployExecutable $payment
      * @param DeployExecutable $session
+     * @param DeployApproval[] $approvals
+     *
+     * @throws \Exception
      */
     public function __construct(
         array $hash,
         DeployHeader $header,
         DeployExecutable $payment,
-        DeployExecutable $session
+        DeployExecutable $session,
+        array $approvals = []
     )
     {
+        $this->assertApprovalsIsValid($approvals);
+
         $this->hash = $hash;
         $this->header = $header;
         $this->payment = $payment;
         $this->session = $session;
+        $this->approvals = $approvals;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function assertApprovalsIsValid(array $approvals): void
+    {
+        foreach ($approvals as $approval) {
+            if (!$approval instanceof DeployApproval) {
+                throw new \Exception('Invalid $approvals type');
+            }
+        }
     }
 
     public function getHash(): array

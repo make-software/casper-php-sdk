@@ -11,6 +11,24 @@ final class CLString extends CLValue
         $this->data = $value;
     }
 
+    /**
+     * @throws \Exception
+     */
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        $u32Result = CLU32::fromBytesWithRemainder($bytes);
+        $length = (int) $u32Result->getClValue()->value();
+
+        if ($u32Result->getRemainder()) {
+            return new CLValueWithRemainder(
+                new self(ByteUtil::byteArrayToString(array_slice($u32Result->getRemainder(), 0, $length))),
+                array_slice($u32Result->getRemainder(), $length)
+            );
+        }
+
+        self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+    }
+
     public function value(): string
     {
         return $this->data;
