@@ -2,12 +2,21 @@
 
 namespace Casper\Serializer;
 
-use Casper\Interfaces\Serializer;
 use Casper\Util\ByteUtil;
 use Casper\Entity\Deploy;
 
-class DeploySerializer implements Serializer
+class DeploySerializer extends Serializer
 {
+    /**
+     * @param Deploy $deploy
+     * @return array
+     */
+    public static function toJson($deploy): array
+    {
+        // TODO: Implement toJson() method.
+        return [];
+    }
+
     /**
      * @throws \Exception
      */

@@ -9,15 +9,24 @@ use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
 use Casper\Entity\DeployExecutableTransfer;
 use Casper\Entity\DeployNamedArg;
-use Casper\Interfaces\Serializer;
 use Casper\Util\ByteUtil;
 
-class DeployExecutableSerializer implements Serializer
+class DeployExecutableSerializer extends Serializer
 {
     protected const DEPLOY_EXECUTABLE_MAP = array(
         'ModuleBytes' => DeployExecutableModuleBytes::class,
         'Transfer' => DeployExecutableTransfer::class,
     );
+
+    /**
+     * @param DeployExecutable $deployExecutable
+     * @return array
+     */
+    public static function toJson($deployExecutable): array
+    {
+        // TODO: Implement toJson() method.
+        return [];
+    }
 
     /**
      * @throws \Exception

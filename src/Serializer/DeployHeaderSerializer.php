@@ -4,11 +4,20 @@ namespace Casper\Serializer;
 
 use Casper\CLType\CLPublicKey;
 use Casper\Entity\DeployHeader;
-use Casper\Interfaces\Serializer;
 use Casper\Util\ByteUtil;
 
-class DeployHeaderSerializer implements Serializer
+class DeployHeaderSerializer extends Serializer
 {
+    /**
+     * @param DeployHeader $header
+     * @return array
+     */
+    public static function toJson($header): array
+    {
+        // TODO: Implement toJson() method.
+        return [];
+    }
+
     /**
      * @throws \Exception
      */

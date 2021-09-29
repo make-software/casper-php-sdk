@@ -6,7 +6,10 @@ class RpcResponse
 {
     private string $apiVersion;
 
-    private array $data;
+    /**
+     * @var object|array
+     */
+    private $data;
 
     public function setApiVersion(string $apiVersion): self
     {
@@ -19,13 +22,20 @@ class RpcResponse
         return $this->apiVersion;
     }
 
-    public function setData(array $data): self
+    /**
+     * @param array|object $data
+     * @return $this
+     */
+    public function setData($data): self
     {
         $this->data = $data;
         return $this;
     }
 
-    public function getData(): array
+    /**
+     * @return array|object
+     */
+    public function getData()
     {
         return $this->data;
     }

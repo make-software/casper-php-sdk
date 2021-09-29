@@ -3,10 +3,19 @@
 namespace Casper\Serializer;
 
 use Casper\Entity\DeployApproval;
-use Casper\Interfaces\Serializer;
 
-class DeployApprovalsSerializer implements Serializer
+class DeployApprovalsSerializer extends Serializer
 {
+    /**
+     * @param $object
+     * @return array
+     */
+    public static function toJson($object): array
+    {
+        // TODO: Implement toJson() method.
+        return [];
+    }
+
     /**
      * @return DeployApproval[]
      */
