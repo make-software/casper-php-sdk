@@ -3,6 +3,7 @@
 namespace Casper\Rpc;
 
 use Casper\Serializer\AuctionStateSerializer;
+use Casper\Serializer\EraSummarySerializer;
 use Casper\Serializer\PeerSerializer;
 use Casper\Serializer\BlockSerializer;
 use Casper\Serializer\DeploySerializer;
@@ -218,7 +219,7 @@ class RpcClient
     }
 
     /**
-     * @throws RpcError
+     * @throws \Exception
      */
     public function getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): string
     {
@@ -272,7 +273,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlock(string $blockHash = null): ?array
+    public function getEraInfoBySwitchBlock(string $blockHash = null): RpcResponse
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
@@ -282,13 +283,18 @@ class RpcClient
         );
         $responseData = $response->getData();
 
-        return $responseData['era_summary'];
+        return $response->setData(array_merge(
+            $responseData,
+            array(
+                'era_summary' => EraSummarySerializer::fromJson($responseData['era_summary'])
+            )
+        ));
     }
 
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlockHeight(int $height): ?array
+    public function getEraInfoBySwitchBlockHeight(int $height): RpcResponse
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
@@ -300,7 +306,12 @@ class RpcClient
         );
         $responseData = $response->getData();
 
-        return $responseData['era_summary'];
+        return $response->setData(array_merge(
+            $responseData,
+            array(
+                'era_summary' => EraSummarySerializer::fromJson($responseData['era_summary'] ?? [])
+            )
+        ));
     }
 
     /**

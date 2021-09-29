@@ -19,7 +19,8 @@ class StoredValueSerializer extends Serializer
     public static function fromJson(array $json): StoredValue
     {
         return new StoredValue(
-            isset($json['Account']) ? AccountSerializer::fromJson($json['Account']) : null
+            isset($json['Account']) ? AccountSerializer::fromJson($json['Account']) : null,
+            isset($json['EraInfo']) ? EraInfoSerializer::fromJson($json['EraInfo']) : null
         );
     }
 }
