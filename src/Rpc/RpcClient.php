@@ -32,12 +32,9 @@ class RpcClient
 
     private string $nodeUrl;
 
-    private ?int $nodePort;
-
-    public function __construct(string $nodeUrl, int $nodePort = null)
+    public function __construct(string $nodeUrl)
     {
         $this->nodeUrl = $nodeUrl;
-        $this->nodePort = $nodePort;
     }
 
     /**
@@ -341,7 +338,7 @@ class RpcClient
      */
     private function rpcCallMethod(string $method, array $params = array()): RpcResponse
     {
-        $url = $this->nodePort ? $this->nodeUrl . ':' . $this->nodePort : $this->nodeUrl;
+        $url = $this->nodeUrl . '/rpc';
         $curl = curl_init($url);
         $data = array(
             'id' => self::ID,
