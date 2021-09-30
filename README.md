@@ -34,7 +34,7 @@ $verified = $keyPair->verify($signature, $message);
 - [x] Implement all GET requests
 - [x] Add Ed25519 key support
 - [x] Add CLType primitives
-- [ ] Add domain-specific entities
+- [x] Add domain-specific entities
 - [x] Add deploy creation related services
 - [ ] Add Secp256k1 key support
 - [ ] Add extensive validations

@@ -314,7 +314,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getDictionaryItemByURef(string $stateRootHash, string $dictionaryItemKey, string $seedUref): array
+    public function getDictionaryItemByURef(string $stateRootHash, string $dictionaryItemKey, string $seedUref): RpcResponse
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DICTIONARY_ITEM,
@@ -330,7 +330,12 @@ class RpcClient
         );
         $responseData = $response->getData();
 
-        return $responseData['stored_value'];
+        return $response->setData(array_merge(
+            $responseData,
+            array(
+                'stored_value' => StoredValueSerializer::fromJson($responseData['stored_value'])
+            )
+        ));
     }
 
     /**

@@ -2,14 +2,12 @@
 
 namespace Casper\Serializer;
 
-use Casper\CLType\CLByteArray;
-use Casper\CLType\CLByteArrayType;
-use Casper\CLType\CLOption;
+use Casper\Util\ByteUtil;
+
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
 use Casper\Entity\DeployExecutableTransfer;
 use Casper\Entity\DeployNamedArg;
-use Casper\Util\ByteUtil;
 
 class DeployExecutableSerializer extends Serializer
 {
@@ -54,37 +52,9 @@ class DeployExecutableSerializer extends Serializer
             }
 
             foreach ($data['args'] as $arg) {
-                $clValueData = $arg[1];
-                $clClassNameSpace = 'Casper\CLType';
-
-                if (is_array($clValueData['cl_type'])) {
-                    $clValueClass = $clClassNameSpace . '\CL' . array_key_first($clValueData['cl_type']);
-                    $clTypeParam = $clValueData['cl_type'][array_key_first($clValueData['cl_type'])];
-
-                    //TODO: Add all types
-                    switch ($clValueClass) {
-                        case CLByteArray::class:
-                            $clType = new CLByteArrayType($clTypeParam);
-                            break;
-                        case CLOption::class:
-                            $clTypeClass = $clClassNameSpace . '\CL' . $clTypeParam . 'Type';
-                            $clType = new $clTypeClass;
-                            break;
-                        default:
-                            throw new \Exception('The complex type ' . $clValueClass . 'Type' . ' is not supported');
-                    }
-                }
-                else {
-                    $clValueClass = $clClassNameSpace . '\CL' . $clValueData['cl_type'];
-                }
-
-                $value = $clValueClass::fromBytes(
-                    ByteUtil::hexToByteArray($clValueData['bytes']),
-                    $clType ?? null
+                $executableInternalInstance->setArg(
+                    new DeployNamedArg($arg[0], CLValueSerializer::fromJson($arg[1]))
                 );
-
-                $clType = null;
-                $executableInternalInstance->setArg(new DeployNamedArg($arg[0], $value));
             }
         }
 
