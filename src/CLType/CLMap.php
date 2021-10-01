@@ -95,6 +95,9 @@ class CLMap extends CLValue
         return new CLMapType($this->refType);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toBytes(): array
     {
         $bytes = [];
