@@ -2,6 +2,14 @@
 
 namespace Casper\Rpc;
 
+use Casper\Entity\AuctionState;
+use Casper\Entity\Block;
+use Casper\Entity\Deploy;
+use Casper\Entity\EraSummary;
+use Casper\Entity\Peer;
+use Casper\Entity\Status;
+use Casper\Entity\StoredValue;
+use Casper\Entity\Transfer;
 use Casper\Serializer\AuctionStateSerializer;
 use Casper\Serializer\EraSummarySerializer;
 use Casper\Serializer\PeerSerializer;
@@ -32,15 +40,22 @@ class RpcClient
 
     private string $nodeUrl;
 
+    private ?string $lastApiVersion = null;
+
     public function __construct(string $nodeUrl)
     {
         $this->nodeUrl = $nodeUrl;
     }
 
+    public function getLastApiVersion(): ?string
+    {
+        return $this->lastApiVersion;
+    }
+
     /**
      * @throws \Exception
      */
-    public function getDeployInfo(string $blockHashBase16): RpcResponse
+    public function getDeployInfo(string $blockHashBase16): Deploy
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DEPLOY_INFO,
@@ -48,20 +63,14 @@ class RpcClient
                 'deploy_hash' => $blockHashBase16
             )
         );
-        $responseData = $response->getData();
 
-        return $response->setData(
-            array_merge(
-                $responseData,
-                array('deploy' => DeploySerializer::fromJson($responseData['deploy']))
-            )
-        );
+        return DeploySerializer::fromJson($response['deploy']);
     }
 
     /**
      * @throws RpcError
      */
-    public function getBlockInfo(string $deployHashBase16): RpcResponse
+    public function getBlockInfo(string $deployHashBase16): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -71,21 +80,18 @@ class RpcClient
                 )
             )
         );
-        $responseData = $response->getData();
 
-        if (isset($responseData['block']) && $responseData['block']['hash'] !== $deployHashBase16) {
+        if (isset($response['block']) && $response['block']['hash'] !== $deployHashBase16) {
             throw new RpcError('Returned block does not have a matching hash');
         }
 
-        return $response->setData(
-            array('block' => BlockSerializer::fromJson($responseData['block']))
-        );
+        return BlockSerializer::fromJson($response['block']);
     }
 
     /**
      * @throws RpcError
      */
-    public function getBlockInfoByHeight(int $height): RpcResponse
+    public function getBlockInfoByHeight(int $height): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -95,73 +101,53 @@ class RpcClient
                 )
             )
         );
-        $responseData = $response->getData();
 
-        if (isset($responseData['block']) && $responseData['block']['header']['height'] !== $height) {
+        if (isset($response['block']) && $response['block']['header']['height'] !== $height) {
             throw new RpcError('Returned block does not have a matching height');
         }
 
-        return $response->setData(
-            array('block' => BlockSerializer::fromJson($responseData['block']))
+        return BlockSerializer::fromJson($response['block']);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getLatestBlockInfo(): Block
+    {
+        return BlockSerializer::fromJson(
+            $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO)['block']
+        );
+    }
+
+    /**
+     * @return Peer[]
+     * @throws RpcError
+     */
+    public function getPeers(): array
+    {
+        return PeerSerializer::fromArray(
+            $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS)['peers']
         );
     }
 
     /**
      * @throws RpcError
      */
-    public function getLatestBlockInfo(): RpcResponse
+    public function getStatus(): Status
     {
-        $response = $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO);
-        $responseData = $response->getData();
-
-        return $response->setData(
-            array('block' => BlockSerializer::fromJson($responseData['block']))
+        return StatusSerializer::fromJson(
+            $this->rpcCallMethod(self::RPC_METHOD_GET_STATUS)
         );
     }
 
     /**
      * @throws RpcError
      */
-    public function getPeers(): RpcResponse
+    public function getValidatorsInfo(): AuctionState
     {
-        $response = $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS);
-        $responseData = $response->getData();
-
-        return $response->setData(
-            array('peers' => PeerSerializer::fromArray($responseData['peers']))
+        return AuctionStateSerializer::fromJson(
+            $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO)['auction_state']
         );
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function getStatus(): RpcResponse
-    {
-        $response = $this->rpcCallMethod(self::RPC_METHOD_GET_STATUS);
-
-        return $response->setData(
-            StatusSerializer::fromJson($response->getData())
-        );
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function getValidatorsInfo(): RpcResponse
-    {
-        $response = $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO);
-        $responseData = $response->getData();
-
-        $response->setData(
-            array_merge(
-                $responseData,
-                array(
-                    'auction_state' => AuctionStateSerializer::fromJson($responseData['auction_state'])
-                )
-            )
-        );
-
-        return $response;
     }
 
     /**
@@ -171,19 +157,16 @@ class RpcClient
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_STATE_ROOT_HASH,
-            array(
-                'block_hash' => $blockHashBase16
-            )
+            array('block_hash' => $blockHashBase16)
         );
-        $responseData = $response->getData();
 
-        return $responseData['state_root_hash'];
+        return $response['state_root_hash'];
     }
 
     /**
      * @throws RpcError
      */
-    public function getAccountBalance(string $stateRootHash, string $balanceUref): string
+    public function getAccountBalance(string $stateRootHash, string $balanceUref): \GMP
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ACCOUNT_BALANCE,
@@ -192,9 +175,8 @@ class RpcClient
                 'purse_uref' => $balanceUref,
             )
         );
-        $responseData = $response->getData();
 
-        return $responseData['balance_value'];
+        return gmp_init($response['balance_value']);
     }
 
     /**
@@ -202,15 +184,7 @@ class RpcClient
      */
     public function getAccountBalanceUrefByPublicKeyHash(string $stateRootHash, string $accountHash): string
     {
-        $response = $this->getBlockState(
-            $stateRootHash,
-            "account-hash-$accountHash",
-            []
-        );
-        $responseData = $response->getData();
-        $storedValue = $responseData['stored_value'];
-
-        return $storedValue
+        return $this->getBlockState($stateRootHash, "account-hash-$accountHash", [])
             ->getAccount()
             ->getMainPurse();
     }
@@ -226,7 +200,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getBlockState(string $stateRootHash, string $key, array $path = []): RpcResponse
+    public function getBlockState(string $stateRootHash, string $key, array $path = []): StoredValue
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_STATE,
@@ -236,41 +210,28 @@ class RpcClient
                 'path' => $path,
             )
         );
-        $responseData = $response->getData();
 
-        return $response->setData(array_merge(
-            $responseData,
-            array(
-                'stored_value' => StoredValueSerializer::fromJson($responseData['stored_value'])
-            )
-        ));
+        return StoredValueSerializer::fromJson($response['stored_value']);
     }
 
     /**
+     * @return Transfer[]
      * @throws RpcError
      */
-    public function getBlockTransfers(string $blockHash = null): RpcResponse
+    public function getBlockTransfers(string $blockHash = null): array
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_TRANSFERS,
-            array(
-                'block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null)
-            )
+            array('block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null))
         );
-        $responseData = $response->getData();
 
-        return $response->setData(array_merge(
-            $responseData,
-            array(
-                'transfers' => TransferSerializer::fromArray($responseData['transfers'])
-            )
-        ));
+        return TransferSerializer::fromArray($response['transfers']);
     }
 
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlock(string $blockHash = null): RpcResponse
+    public function getEraInfoBySwitchBlock(string $blockHash = null): ?EraSummary
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
@@ -278,20 +239,14 @@ class RpcClient
                 'block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null)
             )
         );
-        $responseData = $response->getData();
 
-        return $response->setData(array_merge(
-            $responseData,
-            array(
-                'era_summary' => EraSummarySerializer::fromJson($responseData['era_summary'])
-            )
-        ));
+        return EraSummarySerializer::fromJson($response['era_summary'] ?? []);
     }
 
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlockHeight(int $height): RpcResponse
+    public function getEraInfoBySwitchBlockHeight(int $height): ?EraSummary
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
@@ -301,20 +256,18 @@ class RpcClient
                 )
             )
         );
-        $responseData = $response->getData();
 
-        return $response->setData(array_merge(
-            $responseData,
-            array(
-                'era_summary' => EraSummarySerializer::fromJson($responseData['era_summary'] ?? [])
-            )
-        ));
+        return EraSummarySerializer::fromJson($response['era_summary'] ?? []);
     }
 
     /**
      * @throws RpcError
      */
-    public function getDictionaryItemByURef(string $stateRootHash, string $dictionaryItemKey, string $seedUref): RpcResponse
+    public function getDictionaryItemByURef(
+        string $stateRootHash,
+        string $dictionaryItemKey,
+        string $seedUref
+    ): StoredValue
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DICTIONARY_ITEM,
@@ -328,20 +281,14 @@ class RpcClient
                 )
             )
         );
-        $responseData = $response->getData();
 
-        return $response->setData(array_merge(
-            $responseData,
-            array(
-                'stored_value' => StoredValueSerializer::fromJson($responseData['stored_value'])
-            )
-        ));
+        return StoredValueSerializer::fromJson($response['stored_value']);
     }
 
     /**
      * @throws RpcError
      */
-    private function rpcCallMethod(string $method, array $params = array()): RpcResponse
+    private function rpcCallMethod(string $method, array $params = array()): array
     {
         $url = $this->nodeUrl . '/rpc';
         $curl = curl_init($url);
@@ -370,13 +317,7 @@ class RpcClient
             throw new RpcError($decodedResponse['error']['message'], $decodedResponse['error']['code']);
         }
 
-        $apiVersion = $decodedResponse['result']['api_version'];
-        unset($decodedResponse['result']['api_version']);
-
-        $rpcResult = new RpcResponse();
-        $rpcResult->setApiVersion($apiVersion);
-        $rpcResult->setData($decodedResponse['result']);
-
-        return $rpcResult;
+        $this->lastApiVersion = $decodedResponse['result']['api_version'];
+        return $decodedResponse['result'];
     }
 }

@@ -158,9 +158,6 @@ final class CLPublicKey extends CLValue implements ToBytesInterface
      */
     public function toAccountHashString(): string
     {
-        $bytes = $this->toAccountHash();
-        $hashHex = ByteUtil::byteArrayToHex($bytes);
-
-        return "account-hash-$hashHex";
+        return ByteUtil::byteArrayToHex($this->toAccountHash());
     }
 }

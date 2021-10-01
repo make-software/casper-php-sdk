@@ -16,7 +16,7 @@ class Status
 
     private string $buildVersion;
 
-    private array $nextUpgrade;
+    private ?array $nextUpgrade;
 
     /**
      * @var Peer[]
@@ -30,7 +30,7 @@ class Status
      * @param string $ourPublicSigningKey
      * @param int|null $roundLength
      * @param string $buildVersion
-     * @param array $nextUpgrade
+     * @param array|null $nextUpgrade
      * @param Peer[] $peers
      */
     public function __construct(
@@ -40,7 +40,7 @@ class Status
         string $ourPublicSigningKey,
         ?int $roundLength,
         string $buildVersion,
-        array $nextUpgrade,
+        ?array $nextUpgrade,
         array $peers
     )
     {
@@ -84,7 +84,7 @@ class Status
         return $this->buildVersion;
     }
 
-    public function getNextUpgrade(): array
+    public function getNextUpgrade(): ?array
     {
         return $this->nextUpgrade;
     }
