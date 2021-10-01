@@ -10,23 +10,16 @@ final class Ed25519Key extends AsymmetricKey
     /**
      * @throws \Exception
      */
-    public function __construct(array $publicKey, array $privateKey)
+    public function __construct(array $publicKey = [], array $privateKey = [])
     {
+        if (!count($publicKey) && !count($privateKey)) {
+            $keyPair = sodium_crypto_sign_keypair();
+
+            $publicKey = ByteUtil::stringToByteArray(sodium_crypto_sign_publickey($keyPair));
+            $privateKey = ByteUtil::stringToByteArray(sodium_crypto_sign_secretkey($keyPair));
+        }
+
         parent::__construct($publicKey, $privateKey, self::ALGO_ED25519);
-    }
-
-    /**
-     * @throws \SodiumException
-     * @throws \Exception
-     */
-    public static function new(): self
-    {
-        $keyPair = sodium_crypto_sign_keypair();
-
-        return new self(
-            ByteUtil::stringToByteArray(sodium_crypto_sign_publickey($keyPair)),
-            ByteUtil::stringToByteArray(sodium_crypto_sign_secretkey($keyPair))
-        );
     }
 
     /**

@@ -55,7 +55,7 @@ class RpcClient
     /**
      * @throws \Exception
      */
-    public function getDeployInfo(string $blockHashBase16): Deploy
+    public function getDeploy(string $blockHashBase16): Deploy
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DEPLOY_INFO,
@@ -70,7 +70,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getBlockInfo(string $deployHashBase16): Block
+    public function getBlock(string $deployHashBase16): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -91,7 +91,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getBlockInfoByHeight(int $height): Block
+    public function getBlockByHeight(int $height): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
@@ -112,7 +112,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getLatestBlockInfo(): Block
+    public function getLatestBlock(): Block
     {
         return BlockSerializer::fromJson(
             $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO)['block']
@@ -143,7 +143,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getValidatorsInfo(): AuctionState
+    public function getAuctionState(): AuctionState
     {
         return AuctionStateSerializer::fromJson(
             $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO)['auction_state']
@@ -182,7 +182,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getAccountBalanceUrefByPublicKeyHash(string $stateRootHash, string $accountHash): string
+    public function getAccountBalanceUrefByAccountKeyHash(string $stateRootHash, string $accountHash): string
     {
         return $this->getBlockState($stateRootHash, "account-hash-$accountHash", [])
             ->getAccount()
@@ -194,7 +194,7 @@ class RpcClient
      */
     public function getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): string
     {
-        return $this->getAccountBalanceUrefByPublicKeyHash($stateRootHsh, $publicKey->toAccountHashString());
+        return $this->getAccountBalanceUrefByAccountKeyHash($stateRootHsh, $publicKey->toAccountHashString());
     }
 
     /**
@@ -231,12 +231,14 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlock(string $blockHash = null): ?EraSummary
+    public function getEraSummaryBySwitchBlockHash(string $blockHash): ?EraSummary
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
             array(
-                'block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null)
+                'block_identifier' => array(
+                    'Hash' => $blockHash
+                )
             )
         );
 
@@ -246,7 +248,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getEraInfoBySwitchBlockHeight(int $height): ?EraSummary
+    public function getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,

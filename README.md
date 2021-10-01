@@ -3,19 +3,20 @@ PHP SDK to interact with Casper Network nodes via RPC
 
 ## Examples
 RPC Client:
+
 ```php
 $nodeUrl = 'http://127.0.0.1:7777';
 $client = new \Casper\Rpc\RpcClient($nodeUrl);
 
-$validatorsInfo = $client->getValidatorsInfo();
 $peers = $client->getPeers();
-$latestBlockInfo = $client->getLatestBlockInfo();
+$latestBlock = $client->getLatestBlock();
+$auctionState = $client->getAuctionState();
 ...
 ```
 
 Ed25519 key:
 ```php
-$keyPair = \Casper\Entity\Ed25519Key::new();
+$keyPair = new \Casper\Entity\Ed25519Key();
 
 // Export public and private keys into pem string
 $publicKey = $keyPair->exportPublicKeyInPem();

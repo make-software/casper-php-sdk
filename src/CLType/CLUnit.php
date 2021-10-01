@@ -9,6 +9,11 @@ final class CLUnit extends CLValue
         return $this->data;
     }
 
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    {
+        return new CLValueWithRemainder(new self(), $bytes);
+    }
+
     public function clType(): CLUnitType
     {
         return new CLUnitType();
@@ -17,10 +22,5 @@ final class CLUnit extends CLValue
     public function toBytes(): array
     {
         return [];
-    }
-
-    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
-    {
-        return new CLValueWithRemainder(new self(), $bytes);
     }
 }

@@ -19,24 +19,6 @@ final class CLByteArray extends CLValue
     }
 
     /**
-     * @param int[] $byteArray
-     * @throws \Exception
-     */
-    private function assertByteArrayIsValid(array $byteArray): void
-    {
-        if (!ByteUtil::isByteArray($byteArray)) {
-            $message = 'Incorrect byte array: ' . join(',', $byteArray);
-        }
-        elseif ($length = count($byteArray) > self::CL_BYTE_ARRAY_MAX_LENGTH) {
-            $message = 'Provided value has length ' . $length . ' which exceeded the limit ' . self::CL_BYTE_ARRAY_MAX_LENGTH;
-        }
-
-        if (isset($message)) {
-            throw new \Exception($message);
-        }
-    }
-
-    /**
      * @throws \Exception
      */
     public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
@@ -66,5 +48,23 @@ final class CLByteArray extends CLValue
     public function toBytes(): array
     {
         return $this->data;
+    }
+
+    /**
+     * @param int[] $byteArray
+     * @throws \Exception
+     */
+    private function assertByteArrayIsValid(array $byteArray): void
+    {
+        if (!ByteUtil::isByteArray($byteArray)) {
+            $message = 'Incorrect byte array: ' . join(',', $byteArray);
+        }
+        elseif ($length = count($byteArray) > self::CL_BYTE_ARRAY_MAX_LENGTH) {
+            $message = 'Provided value has length ' . $length . ' which exceeded the limit ' . self::CL_BYTE_ARRAY_MAX_LENGTH;
+        }
+
+        if (isset($message)) {
+            throw new \Exception($message);
+        }
     }
 }

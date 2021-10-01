@@ -61,7 +61,7 @@ final class CLList extends CLValue
             ? new self($listType->getInner())
             : new self($vector);
 
-        return new CLValueWithRemainder($value, []);
+        return new CLValueWithRemainder($value, $remainder);
     }
 
     /**

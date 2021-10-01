@@ -25,20 +25,31 @@ final class CLKey extends CLValue
     }
 
     /**
-     * @param mixed $keyParam
      * @throws \Exception
      */
-    private function assertCLKeyParametersAreValid($keyParam): void
+    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
     {
-        $availableParams = [
-            CLByteArray::class,
-            CLURef::class,
-            CLAccountHash::class,
-        ];
-
-        if (!is_object($keyParam) || !in_array(get_class($keyParam), $availableParams)) {
-            throw new \Exception('Invalid key param');
+        if (count($bytes) < 1) {
+            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
         }
+
+        $tag = $bytes[0];
+
+        switch ($tag) {
+            case self::KEY_TYPE_HASH:
+                $value = new self(CLByteArray::fromBytes(array_slice($bytes, 1, CLAccountHash::ACCOUNT_HASH_LENGTH)));
+                break;
+            case self::KEY_TYPE_UREF:
+                $value = new self(CLURef::fromBytes(array_slice($bytes, 1)));
+                break;
+            case self::KEY_TYPE_ACCOUNT:
+                $value = new self(CLAccountHash::fromBytes(array_slice($bytes, 1)));
+                break;
+            default:
+                self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
+        }
+
+        return new CLValueWithRemainder($value, []);
     }
 
     /**
@@ -78,30 +89,19 @@ final class CLKey extends CLValue
     }
 
     /**
+     * @param mixed $keyParam
      * @throws \Exception
      */
-    public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
+    private function assertCLKeyParametersAreValid($keyParam): void
     {
-        if (count($bytes) < 1) {
-            self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_EARLY_END_OF_STREAM);
+        $availableParams = [
+            CLByteArray::class,
+            CLURef::class,
+            CLAccountHash::class,
+        ];
+
+        if (!is_object($keyParam) || !in_array(get_class($keyParam), $availableParams)) {
+            throw new \Exception('Invalid key param');
         }
-
-        $tag = $bytes[0];
-
-        switch ($tag) {
-            case self::KEY_TYPE_HASH:
-                $value = new self(CLByteArray::fromBytes(array_slice($bytes, 1, CLAccountHash::ACCOUNT_HASH_LENGTH)));
-                break;
-            case self::KEY_TYPE_UREF:
-                $value = new self(CLURef::fromBytes(array_slice($bytes, 1)));
-                break;
-            case self::KEY_TYPE_ACCOUNT:
-                $value = new self(CLAccountHash::fromBytes(array_slice($bytes, 1)));
-                break;
-            default:
-                self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);
-        }
-
-        return new CLValueWithRemainder($value, []);
     }
 }

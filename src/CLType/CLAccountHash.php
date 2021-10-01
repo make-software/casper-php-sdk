@@ -34,17 +34,6 @@ final class CLAccountHash extends CLValue
         );
     }
 
-    /**
-     * @param int[] $byteArray
-     * @throws \Exception
-     */
-    private function assertByteArrayIsValid(array $byteArray): void
-    {
-        if (!ByteUtil::isByteArray($byteArray)) {
-            throw new \Exception('Incorrect byte array: ' . join(',', $byteArray));
-        }
-    }
-
     public function value(): array
     {
         return $this->data;
@@ -58,5 +47,16 @@ final class CLAccountHash extends CLValue
     public function toBytes(): array
     {
         return $this->data;
+    }
+
+    /**
+     * @param int[] $byteArray
+     * @throws \Exception
+     */
+    private function assertByteArrayIsValid(array $byteArray): void
+    {
+        if (!ByteUtil::isByteArray($byteArray)) {
+            throw new \Exception('Incorrect byte array: ' . join(',', $byteArray));
+        }
     }
 }

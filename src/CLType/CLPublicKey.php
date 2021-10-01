@@ -27,26 +27,6 @@ final class CLPublicKey extends CLValue implements ToBytesInterface
     /**
      * @throws \Exception
      */
-    private function assertRawPublicKeyLengthIsValid(array $rawPublicKey, CLPublicKeyTag $tag): void
-    {
-        $keyLength = count($rawPublicKey);
-        $tagValue = $tag->getTagValue();
-
-        if ($tagValue === CLPublicKeyTag::ED25519 && $keyLength !== self::ED25519_LENGTH) {
-            $message = 'Wrong length of ED25519 key. Expected' . self::ED25519_LENGTH . ', but got ' . $keyLength;
-        }
-        else if ($tagValue === CLPublicKeyTag::SECP256K1 && $keyLength !== self::SECP256K1_LENGTH) {
-            $message = 'Wrong length of SECP256K1 key. Expected' . self::SECP256K1_LENGTH . ', but got ' . $keyLength;
-        }
-
-        if (isset($message)) {
-            throw new \Exception($message);
-        }
-    }
-
-    /**
-     * @throws \Exception
-     */
     public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder
     {
         if (count($bytes) < 1) {
@@ -159,5 +139,25 @@ final class CLPublicKey extends CLValue implements ToBytesInterface
     public function toAccountHashString(): string
     {
         return ByteUtil::byteArrayToHex($this->toAccountHash());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function assertRawPublicKeyLengthIsValid(array $rawPublicKey, CLPublicKeyTag $tag): void
+    {
+        $keyLength = count($rawPublicKey);
+        $tagValue = $tag->getTagValue();
+
+        if ($tagValue === CLPublicKeyTag::ED25519 && $keyLength !== self::ED25519_LENGTH) {
+            $message = 'Wrong length of ED25519 key. Expected' . self::ED25519_LENGTH . ', but got ' . $keyLength;
+        }
+        else if ($tagValue === CLPublicKeyTag::SECP256K1 && $keyLength !== self::SECP256K1_LENGTH) {
+            $message = 'Wrong length of SECP256K1 key. Expected' . self::SECP256K1_LENGTH . ', but got ' . $keyLength;
+        }
+
+        if (isset($message)) {
+            throw new \Exception($message);
+        }
     }
 }

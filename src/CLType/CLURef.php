@@ -81,6 +81,24 @@ final class CLURef extends CLValue
         );
     }
 
+    public function value(): array
+    {
+        return array(
+            'data' => $this->data,
+            'accessRights' => $this->accessRights,
+        );
+    }
+
+    public function clType(): CLURefType
+    {
+        return new CLURefType();
+    }
+
+    public function toBytes(): array
+    {
+        return array_merge($this->data, [$this->accessRights]);
+    }
+
     /**
      * @param int[] $urefAddress
      * @throws \Exception
@@ -104,23 +122,5 @@ final class CLURef extends CLValue
         if (!in_array($accessRights, self::ACCESS_RIGHTS)) {
             throw new \Exception('Unsupported access rights');
         }
-    }
-
-    public function value(): array
-    {
-        return array(
-            'data' => $this->data,
-            'accessRights' => $this->accessRights,
-        );
-    }
-
-    public function clType(): CLURefType
-    {
-        return new CLURefType();
-    }
-
-    public function toBytes(): array
-    {
-        return array_merge($this->data, [$this->accessRights]);
     }
 }
