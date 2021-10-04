@@ -2,20 +2,14 @@
 
 namespace Casper\Serializer;
 
-use Casper\Util\ByteUtil;
-
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
+use Casper\Entity\DeployExecutableStoredContractByHash;
 use Casper\Entity\DeployExecutableTransfer;
 use Casper\Entity\DeployNamedArg;
 
 class DeployExecutableSerializer extends Serializer
 {
-    protected const DEPLOY_EXECUTABLE_MAP = array(
-        'ModuleBytes' => DeployExecutableModuleBytes::class,
-        'Transfer' => DeployExecutableTransfer::class,
-    );
-
     /**
      * @param DeployExecutable $deployExecutable
      * @return array
@@ -34,18 +28,23 @@ class DeployExecutableSerializer extends Serializer
         $deployExecutable = new DeployExecutable();
 
         foreach ($json as $key => $data) {
-            $executableInternalClass = self::DEPLOY_EXECUTABLE_MAP[$key] ?? null;
+            $executableInternalClass = 'Casper\Entity\DeployExecutable' . $key;
 
             switch ($executableInternalClass) {
                 case DeployExecutableModuleBytes::class:
-                    $executableInternalInstance = new DeployExecutableModuleBytes(
-                        ByteUtil::hexToByteArray($data['module_bytes'])
-                    );
+                    $executableInternalInstance = new DeployExecutableModuleBytes($data['module_bytes']);
                     $deployExecutable->setModuleBytes($executableInternalInstance);
                     break;
                 case DeployExecutableTransfer::class:
                     $executableInternalInstance = new DeployExecutableTransfer();
                     $deployExecutable->setTransfer($executableInternalInstance);
+                    break;
+                case DeployExecutableStoredContractByHash::class:
+                    $executableInternalInstance = new DeployExecutableStoredContractByHash(
+                        $data['hash'],
+                        $data['entry_point']
+                    );
+                    $deployExecutable->setStoredContractByHash($executableInternalInstance);
                     break;
                 default:
                     throw new \Exception('Unknown executable type: ' . $executableInternalClass);

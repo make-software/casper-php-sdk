@@ -17,6 +17,8 @@ class DeployExecutable implements ToBytesInterface
 
     private ?DeployExecutableTransfer $transfer = null;
 
+    protected ?DeployExecutableStoredContractByHash $storedContractByHash = null;
+
     /**
      * @param string|int|\GMP $amount
      * @return DeployExecutable
@@ -24,7 +26,7 @@ class DeployExecutable implements ToBytesInterface
      */
     public static function newStandardPayment($amount): DeployExecutable
     {
-        $moduleBytes = (new DeployExecutableModuleBytes([]))
+        $moduleBytes = (new DeployExecutableModuleBytes(''))
             ->setArg(new DeployNamedArg('amount', new CLU512($amount)));
 
         return (new self())
@@ -98,6 +100,22 @@ class DeployExecutable implements ToBytesInterface
         return isset($this->transfer);
     }
 
+    public function setStoredContractByHash(?DeployExecutableStoredContractByHash $storedContractByHash): self
+    {
+        $this->storedContractByHash = $storedContractByHash;
+        return $this;
+    }
+
+    public function getStoredContractByHash(): ?DeployExecutableStoredContractByHash
+    {
+        return $this->storedContractByHash;
+    }
+
+    public function isStoredContractByHash(): bool
+    {
+        return isset($this->storedContractByHash);
+    }
+
     /**
      * @return int[]
      * @throws \Exception
@@ -109,6 +127,9 @@ class DeployExecutable implements ToBytesInterface
         }
         elseif ($this->isTransfer()) {
             return $this->transfer->toBytes();
+        }
+        elseif ($this->isStoredContractByHash()) {
+            return $this->storedContractByHash->toBytes();
         }
 
         throw new \Exception('Failed to serialize ExecutableDeployItemJsonWrapper');
