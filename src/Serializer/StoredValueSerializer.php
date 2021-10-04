@@ -24,6 +24,7 @@ class StoredValueSerializer extends Serializer
         return new StoredValue(
             isset($json['CLValue']) ? CLValueSerializer::fromJson($json['CLValue']) : null,
             isset($json['Account']) ? AccountSerializer::fromJson($json['Account']) : null,
+            $json['ContractWASM'] ?? null,
             isset($json['EraInfo']) ? EraInfoSerializer::fromJson($json['EraInfo']) : null
         );
     }
