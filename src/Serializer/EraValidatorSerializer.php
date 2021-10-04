@@ -20,7 +20,7 @@ class EraValidatorSerializer extends Serializer
     {
         return new EraValidator(
             $json['era_id'],
-            ValidatorWeightSerializer::fromArray($json['validator_weights'])
+            ValidatorWeightSerializer::fromJsonArray($json['validator_weights'])
         );
     }
 }

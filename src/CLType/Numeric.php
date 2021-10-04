@@ -49,6 +49,11 @@ abstract class Numeric extends CLValue
         return ByteUtil::toBytesNumber($this->bitSize, $this->signed, $this->data);
     }
 
+    public function toString(): string
+    {
+        return (string) $this->data;
+    }
+
     /**
      * @param int[] $bytes
      * @param int $bitSize

@@ -33,12 +33,12 @@ class CLResultType extends CLType
             . ' (OK: ' . $this->innerOk->toString() . ', ERR: ' . $this->innerErr->toString() . ')';
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         return array(
             $this->tag->getTagName() => array(
-                'ok' => $this->innerOk->toJSON(),
-                'err' => $this->innerErr->toJSON(),
+                'ok' => $this->innerOk->toJson(),
+                'err' => $this->innerErr->toJson(),
             )
         );
     }

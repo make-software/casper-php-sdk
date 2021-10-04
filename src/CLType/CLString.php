@@ -46,4 +46,9 @@ final class CLString extends CLValue
     {
         return ByteUtil::stringToBytesU32($this->data);
     }
+
+    public function toString(): string
+    {
+        return $this->data;
+    }
 }

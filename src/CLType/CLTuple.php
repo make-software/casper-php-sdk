@@ -75,6 +75,12 @@ abstract class CLTuple extends CLValue
         return $result;
     }
 
+    public function toString(): string
+    {
+        // TODO: Implement toString() method.
+        return '';
+    }
+
     public function clType(): CLType
     {
         $CLTupleTypeClass = __NAMESPACE__ . '\CLTuple' . $this->tupleSize . 'Type';

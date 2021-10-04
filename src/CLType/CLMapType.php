@@ -32,12 +32,12 @@ class CLMapType extends CLType
         return parent::toString() . ' (' . $this->innerKey->toString() . ': ' . $this->innerValue->toString() . ')';
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         return array(
             $this->tag->getTagName() => array(
-                'key' => $this->innerKey->toJSON(),
-                'value' => $this->innerValue->toJSON()
+                'key' => $this->innerKey->toJson(),
+                'value' => $this->innerValue->toJson()
             )
         );
     }

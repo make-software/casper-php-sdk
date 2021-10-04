@@ -18,6 +18,6 @@ class EraInfoSerializer extends Serializer
 
     public static function fromJson(array $json): EraInfo
     {
-        return new EraInfo(SeigniorageAllocationSerializer::fromArray($json['seigniorage_allocations']));
+        return new EraInfo(SeigniorageAllocationSerializer::fromJsonArray($json['seigniorage_allocations']));
     }
 }

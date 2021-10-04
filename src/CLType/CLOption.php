@@ -72,4 +72,9 @@ final class CLOption extends CLValue
             ? [self::NONE]
             : array_merge([self::SOME], $this->data->toBytes());
     }
+
+    public function toString(): string
+    {
+        return $this->data === null ? '' : $this->data->toString();
+    }
 }

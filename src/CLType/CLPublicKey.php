@@ -99,6 +99,11 @@ final class CLPublicKey extends CLValue implements ToBytesInterface
         return array_merge([$this->tag->getTagValue()], $this->data);
     }
 
+    public function toString(): string
+    {
+        return ByteUtil::byteArrayToHex($this->toBytes());
+    }
+
     public function isED25519(): bool
     {
         return $this->tag->getTagValue() === CLPublicKeyTag::ED25519;

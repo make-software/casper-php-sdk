@@ -8,7 +8,7 @@ use Casper\Util\ByteUtil;
 
 class DeployHeader implements ToBytesInterface
 {
-    private CLPublicKey $account;
+    private CLPublicKey $publicKey;
 
     private int $timestamp;
 
@@ -29,7 +29,7 @@ class DeployHeader implements ToBytesInterface
     private string $chainName;
 
     /**
-     * @param CLPublicKey $account
+     * @param CLPublicKey $publicKey
      * @param int $timestamp
      * @param int $ttl
      * @param int $gasPrice
@@ -38,7 +38,7 @@ class DeployHeader implements ToBytesInterface
      * @param string $chainName
      */
     public function __construct(
-        CLPublicKey $account,
+        CLPublicKey $publicKey,
         int $timestamp,
         int $ttl,
         int $gasPrice,
@@ -47,7 +47,7 @@ class DeployHeader implements ToBytesInterface
         string $chainName
     )
     {
-        $this->account = $account;
+        $this->publicKey = $publicKey;
         $this->timestamp = $timestamp;
         $this->ttl = $ttl;
         $this->gasPrice = $gasPrice;
@@ -56,9 +56,9 @@ class DeployHeader implements ToBytesInterface
         $this->chainName = $chainName;
     }
 
-    public function getAccount(): CLPublicKey
+    public function getPublicKey(): CLPublicKey
     {
-        return $this->account;
+        return $this->publicKey;
     }
 
     public function getTimestamp(): int
@@ -98,7 +98,7 @@ class DeployHeader implements ToBytesInterface
     public function toBytes(): array
     {
         return array_merge(
-            $this->account->toBytes(),
+            $this->publicKey->toBytes(),
             ByteUtil::toBytesU64($this->timestamp),
             ByteUtil::toBytesU64($this->ttl),
             ByteUtil::toBytesU64($this->gasPrice),

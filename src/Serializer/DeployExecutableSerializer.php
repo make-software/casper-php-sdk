@@ -2,6 +2,8 @@
 
 namespace Casper\Serializer;
 
+use Casper\Util\ByteUtil;
+
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
 use Casper\Entity\DeployExecutableStoredContractByHash;
@@ -19,8 +21,67 @@ class DeployExecutableSerializer extends Serializer
      */
     public static function toJson($deployExecutable): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        if ($deployExecutable->isModuleBytes()) {
+            $result['ModuleBytes'] = array(
+                'module_bytes' => $deployExecutable->getModuleBytes()->getModuleBytes(),
+                'args' => self::namedArgsArrayToJson($deployExecutable->getModuleBytes()->getArgs())
+            );
+        }
+        elseif ($deployExecutable->isStoredContractByHash()) {
+            $result['StoredContractByHash'] = array(
+                'hash' => $deployExecutable->getStoredContractByHash()->getHash(),
+                'entry_point' => $deployExecutable->getStoredContractByHash()->getEntryPoint(),
+                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredContractByHash()->getArgs()),
+            );
+        }
+        elseif ($deployExecutable->isStoredContractByName()) {
+            $result['StoredContractByName'] = array(
+                'name' => $deployExecutable->getStoredContractByName()->getName(),
+                'entry_point' => $deployExecutable->getStoredContractByName()->getEntryPoint(),
+                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredContractByName()->getArgs()),
+            );
+        }
+        elseif ($deployExecutable->isStoredVersionedContractByHash()) {
+            $result['StoredVersionedContractByHash'] = array(
+                'hash' => $deployExecutable->getStoredVersionedContractByHash()->getHash(),
+                'version' => $deployExecutable->getStoredVersionedContractByHash()->getVersion(),
+                'entry_point' => $deployExecutable->getStoredVersionedContractByHash()->getEntryPoint(),
+                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredVersionedContractByHash()->getArgs()),
+            );
+        }
+        elseif ($deployExecutable->isStoredVersionedContractByName()) {
+            $result['StoredVersionedContractByName'] = array(
+                'name' => $deployExecutable->getStoredVersionedContractByName()->getName(),
+                'version' => $deployExecutable->getStoredVersionedContractByName()->getVersion(),
+                'entry_point' => $deployExecutable->getStoredVersionedContractByName()->getEntryPoint(),
+                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredVersionedContractByName()->getArgs()),
+            );
+        }
+        elseif ($deployExecutable->isTransfer()) {
+            $result['Transfer'] = array(
+                'args' => self::namedArgsArrayToJson($deployExecutable->getTransfer()->getArgs()),
+            );
+        }
+
+        return $result ?? [];
+    }
+
+    /**
+     * @param DeployNamedArg[] $namedArgs
+     * @return array
+     */
+    protected static function namedArgsArrayToJson(array $namedArgs): array
+    {
+        return array_map(function ($namedArgJson) {
+            return array(
+                $namedArgJson->getName(),
+                array(
+                    'cl_type' => $namedArgJson->getValue()->clType()->toJson(),
+                    'bytes' => ByteUtil::byteArrayToHex($namedArgJson->getValue()->toBytes()),
+                    'parsed' => $namedArgJson->getValue()->toString(),
+                )
+            );
+        }, $namedArgs);
     }
 
     /**

@@ -21,8 +21,8 @@ class AuctionStateSerializer extends Serializer
         return new AuctionState(
             $json['state_root_hash'],
             $json['block_height'],
-            EraValidatorSerializer::fromArray($json['era_validators']),
-            BidSerializer::fromArray($json['bids'])
+            EraValidatorSerializer::fromJsonArray($json['era_validators']),
+            BidSerializer::fromJsonArray($json['bids'])
         );
     }
 }

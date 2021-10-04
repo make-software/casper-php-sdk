@@ -23,10 +23,10 @@ final class CLListType extends CLType
         return parent::toString() . ' (' . $this->inner->toString() . ')';
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         return [
-            parent::toString() => $this->inner->toJSON()
+            parent::toString() => $this->inner->toJson()
         ];
     }
 

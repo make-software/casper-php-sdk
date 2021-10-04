@@ -46,11 +46,11 @@ abstract class CLTupleType extends CLType
         ) . ')';
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         return [
             parent::toString() => array_map(function ($item) {
-                return $item->toJSON();
+                return $item->toJson();
             }, $this->inner)
         ];
     }

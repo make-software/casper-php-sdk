@@ -26,7 +26,7 @@ class StatusSerializer extends Serializer
             $json['round_length'],
             $json['build_version'],
             $json['next_upgrade'],
-            PeerSerializer::fromArray($json['peers'])
+            PeerSerializer::fromJsonArray($json['peers'])
         );
     }
 }

@@ -99,6 +99,12 @@ final class CLURef extends CLValue
         return array_merge($this->data, [$this->accessRights]);
     }
 
+    public function toString(): string
+    {
+        // TODO: Implement toString() method.
+        return '';
+    }
+
     /**
      * @param int[] $urefAddress
      * @throws \Exception

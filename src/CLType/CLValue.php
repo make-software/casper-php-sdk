@@ -3,9 +3,10 @@
 namespace Casper\CLType;
 
 use Casper\Interfaces\ToBytesInterface;
+use Casper\Interfaces\ToStringInterface;
 use Casper\Util\ByteUtil;
 
-abstract class CLValue implements ToBytesInterface
+abstract class CLValue implements ToBytesInterface, ToStringInterface
 {
     /**
      * @var mixed

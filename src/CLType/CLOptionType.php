@@ -22,10 +22,10 @@ final class CLOptionType extends CLType
             : self::NAME . ' (' . $this->innerType->toString() . ')';
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         return array(
-            self::NAME => ($this->innerType === null ? 'None' : $this->innerType->toJSON())
+            self::NAME => ($this->innerType === null ? 'None' : $this->innerType->toJson())
         );
     }
 

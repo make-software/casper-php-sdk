@@ -15,7 +15,7 @@ final class CLByteArrayType extends CLType
         $this->size = $size;
     }
 
-    public function toJSON(): array
+    public function toJson(): array
     {
         $tagName = $this->tag->getTagName();
         return array($tagName => $this->size);

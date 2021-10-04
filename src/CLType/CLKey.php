@@ -2,6 +2,8 @@
 
 namespace Casper\CLType;
 
+use Casper\Util\ByteUtil;
+
 final class CLKey extends CLValue
 {
     private const KEY_TYPE_ACCOUNT = 0;
@@ -71,6 +73,11 @@ final class CLKey extends CLValue
             [self::KEY_TYPES_MAP[get_class($this->data)]],
             $this->data->toBytes()
         );
+    }
+
+    public function toString(): string
+    {
+        return ByteUtil::byteArrayToHex($this->toBytes());
     }
 
     public function isHash(): bool

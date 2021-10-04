@@ -2,6 +2,18 @@
 
 namespace Casper\Rpc;
 
+use Casper\Serializer\AccountSerializer;
+use Casper\Serializer\AuctionStateSerializer;
+use Casper\Serializer\EraSummarySerializer;
+use Casper\Serializer\PeerSerializer;
+use Casper\Serializer\BlockSerializer;
+use Casper\Serializer\DeploySerializer;
+use Casper\Serializer\StatusSerializer;
+use Casper\Serializer\StoredValueSerializer;
+use Casper\Serializer\TransferSerializer;
+
+use Casper\CLType\CLPublicKey;
+use Casper\Entity\Account;
 use Casper\Entity\AuctionState;
 use Casper\Entity\Block;
 use Casper\Entity\Deploy;
@@ -10,22 +22,13 @@ use Casper\Entity\Peer;
 use Casper\Entity\Status;
 use Casper\Entity\StoredValue;
 use Casper\Entity\Transfer;
-use Casper\Serializer\AuctionStateSerializer;
-use Casper\Serializer\EraSummarySerializer;
-use Casper\Serializer\PeerSerializer;
-use Casper\Serializer\BlockSerializer;
-use Casper\Serializer\DeploySerializer;
-use Casper\Serializer\StatusSerializer;
-
-use Casper\CLType\CLPublicKey;
-use Casper\Serializer\StoredValueSerializer;
-use Casper\Serializer\TransferSerializer;
 
 class RpcClient
 {
     private const ID = 1;
     private const JSON_RPC = '2.0';
 
+    private const RPC_METHOD_PUT_DEPLOY = 'account_put_deploy';
     private const RPC_METHOD_GET_DEPLOY_INFO = 'info_get_deploy';
     private const RPC_METHOD_GET_BLOCK_INFO = 'chain_get_block';
     private const RPC_METHOD_GET_PEERS = 'info_get_peers';
@@ -34,6 +37,7 @@ class RpcClient
     private const RPC_METHOD_GET_STATE_ROOT_HASH = 'chain_get_state_root_hash';
     private const RPC_METHOD_GET_BLOCK_STATE = 'state_get_item';
     private const RPC_METHOD_GET_BLOCK_TRANSFERS = 'chain_get_block_transfers';
+    private const RPC_METHOD_GET_ACCOUNT_INFO = 'state_get_account_info';
     private const RPC_METHOD_GET_ACCOUNT_BALANCE = 'state_get_balance';
     private const RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK = 'chain_get_era_info_by_switch_block';
     private const RPC_METHOD_GET_DICTIONARY_ITEM = 'state_get_dictionary_item';
@@ -50,6 +54,21 @@ class RpcClient
     public function getLastApiVersion(): ?string
     {
         return $this->lastApiVersion;
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function putDeploy(Deploy $deploy): string
+    {
+        $response = $this->rpcCallMethod(
+            self::RPC_METHOD_PUT_DEPLOY,
+            array(
+                'deploy' => DeploySerializer::toJson($deploy)
+            )
+        );
+
+        return $response['deploy_hash'];
     }
 
     /**
@@ -125,7 +144,7 @@ class RpcClient
      */
     public function getPeers(): array
     {
-        return PeerSerializer::fromArray(
+        return PeerSerializer::fromJsonArray(
             $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS)['peers']
         );
     }
@@ -161,6 +180,21 @@ class RpcClient
         );
 
         return $response['state_root_hash'];
+    }
+
+    public function getAccount(string $blockHash, CLPublicKey $publicKey): Account
+    {
+        $response = $this->rpcCallMethod(
+            self::RPC_METHOD_GET_ACCOUNT_INFO,
+            array(
+                'block_identifier' => array(
+                    'Hash' => $blockHash
+                ),
+                'public_key' => $publicKey->toHex(),
+            )
+        );
+
+        return AccountSerializer::fromJson($response['account']);
     }
 
     /**
@@ -225,7 +259,7 @@ class RpcClient
             array('block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null))
         );
 
-        return TransferSerializer::fromArray($response['transfers']);
+        return TransferSerializer::fromJsonArray($response['transfers']);
     }
 
     /**

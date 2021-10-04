@@ -22,7 +22,7 @@ class BidInfoSerializer extends Serializer
             $json['bonding_purse'],
             gmp_init($json['staked_amount']),
             $json['delegation_rate'],
-            DelegatorSerializer::fromArray($json['delegators']),
+            DelegatorSerializer::fromJsonArray($json['delegators']),
             $json['inactive']
         );
     }

@@ -28,7 +28,7 @@ abstract class CLType implements ToBytesInterface
     /**
      * @return string|array
      */
-    public function toJSON()
+    public function toJson()
     {
         return $this->toString();
     }

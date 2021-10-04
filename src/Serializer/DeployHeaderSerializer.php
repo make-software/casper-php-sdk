@@ -8,14 +8,26 @@ use Casper\Util\ByteUtil;
 
 class DeployHeaderSerializer extends Serializer
 {
+    const MS_IN_SEC = 1000;
+    const MS_IN_MIN = 60000;
+    const MS_IN_HOUR = 3600000;
+    const MS_IN_DAY = 86400000;
+
     /**
      * @param DeployHeader $header
      * @return array
      */
     public static function toJson($header): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return [
+            'account' => $header->getPublicKey()->toHex(),
+            'body_hash' => ByteUtil::byteArrayToHex($header->getBodyHash()),
+            'chain_name' => $header->getChainName(),
+            'dependencies' => $header->getDependencies(),
+            'gas_price' => $header->getGasPrice(),
+            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $header->getTimestamp()),
+            'ttl' => self::ttlToString($header->getTtl()),
+        ];
     }
 
     /**
@@ -26,7 +38,7 @@ class DeployHeaderSerializer extends Serializer
         return new DeployHeader(
             CLPublicKey::fromHex($json['account']),
             strtotime($json['timestamp']),
-            self::deserializeTtl($json['ttl']),
+            self::ttlToInt($json['ttl']),
             (int) $json['gas_price'],
             ByteUtil::hexToByteArray($json['body_hash']),
             [],
@@ -34,25 +46,44 @@ class DeployHeaderSerializer extends Serializer
         );
     }
 
+    private static function ttlToString(int $ttl): string
+    {
+        if ($ttl < self::MS_IN_SEC) {
+            return $ttl . 'ms';
+        }
+        elseif ($ttl < self::MS_IN_MIN) {
+            return (int) ($ttl / self::MS_IN_SEC) . 's';
+        }
+        elseif ($ttl < self::MS_IN_HOUR) {
+            return (int) ($ttl / self::MS_IN_MIN) . 'm';
+        }
+        elseif ($ttl < self::MS_IN_DAY) {
+            return (int) ($ttl / self::MS_IN_HOUR) . 'h';
+        }
+        else {
+            return (int) ($ttl / self::MS_IN_DAY) . 'day';
+        }
+    }
+
     /**
      * @throws \Exception
      */
-    protected static function deserializeTtl(string $ttl): int
+    protected static function ttlToInt(string $ttl): int
     {
         if (strpos($ttl, 'ms')) {
             return (int) $ttl;
         }
         elseif (strpos($ttl, 's')) {
-            return (int) $ttl * 1000;
+            return (int) $ttl * self::MS_IN_SEC;
         }
         elseif (strpos($ttl, 'm')) {
-            return (int) $ttl * 60 * 1000;
+            return (int) $ttl * self::MS_IN_MIN;
         }
         elseif (strpos($ttl, 'h')) {
-            return (int) $ttl * 60 * 60 * 1000;
+            return (int) $ttl * self::MS_IN_HOUR;
         }
         elseif (strpos($ttl, 'day')) {
-            return (int) $ttl * 24 * 60 * 60 * 1000;
+            return (int) $ttl * self::MS_IN_DAY;
         }
 
         throw new \Exception('Unsupported TTL unit');

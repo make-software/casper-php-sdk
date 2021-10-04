@@ -21,8 +21,8 @@ class AccountSerializer extends Serializer
         return new Account(
             $json['account_hash'],
             $json['main_purse'],
-            NamedKeySerializer::fromArray($json['named_keys']),
-            AssociatedKeySerializer::fromArray($json['associated_keys']),
+            NamedKeySerializer::fromJsonArray($json['named_keys']),
+            AssociatedKeySerializer::fromJsonArray($json['associated_keys']),
             ActionThresholdsSerializer::fromJson($json['action_thresholds'])
         );
     }

@@ -50,6 +50,11 @@ final class CLByteArray extends CLValue
         return $this->data;
     }
 
+    public function toString(): string
+    {
+        return ByteUtil::byteArrayToHex($this->data);
+    }
+
     /**
      * @param int[] $byteArray
      * @throws \Exception

@@ -17,6 +17,14 @@ abstract class DeployExecutableItemInternal implements ToBytesInterface
         return $this;
     }
 
+    /**
+     * @return DeployNamedArg[]
+     */
+    public function getArgs(): array
+    {
+        return $this->args;
+    }
+
     public function getArgByName(string $name): ?DeployNamedArg
     {
         foreach ($this->args as $arg) {

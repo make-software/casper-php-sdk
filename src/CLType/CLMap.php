@@ -114,6 +114,12 @@ class CLMap extends CLValue
         );
     }
 
+    public function toString(): string
+    {
+        // TODO: Implement toString() method.
+        return '';
+    }
+
     public function get(CLValue $key): ?CLValue
     {
         foreach ($this->data as $keyValue) {
