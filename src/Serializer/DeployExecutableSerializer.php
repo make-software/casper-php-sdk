@@ -5,6 +5,9 @@ namespace Casper\Serializer;
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
 use Casper\Entity\DeployExecutableStoredContractByHash;
+use Casper\Entity\DeployExecutableStoredContractByName;
+use Casper\Entity\DeployExecutableStoredVersionedContractByHash;
+use Casper\Entity\DeployExecutableStoredVersionedContractByName;
 use Casper\Entity\DeployExecutableTransfer;
 use Casper\Entity\DeployNamedArg;
 
@@ -45,6 +48,29 @@ class DeployExecutableSerializer extends Serializer
                         $data['entry_point']
                     );
                     $deployExecutable->setStoredContractByHash($executableInternalInstance);
+                    break;
+                case DeployExecutableStoredContractByName::class:
+                    $executableInternalInstance = new DeployExecutableStoredContractByName(
+                        $data['name'],
+                        $data['entry_point']
+                    );
+                    $deployExecutable->setStoredContractByName($executableInternalInstance);
+                    break;
+                case DeployExecutableStoredVersionedContractByHash::class:
+                    $executableInternalInstance = new DeployExecutableStoredVersionedContractByHash(
+                        $data['hash'],
+                        $data['entry_point'],
+                        $data['version'] ?? null
+                    );
+                    $deployExecutable->setStoredVersionedContractByHash($executableInternalInstance);
+                    break;
+                case DeployExecutableStoredVersionedContractByName::class:
+                    $executableInternalInstance = new DeployExecutableStoredVersionedContractByName(
+                        $data['name'],
+                        $data['entry_point'],
+                        $data['version'] ?? null
+                    );
+                    $deployExecutable->setStoredVersionedContractByName($executableInternalInstance);
                     break;
                 default:
                     throw new \Exception('Unknown executable type: ' . $executableInternalClass);

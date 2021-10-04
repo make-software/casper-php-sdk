@@ -4,23 +4,23 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 
-class DeployExecutableStoredContractByHash extends DeployExecutableItemInternal
+class DeployExecutableStoredContractByName extends DeployExecutableItemInternal
 {
-    protected const TAG = 1;
+    protected const TAG = 2;
 
-    protected string $hash;
+    protected string $name;
 
     protected string $entryPoint;
 
-    public function __construct(string $hash, string $entryPoint)
+    public function __construct(string $name, string $entryPoint)
     {
-        $this->hash = $hash;
+        $this->name = $name;
         $this->entryPoint = $entryPoint;
     }
 
-    public function getHash(): string
+    public function getName(): string
     {
-        return $this->hash;
+        return $this->name;
     }
 
     public function getEntryPoint(): string
@@ -32,7 +32,7 @@ class DeployExecutableStoredContractByHash extends DeployExecutableItemInternal
     {
         return array_merge(
             [self::TAG],
-            ByteUtil::hexToByteArray($this->hash),
+            ByteUtil::stringToBytesU32($this->name),
             ByteUtil::stringToBytesU32($this->entryPoint),
             ByteUtil::vectorToBytesU32($this->args)
         );

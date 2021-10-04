@@ -17,7 +17,13 @@ class DeployExecutable implements ToBytesInterface
 
     private ?DeployExecutableTransfer $transfer = null;
 
-    protected ?DeployExecutableStoredContractByHash $storedContractByHash = null;
+    private ?DeployExecutableStoredContractByHash $storedContractByHash = null;
+
+    private ?DeployExecutableStoredContractByName $storedContractByName = null;
+
+    private ?DeployExecutableStoredVersionedContractByHash $storedVersionedContractByHash = null;
+
+    private ?DeployExecutableStoredVersionedContractByName $storedVersionedContractByName = null;
 
     /**
      * @param string|int|\GMP $amount
@@ -116,6 +122,56 @@ class DeployExecutable implements ToBytesInterface
         return isset($this->storedContractByHash);
     }
 
+    public function setStoredContractByName(?DeployExecutableStoredContractByName $storedContractByName): self
+    {
+        $this->storedContractByName = $storedContractByName;
+        return $this;
+    }
+
+    public function getStoredContractByName(): ?DeployExecutableStoredContractByName
+    {
+        return $this->storedContractByName;
+    }
+
+    public function isStoredContractByName(): bool
+    {
+        return isset($this->storedContractByName);
+    }
+
+    public function setStoredVersionedContractByHash(
+        ?DeployExecutableStoredVersionedContractByHash $storedVersionedContractByHash
+    ): self
+    {
+        $this->storedVersionedContractByHash = $storedVersionedContractByHash;
+        return $this;
+    }
+
+    public function getStoredVersionedContractByHash(): ?DeployExecutableStoredVersionedContractByHash
+    {
+        return $this->storedVersionedContractByHash;
+    }
+
+    public function isStoredVersionedContractByHash(): bool
+    {
+        return isset($this->storedVersionedContractByHash);
+    }
+
+    public function setStoredVersionedContractByName(?DeployExecutableStoredVersionedContractByName $storedVersionedContractByName): self
+    {
+        $this->storedVersionedContractByName = $storedVersionedContractByName;
+        return $this;
+    }
+
+    public function getStoredVersionedContractByName(): ?DeployExecutableStoredVersionedContractByName
+    {
+        return $this->storedVersionedContractByName;
+    }
+
+    public function isStoredVersionedContractByName(): bool
+    {
+        return isset($this->storedVersionedContractByName);
+    }
+
     /**
      * @return int[]
      * @throws \Exception
@@ -130,6 +186,15 @@ class DeployExecutable implements ToBytesInterface
         }
         elseif ($this->isStoredContractByHash()) {
             return $this->storedContractByHash->toBytes();
+        }
+        elseif ($this->isStoredContractByName()) {
+            return $this->storedContractByName->toBytes();
+        }
+        elseif ($this->isStoredVersionedContractByHash()) {
+            return $this->storedVersionedContractByHash->toBytes();
+        }
+        elseif ($this->isStoredVersionedContractByName()) {
+            return $this->storedVersionedContractByHash->toBytes();
         }
 
         throw new \Exception('Failed to serialize ExecutableDeployItemJsonWrapper');
