@@ -75,9 +75,9 @@ abstract class CLTuple extends CLValue
         return $result;
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
-        // TODO: Implement toString() method.
+        // TODO: Implement parsedValue() method.
         return '';
     }
 

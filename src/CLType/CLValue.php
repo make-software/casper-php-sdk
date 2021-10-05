@@ -6,7 +6,7 @@ use Casper\Interfaces\ToBytesInterface;
 use Casper\Interfaces\ToStringInterface;
 use Casper\Util\ByteUtil;
 
-abstract class CLValue implements ToBytesInterface, ToStringInterface
+abstract class CLValue
 {
     /**
      * @var mixed
@@ -18,7 +18,11 @@ abstract class CLValue implements ToBytesInterface, ToStringInterface
      */
     abstract public function value();
 
+    abstract public function parsedValue();
+
     abstract public function clType(): CLType;
+
+    abstract public function toBytes(): array;
 
     abstract public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder;
 

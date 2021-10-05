@@ -2,8 +2,6 @@
 
 namespace Casper\Serializer;
 
-use Casper\Util\ByteUtil;
-
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployExecutableModuleBytes;
 use Casper\Entity\DeployExecutableStoredContractByHash;
@@ -11,7 +9,6 @@ use Casper\Entity\DeployExecutableStoredContractByName;
 use Casper\Entity\DeployExecutableStoredVersionedContractByHash;
 use Casper\Entity\DeployExecutableStoredVersionedContractByName;
 use Casper\Entity\DeployExecutableTransfer;
-use Casper\Entity\DeployNamedArg;
 
 class DeployExecutableSerializer extends Serializer
 {
@@ -24,21 +21,27 @@ class DeployExecutableSerializer extends Serializer
         if ($deployExecutable->isModuleBytes()) {
             $result['ModuleBytes'] = array(
                 'module_bytes' => $deployExecutable->getModuleBytes()->getModuleBytes(),
-                'args' => self::namedArgsArrayToJson($deployExecutable->getModuleBytes()->getArgs())
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getModuleBytes()->getArgs()
+                )
             );
         }
         elseif ($deployExecutable->isStoredContractByHash()) {
             $result['StoredContractByHash'] = array(
                 'hash' => $deployExecutable->getStoredContractByHash()->getHash(),
                 'entry_point' => $deployExecutable->getStoredContractByHash()->getEntryPoint(),
-                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredContractByHash()->getArgs()),
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getStoredContractByHash()->getArgs()
+                ),
             );
         }
         elseif ($deployExecutable->isStoredContractByName()) {
             $result['StoredContractByName'] = array(
                 'name' => $deployExecutable->getStoredContractByName()->getName(),
                 'entry_point' => $deployExecutable->getStoredContractByName()->getEntryPoint(),
-                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredContractByName()->getArgs()),
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getStoredContractByName()->getArgs()
+                ),
             );
         }
         elseif ($deployExecutable->isStoredVersionedContractByHash()) {
@@ -46,7 +49,9 @@ class DeployExecutableSerializer extends Serializer
                 'hash' => $deployExecutable->getStoredVersionedContractByHash()->getHash(),
                 'version' => $deployExecutable->getStoredVersionedContractByHash()->getVersion(),
                 'entry_point' => $deployExecutable->getStoredVersionedContractByHash()->getEntryPoint(),
-                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredVersionedContractByHash()->getArgs()),
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getStoredVersionedContractByHash()->getArgs()
+                ),
             );
         }
         elseif ($deployExecutable->isStoredVersionedContractByName()) {
@@ -54,34 +59,20 @@ class DeployExecutableSerializer extends Serializer
                 'name' => $deployExecutable->getStoredVersionedContractByName()->getName(),
                 'version' => $deployExecutable->getStoredVersionedContractByName()->getVersion(),
                 'entry_point' => $deployExecutable->getStoredVersionedContractByName()->getEntryPoint(),
-                'args' => self::namedArgsArrayToJson($deployExecutable->getStoredVersionedContractByName()->getArgs()),
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getStoredVersionedContractByName()->getArgs()
+                ),
             );
         }
         elseif ($deployExecutable->isTransfer()) {
             $result['Transfer'] = array(
-                'args' => self::namedArgsArrayToJson($deployExecutable->getTransfer()->getArgs()),
+                'args' => DeployNamedArgSerialized::toJsonArray(
+                    $deployExecutable->getTransfer()->getArgs()
+                ),
             );
         }
 
         return $result ?? [];
-    }
-
-    /**
-     * @param DeployNamedArg[] $namedArgs
-     * @return array
-     */
-    protected static function namedArgsArrayToJson(array $namedArgs): array
-    {
-        return array_map(function ($namedArgJson) {
-            return array(
-                $namedArgJson->getName(),
-                array(
-                    'cl_type' => $namedArgJson->getValue()->clType()->toJson(),
-                    'bytes' => ByteUtil::byteArrayToHex($namedArgJson->getValue()->toBytes()),
-                    'parsed' => $namedArgJson->getValue()->toString(),
-                )
-            );
-        }, $namedArgs);
     }
 
     /**
@@ -138,9 +129,7 @@ class DeployExecutableSerializer extends Serializer
             }
 
             foreach ($data['args'] as $arg) {
-                $executableInternalInstance->setArg(
-                    new DeployNamedArg($arg[0], CLValueSerializer::fromJson($arg[1]))
-                );
+                $executableInternalInstance->setArg(DeployNamedArgSerialized::fromJson($arg));
             }
         }
 

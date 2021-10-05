@@ -114,9 +114,9 @@ class CLMap extends CLValue
         );
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
-        // TODO: Implement toString() method.
+        // TODO: Implement parsedValue() method
         return '';
     }
 

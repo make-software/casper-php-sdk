@@ -37,7 +37,7 @@ final class CLBool extends CLValue
         return [(int) $this->data];
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return (string)(int) $this->data;
     }

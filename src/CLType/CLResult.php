@@ -89,9 +89,9 @@ class CLResult extends CLValue
         return array_merge([$this->result], $this->data->toBytes());
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
-        // TODO: Implement toString() method.
+        // TODO: Implement parsedValue() method.
         return '';
     }
 

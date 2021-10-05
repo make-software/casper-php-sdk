@@ -4,5 +4,5 @@ namespace Casper\Interfaces;
 
 interface ToStringInterface
 {
-    public function toString(): string;
+    public function getParsed(): string;
 }

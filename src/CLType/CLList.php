@@ -86,9 +86,9 @@ final class CLList extends CLValue
         return ByteUtil::vectorToBytesU32($this->data);
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
-        // TODO: Implement to string method
+        // TODO: Implement parsedValue() method
         return '';
     }
 

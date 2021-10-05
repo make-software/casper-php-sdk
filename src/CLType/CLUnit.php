@@ -24,7 +24,7 @@ final class CLUnit extends CLValue
         return [];
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return '';
     }

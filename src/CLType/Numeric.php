@@ -49,7 +49,7 @@ abstract class Numeric extends CLValue
         return ByteUtil::toBytesNumber($this->bitSize, $this->signed, $this->data);
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return (string) $this->data;
     }

@@ -50,7 +50,7 @@ final class CLByteArray extends CLValue
         return $this->data;
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return ByteUtil::byteArrayToHex($this->data);
     }

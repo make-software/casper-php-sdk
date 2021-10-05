@@ -99,7 +99,7 @@ final class CLPublicKey extends CLValue implements ToBytesInterface
         return array_merge([$this->tag->getTagValue()], $this->data);
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return ByteUtil::byteArrayToHex($this->toBytes());
     }

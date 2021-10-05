@@ -75,7 +75,7 @@ final class CLKey extends CLValue
         );
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
         return ByteUtil::byteArrayToHex($this->toBytes());
     }

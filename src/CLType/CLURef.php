@@ -99,9 +99,9 @@ final class CLURef extends CLValue
         return array_merge($this->data, [$this->accessRights]);
     }
 
-    public function toString(): string
+    public function parsedValue(): string
     {
-        // TODO: Implement toString() method.
+        // TODO: Implement parsedValue() method.
         return '';
     }
 
