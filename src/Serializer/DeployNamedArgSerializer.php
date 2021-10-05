@@ -5,7 +5,7 @@ namespace Casper\Serializer;
 use Casper\Entity\DeployNamedArg;
 use Casper\Util\ByteUtil;
 
-class DeployNamedArgSerialized extends Serializer
+class DeployNamedArgSerializer extends Serializer
 {
     /**
      * @param DeployNamedArg $deployNamedArg
