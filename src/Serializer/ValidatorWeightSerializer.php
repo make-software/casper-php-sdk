@@ -12,12 +12,17 @@ class ValidatorWeightSerializer extends Serializer
      */
     public static function toJson($validatorWeight): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'public_key' => $validatorWeight->getPublicKey(),
+            'weight' => (string) $validatorWeight->getWeight(),
+        );
     }
 
     public static function fromJson(array $json): ValidatorWeight
     {
-        return new ValidatorWeight($json['public_key'], gmp_init($json['weight']));
+        return new ValidatorWeight(
+            $json['public_key'],
+            gmp_init($json['weight'])
+        );
     }
 }

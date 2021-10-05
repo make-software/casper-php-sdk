@@ -12,12 +12,17 @@ class NamedKeySerializer extends Serializer
      */
     public static function toJson($namedKey): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'name' => $namedKey->getName(),
+            'key' => $namedKey->getKey(),
+        );
     }
 
     public static function fromJson(array $json): NamedKey
     {
-        return new NamedKey($json['name'], $json['key']);
+        return new NamedKey(
+            $json['name'],
+            $json['key']
+        );
     }
 }

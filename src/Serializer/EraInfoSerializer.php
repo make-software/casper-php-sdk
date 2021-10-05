@@ -12,12 +12,16 @@ class EraInfoSerializer extends Serializer
      */
     public static function toJson($eraInfo): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'seigniorage_allocations' =>
+                SeigniorageAllocationSerializer::toJsonArray($eraInfo->getSeigniorageAllocations()),
+        );
     }
 
     public static function fromJson(array $json): EraInfo
     {
-        return new EraInfo(SeigniorageAllocationSerializer::fromJsonArray($json['seigniorage_allocations']));
+        return new EraInfo(
+            SeigniorageAllocationSerializer::fromJsonArray($json['seigniorage_allocations'])
+        );
     }
 }

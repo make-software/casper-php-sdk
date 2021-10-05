@@ -12,8 +12,13 @@ class AccountSerializer extends Serializer
      */
     public static function toJson($account): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'account_hash' => $account->getAccountHash(),
+            'main_purse' => $account->getMainPurse(),
+            'named_keys' => NamedKeySerializer::toJsonArray($account->getNamedKeys()),
+            'associated_keys' => AssociatedKeySerializer::toJsonArray($account->getAssociatedKeys()),
+            'action_thresholds' => ActionThresholdsSerializer::toJson($account->getActionThresholds()),
+        );
     }
 
     public static function fromJson(array $json): Account

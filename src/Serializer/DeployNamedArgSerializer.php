@@ -3,7 +3,6 @@
 namespace Casper\Serializer;
 
 use Casper\Entity\DeployNamedArg;
-use Casper\Util\ByteUtil;
 
 class DeployNamedArgSerializer extends Serializer
 {
@@ -15,16 +14,15 @@ class DeployNamedArgSerializer extends Serializer
     {
         return array(
             $deployNamedArg->getName(),
-            array(
-                'cl_type' => $deployNamedArg->getValue()->clType()->toJson(),
-                'bytes' => ByteUtil::byteArrayToHex($deployNamedArg->getValue()->toBytes()),
-                'parsed' => $deployNamedArg->getValue()->parsedValue(),
-            )
+            CLValueSerializer::toJson($deployNamedArg->getValue()),
         );
     }
 
     public static function fromJson(array $json): DeployNamedArg
     {
-        return new DeployNamedArg($json[0], CLValueSerializer::fromJson($json[1]));
+        return new DeployNamedArg(
+            $json[0],
+            CLValueSerializer::fromJson($json[1])
+        );
     }
 }

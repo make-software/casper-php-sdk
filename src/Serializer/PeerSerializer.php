@@ -12,12 +12,17 @@ class PeerSerializer extends Serializer
      */
     public static function toJson($peer): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'node_id' => $peer->getNodeId(),
+            'address' => $peer->getAddress(),
+        );
     }
 
     public static function fromJson(array $json): Peer
     {
-        return new Peer($json['node_id'], $json['address']);
+        return new Peer(
+            $json['node_id'],
+            $json['address']
+        );
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Casper\Service;
 
-use Casper\Entity\DeployApproval;
 use Casper\Util\HashUtil;
+use Casper\Util\KeysUtil;
 
 use Casper\Entity\AsymmetricKey;
 use Casper\Entity\Deploy;
+use Casper\Entity\DeployApproval;
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployHeader;
 use Casper\Entity\DeployParams;
-use Casper\Util\KeysUtil;
 
 class DeployService
 {
@@ -40,6 +40,9 @@ class DeployService
         return new Deploy(HashUtil::blake2bHash($header->toBytes()), $header, $payment, $session);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
         $signer = $key->accountHex();

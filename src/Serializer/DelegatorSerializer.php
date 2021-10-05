@@ -12,8 +12,12 @@ class DelegatorSerializer extends Serializer
      */
     public static function toJson($delegator): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'public_key' => $delegator->getPublicKey(),
+            'staked_amount' => (string) $delegator->getStakedAmount(),
+            'bonding_purse' => $delegator->getBondingPurse(),
+            'delegatee' => $delegator->getDelegatee(),
+        );
     }
 
     public static function fromJson(array $json): Delegator

@@ -14,8 +14,22 @@ class SeigniorageAllocationSerializer extends Serializer
      */
     public static function toJson($seigniorageAllocation): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        if ($delegator = $seigniorageAllocation->getDelegator()) {
+            $result['Delegator'] = array(
+                'delegator_public_key' => $delegator->getDelegatorPublicKey(),
+                'validator_public_key' => $delegator->getValidatorPublicKey(),
+                'amount' => (string) $delegator->getAmount(),
+            );
+        }
+
+        if ($validator = $seigniorageAllocation->getValidator()) {
+            $result['Validator'] = array(
+                'validator_public_key' => $validator->getValidatorPublicKey(),
+                'amount' => (string) $validator->getAmount(),
+            );
+        }
+
+        return $result ?? [];
     }
 
     public static function fromJson(array $json): SeigniorageAllocation

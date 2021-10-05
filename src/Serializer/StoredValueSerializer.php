@@ -12,8 +12,23 @@ class StoredValueSerializer extends Serializer
      */
     public static function toJson($storedValue): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        if ($storedValue->getCLValue()) {
+            $result['CLValue'] = CLValueSerializer::toJson($storedValue->getCLValue());
+        }
+
+        if ($storedValue->getAccount()) {
+            $result['Account'] = AccountSerializer::toJson($storedValue->getAccount());
+        }
+
+        if ($storedValue->getContractWASM()) {
+            $result['ContractWASM'] = $storedValue->getContractWASM();
+        }
+
+        if ($storedValue->getEraInfo()) {
+            $result['EraInfo'] = $storedValue->getEraInfo();
+        }
+
+        return $result ?? [];
     }
 
     /**

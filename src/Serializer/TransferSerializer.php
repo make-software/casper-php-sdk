@@ -12,8 +12,16 @@ class TransferSerializer extends Serializer
      */
     public static function toJson($transfer): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'deploy_hash' => $transfer->getDeployHash(),
+            'from' => $transfer->getFrom(),
+            'to' => $transfer->getTo(),
+            'source' => $transfer->getSource(),
+            'target' => $transfer->getTarget(),
+            'amount' => (string) $transfer->getAmount(),
+            'gas' => (string) $transfer->getGas(),
+            'id' => $transfer->getId(),
+        );
     }
 
     public static function fromJson(array $json): Transfer

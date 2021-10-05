@@ -9,38 +9,27 @@ use Casper\Entity\BlockProof;
 
 class BlockSerializer extends Serializer
 {
-    public static function fromJson(array $json): Block
+    /**
+     * @param Block $block
+     * @return array
+     */
+    public static function toJson($block): array
     {
-        $header = new BlockHeader(
-            $json['header']['parent_hash'],
-            $json['header']['state_root_hash'],
-            $json['header']['body_hash'],
-            $json['header']['random_bit'],
-            $json['header']['accumulated_seed'],
-            $json['header']['era_end'],
-            strtotime($json['header']['timestamp']),
-            $json['header']['era_id'],
-            $json['header']['height'],
-            $json['header']['protocol_version'],
+        return array(
+            'hash' => $block->getHash(),
+            'header' => BlockHeaderSerializer::toJson($block->getHeader()),
+            'body' => BlockBodySerializer::toJson($block->getBody()),
+            'proofs' => BlockProofSerializer::toJsonArray($block->getProofs()),
         );
-        $body = new BlockBody(
-            $json['body']['proposer'],
-            $json['body']['deploy_hashes'],
-            $json['body']['transfer_hashes']
-        );
-        $proofs = array_map(
-            function($json) {
-                return new BlockProof($json['public_key'], $json['signature']);
-            },
-            $json['proofs']
-        );
-
-        return new Block($json['hash'], $header, $body, $proofs);
     }
 
-    public static function toJson($object): array
+    public static function fromJson(array $json): Block
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return new Block(
+            $json['hash'],
+            BlockHeaderSerializer::fromJson($json['header']),
+            BlockBodySerializer::fromJson($json['body']),
+            BlockProofSerializer::fromJsonArray($json['proofs'])
+        );
     }
 }

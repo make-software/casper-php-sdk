@@ -20,6 +20,9 @@ class DeployApprovalSerializer extends Serializer
 
     public static function fromJson(array $json): DeployApproval
     {
-        return new DeployApproval($json['signer'], $json['signature']);
+        return new DeployApproval(
+            $json['signer'],
+            $json['signature']
+        );
     }
 }

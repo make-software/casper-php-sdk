@@ -12,8 +12,10 @@ class ActionThresholdsSerializer extends Serializer
      */
     public static function toJson($actionThresholds): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'deployment' => $actionThresholds->getDeployment(),
+            'key_management' => $actionThresholds->getKeyManagement(),
+        );
     }
 
     public static function fromJson(array $json): ActionThresholds

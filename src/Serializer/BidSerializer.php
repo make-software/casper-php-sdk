@@ -12,8 +12,10 @@ class BidSerializer extends Serializer
      */
     public static function toJson($bid): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'public_key' => $bid->getPublicKey(),
+            'bid' => BidInfoSerializer::toJson($bid->getInfo()),
+        );
     }
 
     public static function fromJson(array $json): Bid

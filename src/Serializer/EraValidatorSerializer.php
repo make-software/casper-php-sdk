@@ -12,8 +12,10 @@ class EraValidatorSerializer extends Serializer
      */
     public static function toJson($eraValidator): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'era_id' => $eraValidator->getEraId(),
+            'validator_weights' => ValidatorWeightSerializer::toJsonArray($eraValidator->getValidatorWeights()),
+        );
     }
 
     public static function fromJson(array $json): EraValidator

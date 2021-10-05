@@ -12,8 +12,12 @@ class AuctionStateSerializer extends Serializer
      */
     public static function toJson($actionState): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'state_root_hash' => $actionState->getStateRootHash(),
+            'block_height' => $actionState->getBlockHeight(),
+            'era_validators' => EraValidatorSerializer::toJsonArray($actionState->getEraValidators()),
+            'bids' => BidSerializer::toJsonArray($actionState->getBids()),
+        );
     }
 
     public static function fromJson(array $json): AuctionState

@@ -2,9 +2,10 @@
 
 namespace Casper\Entity;
 
-use Casper\CLType\CLPublicKey;
-use Casper\Interfaces\ToBytesInterface;
 use Casper\Util\ByteUtil;
+use Casper\Interfaces\ToBytesInterface;
+
+use Casper\CLType\CLPublicKey;
 
 class DeployHeader implements ToBytesInterface
 {

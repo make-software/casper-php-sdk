@@ -12,8 +12,16 @@ class StatusSerializer extends Serializer
      */
     public static function toJson($status): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'chainspec_name' => $status->getChainspecName(),
+            'starting_state_root_hash' => $status->getStartingStateRootHash(),
+            'last_added_block_info' => BlockInfoSerializer::toJson($status->getLastAddedBlockInfo()),
+            'our_public_signing_key' => $status->getOurPublicSigningKey(),
+            'round_length' => $status->getRoundLength(),
+            'build_version' => $status->getBuildVersion(),
+            'next_upgrade' => $status->getNextUpgrade(),
+            'peers' => PeerSerializer::toJsonArray($status->getPeers()),
+        );
     }
 
     public static function fromJson(array $json): Status

@@ -12,8 +12,14 @@ class BlockInfoSerializer extends Serializer
      */
     public static function toJson($blockInfo): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'hash' => $blockInfo->getHash(),
+            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $blockInfo->getTimestamp()),
+            'era_id' => $blockInfo->getEraId(),
+            'height' => $blockInfo->getHeight(),
+            'state_root_hash' => $blockInfo->getStateRootHash(),
+            'creator' => $blockInfo->getCreator(),
+        );
     }
 
     public static function fromJson(array $json): BlockInfo

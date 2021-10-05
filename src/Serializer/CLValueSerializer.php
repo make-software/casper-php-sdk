@@ -26,8 +26,11 @@ class CLValueSerializer extends Serializer
      */
     public static function toJson($clValue): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'cl_type' => $clValue->clType()->toJson(),
+            'bytes' => ByteUtil::byteArrayToHex($clValue->toBytes()),
+            'parsed' => $clValue->parsedValue(),
+        );
     }
 
     /**

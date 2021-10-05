@@ -6,15 +6,16 @@ use Casper\Entity\AssociatedKey;
 
 class AssociatedKeySerializer extends Serializer
 {
-
     /**
      * @param AssociatedKey $associatedKey
      * @return array
      */
     public static function toJson($associatedKey): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'account_hash' => $associatedKey->getAccountHash(),
+            'weight' => $associatedKey->getWeight(),
+        );
     }
 
     public static function fromJson(array $json): AssociatedKey

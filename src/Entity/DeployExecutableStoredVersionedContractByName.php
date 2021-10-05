@@ -2,10 +2,11 @@
 
 namespace Casper\Entity;
 
+use Casper\Util\ByteUtil;
+
 use Casper\CLType\CLOption;
 use Casper\CLType\CLU32;
 use Casper\CLType\CLU32Type;
-use Casper\Util\ByteUtil;
 
 class DeployExecutableStoredVersionedContractByName extends DeployExecutableStoredContractByName
 {

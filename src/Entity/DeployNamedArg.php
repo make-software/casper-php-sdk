@@ -2,9 +2,10 @@
 
 namespace Casper\Entity;
 
-use Casper\CLType\CLValue;
-use Casper\Interfaces\ToBytesInterface;
 use Casper\Util\ByteUtil;
+
+use Casper\Interfaces\ToBytesInterface;
+use Casper\CLType\CLValue;
 
 class DeployNamedArg implements ToBytesInterface
 {

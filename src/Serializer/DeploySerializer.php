@@ -13,7 +13,6 @@ class DeploySerializer extends Serializer
      */
     public static function toJson($deploy): array
     {
-        // TODO: Implement toJson() method.
         return [
             'hash' => ByteUtil::byteArrayToHex($deploy->getHash()),
             'header' => DeployHeaderSerializer::toJson($deploy->getHeader()),

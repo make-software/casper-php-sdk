@@ -2,9 +2,10 @@
 
 namespace Casper\Serializer;
 
+use Casper\Util\ByteUtil;
+
 use Casper\CLType\CLPublicKey;
 use Casper\Entity\DeployHeader;
-use Casper\Util\ByteUtil;
 
 class DeployHeaderSerializer extends Serializer
 {

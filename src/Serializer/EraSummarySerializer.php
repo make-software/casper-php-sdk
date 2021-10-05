@@ -12,8 +12,12 @@ class EraSummarySerializer extends Serializer
      */
     public static function toJson($eraSummary): array
     {
-        // TODO: Implement toJson() method.
-        return [];
+        return array(
+            'block_hash' => $eraSummary->getBlockHash(),
+            'era_id' => $eraSummary->getEraId(),
+            'stored_value' => StoredValueSerializer::toJson($eraSummary->getStoredValue()),
+            'state_root_hash' => $eraSummary->getStateRootHash(),
+        );
     }
 
     public static function fromJson(array $json): ?EraSummary
