@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLResult extends CLValue
+final class CLResult extends CLValue
 {
     public const RESULT_ERR = 0;
     public const RESULT_OK = 1;

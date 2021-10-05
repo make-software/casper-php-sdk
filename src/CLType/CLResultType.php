@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLResultType extends CLType
+final class CLResultType extends CLType
 {
     private CLType $innerOk;
 

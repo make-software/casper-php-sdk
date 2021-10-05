@@ -2,7 +2,7 @@
 
 namespace Casper\CLType;
 
-class CLMapType extends CLType
+final class CLMapType extends CLType
 {
     private CLType $innerKey;
 

@@ -4,7 +4,7 @@ namespace Casper\CLType;
 
 use Casper\Util\ByteUtil;
 
-class CLMap extends CLValue
+final class CLMap extends CLValue
 {
     /**
      * Couple CLType objects in array. Example: [CLBoolType, CLBoolType]
