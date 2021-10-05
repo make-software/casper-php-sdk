@@ -2,12 +2,12 @@
 
 namespace Casper\CLType;
 
-use Casper\Entity\AsymmetricKey;
-use Casper\Interfaces\ToBytesInterface;
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
 
-final class CLPublicKey extends CLValue implements ToBytesInterface
+use Casper\Entity\AsymmetricKey;
+
+final class CLPublicKey extends CLValue
 {
     private const ED25519_LENGTH = 32;
     private const SECP256K1_LENGTH = 33;
