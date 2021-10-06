@@ -4,7 +4,7 @@
   "type": "library",
   "license": "Apache-2.0",
   "keywords": ["casper", "rpc", "sdk", "blockchain", "node"],
-  "minimum-stability": "alpha",
+  "minimum-stability": "stable",
   "require": {
     "php": ">=7.4",
     "ext-curl": "*",
