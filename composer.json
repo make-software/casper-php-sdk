@@ -1,9 +1,10 @@
 {
   "name": "make-software/casper-php-sdk",
-  "description": "Casper SDK",
+  "description": "PHP 7.4+ library for interacting with Casper blockchain node RPC API.",
   "type": "library",
-  "license": "proprietary",
-  "minimum-stability": "stable",
+  "license": "Apache-2.0",
+  "keywords": ["casper", "rpc", "sdk", "blockchain", "node"],
+  "minimum-stability": "alpha",
   "require": {
     "php": ">=7.4",
     "ext-curl": "*",
