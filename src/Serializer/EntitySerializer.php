@@ -2,7 +2,7 @@
 
 namespace Casper\Serializer;
 
-abstract class Serializer
+abstract class EntitySerializer
 {
     abstract public static function toJson($object): array;
 

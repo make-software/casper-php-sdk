@@ -2,15 +2,15 @@
 
 namespace Casper\Rpc;
 
-use Casper\Serializer\AccountSerializer;
-use Casper\Serializer\AuctionStateSerializer;
-use Casper\Serializer\EraSummarySerializer;
-use Casper\Serializer\PeerSerializer;
-use Casper\Serializer\BlockSerializer;
-use Casper\Serializer\DeploySerializer;
-use Casper\Serializer\StatusSerializer;
-use Casper\Serializer\StoredValueSerializer;
-use Casper\Serializer\TransferSerializer;
+use Casper\Serializer\AccountEntitySerializer;
+use Casper\Serializer\AuctionStateEntitySerializer;
+use Casper\Serializer\EraSummaryEntitySerializer;
+use Casper\Serializer\PeerEntitySerializer;
+use Casper\Serializer\BlockEntitySerializer;
+use Casper\Serializer\DeployEntitySerializer;
+use Casper\Serializer\StatusEntitySerializer;
+use Casper\Serializer\StoredValueEntitySerializer;
+use Casper\Serializer\TransferEntitySerializer;
 
 use Casper\CLType\CLPublicKey;
 use Casper\Entity\Account;
@@ -64,7 +64,7 @@ class RpcClient
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_PUT_DEPLOY,
             array(
-                'deploy' => DeploySerializer::toJson($deploy)
+                'deploy' => DeployEntitySerializer::toJson($deploy)
             )
         );
 
@@ -83,7 +83,7 @@ class RpcClient
             )
         );
 
-        return DeploySerializer::fromJson($response['deploy']);
+        return DeployEntitySerializer::fromJson($response['deploy']);
     }
 
     /**
@@ -104,7 +104,7 @@ class RpcClient
             throw new RpcError('Returned block does not have a matching hash');
         }
 
-        return BlockSerializer::fromJson($response['block']);
+        return BlockEntitySerializer::fromJson($response['block']);
     }
 
     /**
@@ -125,7 +125,7 @@ class RpcClient
             throw new RpcError('Returned block does not have a matching height');
         }
 
-        return BlockSerializer::fromJson($response['block']);
+        return BlockEntitySerializer::fromJson($response['block']);
     }
 
     /**
@@ -133,7 +133,7 @@ class RpcClient
      */
     public function getLatestBlock(): Block
     {
-        return BlockSerializer::fromJson(
+        return BlockEntitySerializer::fromJson(
             $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO)['block']
         );
     }
@@ -144,7 +144,7 @@ class RpcClient
      */
     public function getPeers(): array
     {
-        return PeerSerializer::fromJsonArray(
+        return PeerEntitySerializer::fromJsonArray(
             $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS)['peers']
         );
     }
@@ -154,7 +154,7 @@ class RpcClient
      */
     public function getStatus(): Status
     {
-        return StatusSerializer::fromJson(
+        return StatusEntitySerializer::fromJson(
             $this->rpcCallMethod(self::RPC_METHOD_GET_STATUS)
         );
     }
@@ -164,7 +164,7 @@ class RpcClient
      */
     public function getAuctionState(): AuctionState
     {
-        return AuctionStateSerializer::fromJson(
+        return AuctionStateEntitySerializer::fromJson(
             $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO)['auction_state']
         );
     }
@@ -194,7 +194,7 @@ class RpcClient
             )
         );
 
-        return AccountSerializer::fromJson($response['account']);
+        return AccountEntitySerializer::fromJson($response['account']);
     }
 
     /**
@@ -245,7 +245,7 @@ class RpcClient
             )
         );
 
-        return StoredValueSerializer::fromJson($response['stored_value']);
+        return StoredValueEntitySerializer::fromJson($response['stored_value']);
     }
 
     /**
@@ -259,7 +259,7 @@ class RpcClient
             array('block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null))
         );
 
-        return TransferSerializer::fromJsonArray($response['transfers']);
+        return TransferEntitySerializer::fromJsonArray($response['transfers']);
     }
 
     /**
@@ -276,7 +276,7 @@ class RpcClient
             )
         );
 
-        return EraSummarySerializer::fromJson($response['era_summary'] ?? []);
+        return EraSummaryEntitySerializer::fromJson($response['era_summary'] ?? []);
     }
 
     /**
@@ -293,7 +293,7 @@ class RpcClient
             )
         );
 
-        return EraSummarySerializer::fromJson($response['era_summary'] ?? []);
+        return EraSummaryEntitySerializer::fromJson($response['era_summary'] ?? []);
     }
 
     /**
@@ -318,7 +318,7 @@ class RpcClient
             )
         );
 
-        return StoredValueSerializer::fromJson($response['stored_value']);
+        return StoredValueEntitySerializer::fromJson($response['stored_value']);
     }
 
     /**

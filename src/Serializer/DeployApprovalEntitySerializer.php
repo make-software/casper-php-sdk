@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\DeployApproval;
 
-class DeployApprovalSerializer extends Serializer
+class DeployApprovalEntitySerializer extends EntitySerializer
 {
     /**
      * @param DeployApproval $deployApproval

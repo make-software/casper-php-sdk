@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\NamedKey;
 
-class NamedKeySerializer extends Serializer
+class NamedKeyEntitySerializer extends EntitySerializer
 {
     /**
      * @param NamedKey $namedKey

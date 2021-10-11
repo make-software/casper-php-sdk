@@ -6,7 +6,7 @@ use Casper\Entity\SeigniorageAllocation;
 use Casper\Entity\SeigniorageAllocationDelegator;
 use Casper\Entity\SeigniorageAllocationValidator;
 
-class SeigniorageAllocationSerializer extends Serializer
+class SeigniorageAllocationEntitySerializer extends EntitySerializer
 {
     /**
      * @param SeigniorageAllocation $seigniorageAllocation

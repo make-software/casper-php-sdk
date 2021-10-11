@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\EraSummary;
 
-class EraSummarySerializer extends Serializer
+class EraSummaryEntitySerializer extends EntitySerializer
 {
     /**
      * @param EraSummary $eraSummary
@@ -15,7 +15,7 @@ class EraSummarySerializer extends Serializer
         return array(
             'block_hash' => $eraSummary->getBlockHash(),
             'era_id' => $eraSummary->getEraId(),
-            'stored_value' => StoredValueSerializer::toJson($eraSummary->getStoredValue()),
+            'stored_value' => StoredValueEntitySerializer::toJson($eraSummary->getStoredValue()),
             'state_root_hash' => $eraSummary->getStateRootHash(),
         );
     }
@@ -29,7 +29,7 @@ class EraSummarySerializer extends Serializer
         return new EraSummary(
             $json['block_hash'],
             $json['era_id'],
-            StoredValueSerializer::fromJson($json['stored_value']),
+            StoredValueEntitySerializer::fromJson($json['stored_value']),
             $json['state_root_hash']
         );
     }

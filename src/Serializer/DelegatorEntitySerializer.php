@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\Delegator;
 
-class DelegatorSerializer extends Serializer
+class DelegatorEntitySerializer extends EntitySerializer
 {
     /**
      * @param Delegator $delegator

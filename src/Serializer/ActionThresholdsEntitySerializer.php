@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\ActionThresholds;
 
-class ActionThresholdsSerializer extends Serializer
+class ActionThresholdsEntitySerializer extends EntitySerializer
 {
     /**
      * @param ActionThresholds $actionThresholds

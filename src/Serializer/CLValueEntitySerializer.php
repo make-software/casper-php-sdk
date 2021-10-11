@@ -18,7 +18,7 @@ use Casper\CLType\CLTuple2;
 use Casper\CLType\CLTuple3;
 use Casper\CLType\CLValue;
 
-class CLValueSerializer extends Serializer
+class CLValueEntitySerializer extends EntitySerializer
 {
     /**
      * @param CLValue $clValue

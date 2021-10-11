@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\DeployNamedArg;
 
-class DeployNamedArgSerializer extends Serializer
+class DeployNamedArgEntitySerializer extends EntitySerializer
 {
     /**
      * @param DeployNamedArg $deployNamedArg
@@ -14,7 +14,7 @@ class DeployNamedArgSerializer extends Serializer
     {
         return array(
             $deployNamedArg->getName(),
-            CLValueSerializer::toJson($deployNamedArg->getValue()),
+            CLValueEntitySerializer::toJson($deployNamedArg->getValue()),
         );
     }
 
@@ -22,7 +22,7 @@ class DeployNamedArgSerializer extends Serializer
     {
         return new DeployNamedArg(
             $json[0],
-            CLValueSerializer::fromJson($json[1])
+            CLValueEntitySerializer::fromJson($json[1])
         );
     }
 }

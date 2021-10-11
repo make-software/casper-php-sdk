@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\EraInfo;
 
-class EraInfoSerializer extends Serializer
+class EraInfoEntitySerializer extends EntitySerializer
 {
     /**
      * @param EraInfo $eraInfo
@@ -14,14 +14,14 @@ class EraInfoSerializer extends Serializer
     {
         return array(
             'seigniorage_allocations' =>
-                SeigniorageAllocationSerializer::toJsonArray($eraInfo->getSeigniorageAllocations()),
+                SeigniorageAllocationEntitySerializer::toJsonArray($eraInfo->getSeigniorageAllocations()),
         );
     }
 
     public static function fromJson(array $json): EraInfo
     {
         return new EraInfo(
-            SeigniorageAllocationSerializer::fromJsonArray($json['seigniorage_allocations'])
+            SeigniorageAllocationEntitySerializer::fromJsonArray($json['seigniorage_allocations'])
         );
     }
 }

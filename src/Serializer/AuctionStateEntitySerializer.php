@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\AuctionState;
 
-class AuctionStateSerializer extends Serializer
+class AuctionStateEntitySerializer extends EntitySerializer
 {
     /**
      * @param AuctionState $actionState
@@ -15,8 +15,8 @@ class AuctionStateSerializer extends Serializer
         return array(
             'state_root_hash' => $actionState->getStateRootHash(),
             'block_height' => $actionState->getBlockHeight(),
-            'era_validators' => EraValidatorSerializer::toJsonArray($actionState->getEraValidators()),
-            'bids' => BidSerializer::toJsonArray($actionState->getBids()),
+            'era_validators' => EraValidatorEntitySerializer::toJsonArray($actionState->getEraValidators()),
+            'bids' => BidEntitySerializer::toJsonArray($actionState->getBids()),
         );
     }
 
@@ -25,8 +25,8 @@ class AuctionStateSerializer extends Serializer
         return new AuctionState(
             $json['state_root_hash'],
             $json['block_height'],
-            EraValidatorSerializer::fromJsonArray($json['era_validators']),
-            BidSerializer::fromJsonArray($json['bids'])
+            EraValidatorEntitySerializer::fromJsonArray($json['era_validators']),
+            BidEntitySerializer::fromJsonArray($json['bids'])
         );
     }
 }

@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\BlockBody;
 
-class BlockBodySerializer extends Serializer
+class BlockBodyEntitySerializer extends EntitySerializer
 {
     /**
      * @param BlockBody $blockBody

@@ -7,7 +7,7 @@ use Casper\Util\ByteUtil;
 use Casper\CLType\CLPublicKey;
 use Casper\Entity\DeployHeader;
 
-class DeployHeaderSerializer extends Serializer
+class DeployHeaderEntitySerializer extends EntitySerializer
 {
     const MS_IN_SEC = 1000;
     const MS_IN_MIN = 60000;

@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\StoredValue;
 
-class StoredValueSerializer extends Serializer
+class StoredValueEntitySerializer extends EntitySerializer
 {
     /**
      * @param StoredValue $storedValue
@@ -13,11 +13,11 @@ class StoredValueSerializer extends Serializer
     public static function toJson($storedValue): array
     {
         if ($storedValue->getCLValue()) {
-            $result['CLValue'] = CLValueSerializer::toJson($storedValue->getCLValue());
+            $result['CLValue'] = CLValueEntitySerializer::toJson($storedValue->getCLValue());
         }
 
         if ($storedValue->getAccount()) {
-            $result['Account'] = AccountSerializer::toJson($storedValue->getAccount());
+            $result['Account'] = AccountEntitySerializer::toJson($storedValue->getAccount());
         }
 
         if ($storedValue->getContractWASM()) {
@@ -37,10 +37,10 @@ class StoredValueSerializer extends Serializer
     public static function fromJson(array $json): StoredValue
     {
         return new StoredValue(
-            isset($json['CLValue']) ? CLValueSerializer::fromJson($json['CLValue']) : null,
-            isset($json['Account']) ? AccountSerializer::fromJson($json['Account']) : null,
+            isset($json['CLValue']) ? CLValueEntitySerializer::fromJson($json['CLValue']) : null,
+            isset($json['Account']) ? AccountEntitySerializer::fromJson($json['Account']) : null,
             $json['ContractWASM'] ?? null,
-            isset($json['EraInfo']) ? EraInfoSerializer::fromJson($json['EraInfo']) : null
+            isset($json['EraInfo']) ? EraInfoEntitySerializer::fromJson($json['EraInfo']) : null
         );
     }
 }

@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\BidInfo;
 
-class BidInfoSerializer extends Serializer
+class BidInfoEntitySerializer extends EntitySerializer
 {
     /**
      * @param BidInfo $bidInfo
@@ -16,7 +16,7 @@ class BidInfoSerializer extends Serializer
             'bonding_purse' => $bidInfo->getBondingPurse(),
             'staked_amount' => (string) $bidInfo->getStakedAmount(),
             'delegation_rate' => $bidInfo->getDelegationRate(),
-            'delegators' => DelegatorSerializer::toJsonArray($bidInfo->getDelegators()),
+            'delegators' => DelegatorEntitySerializer::toJsonArray($bidInfo->getDelegators()),
             'inactive' => $bidInfo->isInactive(),
         );
     }
@@ -27,7 +27,7 @@ class BidInfoSerializer extends Serializer
             $json['bonding_purse'],
             gmp_init($json['staked_amount']),
             $json['delegation_rate'],
-            DelegatorSerializer::fromJsonArray($json['delegators']),
+            DelegatorEntitySerializer::fromJsonArray($json['delegators']),
             $json['inactive']
         );
     }

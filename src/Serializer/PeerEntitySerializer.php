@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\Peer;
 
-class PeerSerializer extends Serializer
+class PeerEntitySerializer extends EntitySerializer
 {
     /**
      * @param Peer $peer

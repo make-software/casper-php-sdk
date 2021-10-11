@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\BlockProof;
 
-class BlockProofSerializer extends Serializer
+class BlockProofEntitySerializer extends EntitySerializer
 {
     /**
      * @param BlockProof $blockProof

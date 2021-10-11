@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\AssociatedKey;
 
-class AssociatedKeySerializer extends Serializer
+class AssociatedKeyEntitySerializer extends EntitySerializer
 {
     /**
      * @param AssociatedKey $associatedKey

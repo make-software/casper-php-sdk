@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\BlockHeader;
 
-class BlockHeaderSerializer extends Serializer
+class BlockHeaderEntitySerializer extends EntitySerializer
 {
     /**
      * @param BlockHeader $blockHeader

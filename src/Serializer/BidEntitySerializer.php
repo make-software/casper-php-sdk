@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\Bid;
 
-class BidSerializer extends Serializer
+class BidEntitySerializer extends EntitySerializer
 {
     /**
      * @param Bid $bid
@@ -14,7 +14,7 @@ class BidSerializer extends Serializer
     {
         return array(
             'public_key' => $bid->getPublicKey(),
-            'bid' => BidInfoSerializer::toJson($bid->getInfo()),
+            'bid' => BidInfoEntitySerializer::toJson($bid->getInfo()),
         );
     }
 
@@ -22,7 +22,7 @@ class BidSerializer extends Serializer
     {
         return new Bid(
             $json['public_key'],
-            BidInfoSerializer::fromJson($json['bid'])
+            BidInfoEntitySerializer::fromJson($json['bid'])
         );
     }
 }

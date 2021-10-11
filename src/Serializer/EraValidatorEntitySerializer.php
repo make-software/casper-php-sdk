@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\EraValidator;
 
-class EraValidatorSerializer extends Serializer
+class EraValidatorEntitySerializer extends EntitySerializer
 {
     /**
      * @param EraValidator $eraValidator
@@ -14,7 +14,7 @@ class EraValidatorSerializer extends Serializer
     {
         return array(
             'era_id' => $eraValidator->getEraId(),
-            'validator_weights' => ValidatorWeightSerializer::toJsonArray($eraValidator->getValidatorWeights()),
+            'validator_weights' => ValidatorWeightEntitySerializer::toJsonArray($eraValidator->getValidatorWeights()),
         );
     }
 
@@ -22,7 +22,7 @@ class EraValidatorSerializer extends Serializer
     {
         return new EraValidator(
             $json['era_id'],
-            ValidatorWeightSerializer::fromJsonArray($json['validator_weights'])
+            ValidatorWeightEntitySerializer::fromJsonArray($json['validator_weights'])
         );
     }
 }

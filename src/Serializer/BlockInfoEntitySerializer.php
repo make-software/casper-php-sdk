@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\BlockInfo;
 
-class BlockInfoSerializer extends Serializer
+class BlockInfoEntitySerializer extends EntitySerializer
 {
     /**
      * @param BlockInfo $blockInfo

@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\ValidatorWeight;
 
-class ValidatorWeightSerializer extends Serializer
+class ValidatorWeightEntitySerializer extends EntitySerializer
 {
     /**
      * @param ValidatorWeight $validatorWeight

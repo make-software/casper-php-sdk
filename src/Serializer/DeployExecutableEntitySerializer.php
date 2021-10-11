@@ -10,7 +10,7 @@ use Casper\Entity\DeployExecutableStoredVersionedContractByHash;
 use Casper\Entity\DeployExecutableStoredVersionedContractByName;
 use Casper\Entity\DeployExecutableTransfer;
 
-class DeployExecutableSerializer extends Serializer
+class DeployExecutableEntitySerializer extends EntitySerializer
 {
     /**
      * @param DeployExecutable $deployExecutable
@@ -21,7 +21,7 @@ class DeployExecutableSerializer extends Serializer
         if ($deployExecutable->isModuleBytes()) {
             $result['ModuleBytes'] = array(
                 'module_bytes' => $deployExecutable->getModuleBytes()->getModuleBytes(),
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getModuleBytes()->getArgs()
                 )
             );
@@ -30,7 +30,7 @@ class DeployExecutableSerializer extends Serializer
             $result['StoredContractByHash'] = array(
                 'hash' => $deployExecutable->getStoredContractByHash()->getHash(),
                 'entry_point' => $deployExecutable->getStoredContractByHash()->getEntryPoint(),
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getStoredContractByHash()->getArgs()
                 ),
             );
@@ -39,7 +39,7 @@ class DeployExecutableSerializer extends Serializer
             $result['StoredContractByName'] = array(
                 'name' => $deployExecutable->getStoredContractByName()->getName(),
                 'entry_point' => $deployExecutable->getStoredContractByName()->getEntryPoint(),
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getStoredContractByName()->getArgs()
                 ),
             );
@@ -49,7 +49,7 @@ class DeployExecutableSerializer extends Serializer
                 'hash' => $deployExecutable->getStoredVersionedContractByHash()->getHash(),
                 'version' => $deployExecutable->getStoredVersionedContractByHash()->getVersion(),
                 'entry_point' => $deployExecutable->getStoredVersionedContractByHash()->getEntryPoint(),
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getStoredVersionedContractByHash()->getArgs()
                 ),
             );
@@ -59,14 +59,14 @@ class DeployExecutableSerializer extends Serializer
                 'name' => $deployExecutable->getStoredVersionedContractByName()->getName(),
                 'version' => $deployExecutable->getStoredVersionedContractByName()->getVersion(),
                 'entry_point' => $deployExecutable->getStoredVersionedContractByName()->getEntryPoint(),
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getStoredVersionedContractByName()->getArgs()
                 ),
             );
         }
         elseif ($deployExecutable->isTransfer()) {
             $result['Transfer'] = array(
-                'args' => DeployNamedArgSerializer::toJsonArray(
+                'args' => DeployNamedArgEntitySerializer::toJsonArray(
                     $deployExecutable->getTransfer()->getArgs()
                 ),
             );
@@ -129,7 +129,7 @@ class DeployExecutableSerializer extends Serializer
             }
 
             foreach ($data['args'] as $arg) {
-                $executableInternalInstance->setArg(DeployNamedArgSerializer::fromJson($arg));
+                $executableInternalInstance->setArg(DeployNamedArgEntitySerializer::fromJson($arg));
             }
         }
 

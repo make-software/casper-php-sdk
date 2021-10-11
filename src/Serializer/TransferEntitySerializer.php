@@ -4,7 +4,7 @@ namespace Casper\Serializer;
 
 use Casper\Entity\Transfer;
 
-class TransferSerializer extends Serializer
+class TransferEntitySerializer extends EntitySerializer
 {
     /**
      * @param Transfer $transfer
