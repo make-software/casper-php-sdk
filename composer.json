@@ -12,6 +12,7 @@
     "ext-openssl": "*",
     "ext-sodium": "*",
     "ext-gmp": "*",
+    "ext-mbstring": "*",
     "deemru/blake2b": "^1.0",
     "mdanter/ecc": "^1.0",
     "ionux/phactor": "1.0.8"

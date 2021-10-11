@@ -2,8 +2,6 @@
 
 namespace Casper\Entity;
 
-use Casper\Util\ByteUtil;
-
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
@@ -16,8 +14,10 @@ use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 use Phactor\Math;
+
+use Casper\Serializer\Secp256K1HexSignatureSerializer;
+use Casper\Util\ByteUtil;
 
 final class Secp256K1 extends AsymmetricKey
 {
@@ -90,17 +90,17 @@ final class Secp256K1 extends AsymmetricKey
         $randomK = $random->generate($this->generator->getOrder());
 
         $signer = new Signer($this->adapter);
-        $signature = (new DerSignatureSerializer())
+        $signature = (new Secp256K1HexSignatureSerializer())
             ->serialize($signer->sign($this->secpPrivateKey, $hash, $randomK));
 
-        return ByteUtil::stringToByteArray($signature);
+        return ByteUtil::hexToByteArray($signature);
     }
 
     public function verify(array $signature, array $message): bool
     {
         try {
-            $signature = (new DerSignatureSerializer())
-                ->parse(ByteUtil::byteArrayToString($signature));
+            $signature = (new Secp256K1HexSignatureSerializer())
+                ->parse(ByteUtil::byteArrayToHex($signature));
 
             $hasher = new SignHasher(self::HASHING_ALGORITHM);
             $hash = $hasher->makeHash(ByteUtil::byteArrayToString($message), $this->generator);
