@@ -19,7 +19,7 @@ use Phactor\Math;
 use Casper\Serializer\Secp256K1HexSignatureSerializer;
 use Casper\Util\ByteUtil;
 
-final class Secp256K1 extends AsymmetricKey
+final class Secp256K1Key extends AsymmetricKey
 {
     use Math;
 
