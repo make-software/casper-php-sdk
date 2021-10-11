@@ -24,8 +24,24 @@ class StoredValueEntitySerializer extends EntitySerializer
             $result['ContractWASM'] = $storedValue->getContractWASM();
         }
 
+        if ($storedValue->getContract()) {
+            $result['Contract'] = ContractMetadataEntitySerializer::toJson($storedValue->getContract());
+        }
+
+        if ($storedValue->getContractPackage()) {
+            $result['ContractPackage'] = ContractPackageEntitySerializer::toJson($storedValue->getContractPackage());
+        }
+
+        if ($storedValue->getTransfer()) {
+            $result['Transfer'] = TransferEntitySerializer::toJson($storedValue->getTransfer());
+        }
+
+        if ($storedValue->getDeployInfo()) {
+            $result['DeployInfo'] = DeployInfoEntitySerializer::toJson($storedValue->getDeployInfo());
+        }
+
         if ($storedValue->getEraInfo()) {
-            $result['EraInfo'] = $storedValue->getEraInfo();
+            $result['EraInfo'] = EraInfoEntitySerializer::toJson($storedValue->getEraInfo());
         }
 
         return $result ?? [];
@@ -40,6 +56,10 @@ class StoredValueEntitySerializer extends EntitySerializer
             isset($json['CLValue']) ? CLValueEntitySerializer::fromJson($json['CLValue']) : null,
             isset($json['Account']) ? AccountEntitySerializer::fromJson($json['Account']) : null,
             $json['ContractWASM'] ?? null,
+            isset($json['Contract']) ? ContractMetadataEntitySerializer::fromJson($json['Contract']) : null,
+            isset($json['ContractPackage']) ? ContractPackageEntitySerializer::fromJson($json['ContractPackage']) : null,
+            isset($json['Transfer']) ? TransferEntitySerializer::fromJson($json['Transfer']) : null,
+            isset($json['DeployInfo']) ? DeployInfoEntitySerializer::fromJson($json['DeployInfo']) : null,
             isset($json['EraInfo']) ? EraInfoEntitySerializer::fromJson($json['EraInfo']) : null
         );
     }

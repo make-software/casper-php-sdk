@@ -8,7 +8,7 @@ class Transfer
 
     private string $from;
 
-    private string $to;
+    private ?string $to;
 
     private string $source;
 
@@ -23,7 +23,7 @@ class Transfer
     public function __construct(
         string $deployHash,
         string $from,
-        string $to,
+        ?string $to,
         string $source,
         string $target,
         \GMP $amount,
@@ -51,7 +51,7 @@ class Transfer
         return $this->from;
     }
 
-    public function getTo(): string
+    public function getTo(): ?string
     {
         return $this->to;
     }

@@ -29,7 +29,7 @@ class TransferEntitySerializer extends EntitySerializer
         return new Transfer(
             $json['deploy_hash'],
             $json['from'],
-            $json['to'],
+            $json['to'] ?? null,
             $json['source'],
             $json['target'],
             gmp_init($json['amount']),

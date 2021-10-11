@@ -4,9 +4,12 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
+use Casper\Validation\EntityValidationAware;
 
 class Deploy
 {
+    use EntityValidationAware;
+
     /**
      * @var int[]
      */
@@ -40,25 +43,13 @@ class Deploy
         array $approvals = []
     )
     {
-        $this->assertApprovalsIsValid($approvals);
+        $this->assertArrayContainsProperEntities($approvals, DeployApproval::class);
 
         $this->hash = $hash;
         $this->header = $header;
         $this->payment = $payment;
         $this->session = $session;
         $this->approvals = $approvals;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function assertApprovalsIsValid(array $approvals): void
-    {
-        foreach ($approvals as $approval) {
-            if (!$approval instanceof DeployApproval) {
-                throw new \Exception('Invalid $approvals type');
-            }
-        }
     }
 
     public function getHash(): array

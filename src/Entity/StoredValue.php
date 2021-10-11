@@ -4,7 +4,6 @@ namespace Casper\Entity;
 
 use Casper\CLType\CLValue;
 
-//TODO: Add all fields to StoredValue object (Contract, ContractPackage, Transfer, DeployInfo)
 class StoredValue
 {
     private ?CLValue $cLValue;
@@ -13,24 +12,34 @@ class StoredValue
 
     private ?string $contractWASM;
 
+    private ?ContractMetadata $contract;
+
+    private ?ContractPackage $contractPackage;
+
+    private ?Transfer $transfer;
+
+    private ?DeployInfo $deployInfo;
+
     private ?EraInfo $eraInfo;
 
-    /**
-     * @param ?CLValue $cLValue
-     * @param ?Account $account
-     * @param string|null $contractWASM
-     * @param ?EraInfo $eraInfo
-     */
     public function __construct(
         ?CLValue $cLValue,
         ?Account $account,
         ?string  $contractWASM,
+        ?ContractMetadata $contract,
+        ?ContractPackage $contractPackage,
+        ?Transfer $transfer,
+        ?DeployInfo $deployInfo,
         ?EraInfo $eraInfo
     )
     {
         $this->cLValue = $cLValue;
         $this->account = $account;
         $this->contractWASM = $contractWASM;
+        $this->contract = $contract;
+        $this->contractPackage = $contractPackage;
+        $this->transfer = $transfer;
+        $this->deployInfo = $deployInfo;
         $this->eraInfo = $eraInfo;
     }
 
@@ -47,6 +56,26 @@ class StoredValue
     public function getContractWASM(): ?string
     {
         return $this->contractWASM;
+    }
+
+    public function getContract(): ?ContractMetadata
+    {
+        return $this->contract;
+    }
+
+    public function getContractPackage(): ?ContractPackage
+    {
+        return $this->contractPackage;
+    }
+
+    public function getTransfer(): ?Transfer
+    {
+        return $this->transfer;
+    }
+
+    public function getDeployInfo(): ?DeployInfo
+    {
+        return $this->deployInfo;
     }
 
     public function getEraInfo(): ?EraInfo
