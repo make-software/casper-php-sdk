@@ -20,20 +20,24 @@ $auctionState = $client->getAuctionState();
 ...
 ```
 
-Ed25519 key:
+Keys:
 ```php
-$keyPair = new \Casper\Entity\Ed25519Key();
+$key = new \Casper\Entity\Ed25519Key();
+// or
+$key = new \Casper\Entity\Secp256K1Key();
+```
 
+```php
 // Export public and private keys into pem string
-$publicKey = $keyPair->exportPublicKeyInPem();
-$privateKey = $keyPair->exportPrivateKeyInPem();
+$publicKey = $key->exportPublicKeyInPem();
+$privateKey = $key->exportPrivateKeyInPem();
 
 // Sign the message
-$message = [1,2,3];
-$signature = $keyPair->sign($message);
+$messageBytes = [1,2,3];
+$signature = $key->sign($messageBytes);
 
 // Verify signature
-$verified = $keyPair->verify($signature, $message);
+$verified = $key->verify($signature, $messageBytes);
 ```
 
 ## Roadmap
