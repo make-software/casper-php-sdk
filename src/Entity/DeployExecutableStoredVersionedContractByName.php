@@ -8,7 +8,7 @@ use Casper\CLType\CLOption;
 use Casper\CLType\CLU32;
 use Casper\CLType\CLU32Type;
 
-class DeployExecutableStoredVersionedContractByName extends DeployExecutableStoredContractByName
+final class DeployExecutableStoredVersionedContractByName extends DeployExecutableStoredContractByName
 {
     protected const TAG = 4;
 

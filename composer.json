@@ -11,7 +11,9 @@
     "ext-openssl": "*",
     "ext-sodium": "*",
     "ext-gmp": "*",
-    "deemru/blake2b": "^1.0"
+    "deemru/blake2b": "^1.0",
+    "mdanter/ecc": "^1.0",
+    "ionux/phactor": "1.0.8"
   },
   "autoload": {
     "psr-4": {

@@ -52,7 +52,9 @@ final class Ed25519Key extends AsymmetricKey
     public static function parsePrivateKeyFile(string $path): array
     {
         return self::parsePrivateKey(
-            KeysUtil::readBase64WithPEM(file_get_contents($path))
+            ByteUtil::stringToByteArray(
+                KeysUtil::readBase64WithPEM(file_get_contents($path))
+            )
         );
     }
 
@@ -62,7 +64,9 @@ final class Ed25519Key extends AsymmetricKey
     public static function parsePublicKeyFile(string $path): array
     {
         return self::parsePublicKey(
-            KeysUtil::readBase64WithPEM(file_get_contents($path))
+            ByteUtil::stringToByteArray(
+                KeysUtil::readBase64WithPEM(file_get_contents($path))
+            )
         );
     }
 
@@ -140,7 +144,7 @@ final class Ed25519Key extends AsymmetricKey
             )
         );
 
-        return $this->toPem(self::PEM_PUBLIC_KEY_TAG, $encoded);
+        return "-----BEGIN PUBLIC KEY-----\n$encoded\n-----END PUBLIC KEY-----\n";
     }
 
     /**
@@ -155,7 +159,7 @@ final class Ed25519Key extends AsymmetricKey
             )
         );
 
-        return $this->toPem(self::PEM_PRIVATE_KEY_TAG, $encoded);
+        return "-----BEGIN PRIVATE KEY-----\n$encoded\n-----END PUBLIC KEY-----\n";
     }
 
     /**

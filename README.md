@@ -37,7 +37,7 @@ $verified = $keyPair->verify($signature, $message);
 - [x] Add `CLType` primitives
 - [x] Add domain-specific entities
 - [x] Add deploy creation related services
-- [ ] Add `Secp256k1` key support
+- [x] Add `Secp256k1` key support
 - [ ] Return `CLValue` types instead of `GMP`, `strings`, and byte arrays
 - [ ] Get rid of redundant methods/abstractions (e.g. deploy arguments)
 - [ ] Implement magic `__toString()` method for CLTypes where it makes sense

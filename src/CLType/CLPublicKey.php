@@ -9,8 +9,13 @@ use Casper\Entity\AsymmetricKey;
 
 final class CLPublicKey extends CLValue
 {
-    private const ED25519_LENGTH = 32;
-    private const SECP256K1_LENGTH = 33;
+    public const ED25519_LENGTH = 32;
+    public const SECP256K1_LENGTH = 33;
+
+    public const KEY_TYPE_TO_KEY_LENGTH_MAP = array(
+        AsymmetricKey::ALGO_ED25519 => CLPublicKey::ED25519_LENGTH,
+        AsymmetricKey::ALGO_SECP255K1 => CLPublicKey::SECP256K1_LENGTH,
+    );
 
     protected CLPublicKeyTag $tag;
 
@@ -34,7 +39,7 @@ final class CLPublicKey extends CLValue
         }
 
         $keyType = $bytes[0];
-        $keyLength = AsymmetricKey::KEY_TYPE_TO_KEY_LENGTH_MAP[$keyType] ?? null;
+        $keyLength = self::KEY_TYPE_TO_KEY_LENGTH_MAP[$keyType] ?? null;
 
         if (!$keyLength) {
             self::throwFromBytesCreationError(CLTypeTag::CL_ERROR_CODE_FORMATTING);

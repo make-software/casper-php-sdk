@@ -9,7 +9,7 @@ class KeysUtil
     /**
      * @throws \Exception
      */
-    public static function readBase64WithPEM(string $content): array
+    public static function readBase64WithPEM(string $content): string
     {
         $base64 = trim(
             join(
@@ -22,7 +22,7 @@ class KeysUtil
             )
         );
 
-        return ByteUtil::stringToByteArray(base64_decode($base64));
+        return base64_decode($base64);
     }
 
     /**

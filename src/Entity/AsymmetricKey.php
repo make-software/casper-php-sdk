@@ -10,21 +10,10 @@ abstract class AsymmetricKey
     public const ALGO_ED25519 = 1;
     public const ALGO_SECP255K1 = 2;
 
-    public const KEY_LENGTH_ED25519 = 32;
-    public const KEY_LENGTH_SECP255K1 = 33;
-
     public const SUPPORTED_SIGNATURE_ALGORITHM = [
         self::ALGO_ED25519,
         self::ALGO_SECP255K1,
     ];
-
-    public const KEY_TYPE_TO_KEY_LENGTH_MAP = array(
-        self::ALGO_ED25519 => self::KEY_LENGTH_ED25519,
-        self::ALGO_SECP255K1 => self::KEY_LENGTH_SECP255K1
-    );
-
-    protected const PEM_PUBLIC_KEY_TAG = 'PUBLIC KEY';
-    protected const PEM_PRIVATE_KEY_TAG = 'PRIVATE KEY';
 
     protected CLPublicKey $publicKey;
 
@@ -79,21 +68,16 @@ abstract class AsymmetricKey
         return $this->signatureAlgorithm;
     }
 
+    public function accountHex(): string
+    {
+        return $this->publicKey->toHex();
+    }
+
     /**
      * @throws \Exception
      */
     public function accountHash(): array
     {
         return $this->publicKey->toAccountHash();
-    }
-
-    public function accountHex(): string
-    {
-        return $this->publicKey->toHex();
-    }
-
-    protected function toPem(string $tag, string $content): string
-    {
-        return "-----BEGIN $tag-----\n$content\n-----END PUBLIC KEY-----\n";
     }
 }
