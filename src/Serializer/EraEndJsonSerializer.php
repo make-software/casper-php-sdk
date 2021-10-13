@@ -18,7 +18,7 @@ class EraEndJsonSerializer extends JsonSerializer
         );
     }
 
-    public static function fromJson(array $json)
+    public static function fromJson(array $json): EraEnd
     {
         return new EraEnd(
             EraReportJsonSerializer::fromJson($json['era_report']),

@@ -285,7 +285,9 @@ class RpcClient
             )
         );
 
-        return EraSummaryJsonSerializer::fromJson($response['era_summary'] ?? []);
+        return isset($response['era_summary'])
+            ? EraSummaryJsonSerializer::fromJson($response['era_summary'])
+            : null;
     }
 
     /**
@@ -302,7 +304,9 @@ class RpcClient
             )
         );
 
-        return EraSummaryJsonSerializer::fromJson($response['era_summary'] ?? []);
+        return isset($response['era_summary'])
+            ? EraSummaryJsonSerializer::fromJson($response['era_summary'])
+            : null;
     }
 
     /**

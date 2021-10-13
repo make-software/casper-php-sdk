@@ -22,10 +22,6 @@ class EraSummaryJsonSerializer extends JsonSerializer
 
     public static function fromJson(array $json): ?EraSummary
     {
-        if (!$json) {
-            return null;
-        }
-
         return new EraSummary(
             $json['block_hash'],
             $json['era_id'],
