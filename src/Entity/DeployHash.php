@@ -2,9 +2,7 @@
 
 namespace Casper\Entity;
 
-use Casper\Interfaces\ToBytesInterface;
-
-class DeployHash implements ToBytesInterface
+class DeployHash implements ToBytesConvertible
 {
     /**
      * @var int[]

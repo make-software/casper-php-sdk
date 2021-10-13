@@ -2,7 +2,7 @@
 
 namespace Casper\Util;
 
-use Casper\Entity\AsymmetricKey;
+use Casper\Util\Crypto\AsymmetricKey;
 
 class KeysUtil
 {
@@ -27,16 +27,16 @@ class KeysUtil
 
     /**
      * @param int $signatureAlgorithm
-     * @param array $publicKey
+     * @param string $hexPublicKey
      * @return string
      * @throws \Exception
      */
-    public static function accountHex(int $signatureAlgorithm, array $publicKey): string
+    public static function accountHex(int $signatureAlgorithm, string $hexPublicKey): string
     {
         if (!in_array($signatureAlgorithm, AsymmetricKey::SUPPORTED_SIGNATURE_ALGORITHM)) {
             throw new \Exception("$signatureAlgorithm invalid signature algorithm");
         }
 
-        return "0$signatureAlgorithm" . ByteUtil::byteArrayToHex($publicKey);
+        return "0" . $signatureAlgorithm . $hexPublicKey;
     }
 }

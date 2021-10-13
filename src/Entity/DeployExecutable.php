@@ -9,9 +9,7 @@ use Casper\CLType\CLU512;
 use Casper\CLType\CLU64;
 use Casper\CLType\CLURef;
 
-use Casper\Interfaces\ToBytesInterface;
-
-class DeployExecutable implements ToBytesInterface
+class DeployExecutable implements ToBytesConvertible
 {
     private ?DeployExecutableModuleBytes $moduleBytes = null;
 
@@ -47,7 +45,7 @@ class DeployExecutable implements ToBytesInterface
      * @return DeployExecutable
      * @throws \Exception
      */
-    public static function newTransfer($id, $amount, $target, CLURef $sourcePurse = null): DeployExecutable
+    public static function newTransfer($id, $amount, $target, CLURef $sourcePurse = null): self
     {
         if ($target instanceof CLURef) {
             $targetValue = $target;

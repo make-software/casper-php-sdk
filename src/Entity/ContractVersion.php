@@ -8,7 +8,7 @@ class ContractVersion
 
     private int $contractVersion;
 
-    private string $contractHash;
+    private string $contractHash; // Hash
 
     public function __construct(int $protocolVersionMajor, int $contractVersion, string $contractHash)
     {

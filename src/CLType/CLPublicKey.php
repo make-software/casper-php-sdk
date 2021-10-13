@@ -4,8 +4,7 @@ namespace Casper\CLType;
 
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
-
-use Casper\Entity\AsymmetricKey;
+use Casper\Util\Crypto\AsymmetricKey;
 
 final class CLPublicKey extends CLValue
 {
@@ -17,7 +16,7 @@ final class CLPublicKey extends CLValue
         AsymmetricKey::ALGO_SECP255K1 => CLPublicKey::SECP256K1_LENGTH,
     );
 
-    protected CLPublicKeyTag $tag;
+    private CLPublicKeyTag $tag;
 
     /**
      * @throws \Exception
@@ -51,41 +50,6 @@ final class CLPublicKey extends CLValue
         );
     }
 
-    /**
-     * @throws \Exception
-     */
-    public static function fromHex(string $publicKeyHex): self
-    {
-        if (strlen($publicKeyHex) < 2) {
-            throw new \Exception('Asymmetric key error: too short');
-        }
-
-        $bytes = ByteUtil::hexToByteArray($publicKeyHex);
-        return new self(
-            array_slice($bytes, 1),
-            new CLPublicKeyTag($bytes[0])
-        );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function fromED5519(array $publicKey): self
-    {
-        return new self($publicKey, new CLPublicKeyTag(CLPublicKeyTag::ED25519));
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function fromSECP256K1(array $publicKey): self
-    {
-        return new self($publicKey, new CLPublicKeyTag(CLPublicKeyTag::SECP256K1));
-    }
-
-    /**
-     * @return int[]
-     */
     public function value(): array
     {
         return $this->data;
@@ -96,9 +60,6 @@ final class CLPublicKey extends CLValue
         return new CLPublicKeyType();
     }
 
-    /**
-     * @return int[]
-     */
     public function toBytes(): array
     {
         return array_merge([$this->tag->getTagValue()], $this->data);
@@ -109,16 +70,6 @@ final class CLPublicKey extends CLValue
         return ByteUtil::byteArrayToHex($this->toBytes());
     }
 
-    public function isED25519(): bool
-    {
-        return $this->tag->getTagValue() === CLPublicKeyTag::ED25519;
-    }
-
-    public function isSECP256K1(): bool
-    {
-        return $this->tag->getTagValue() === CLPublicKeyTag::SECP256K1;
-    }
-
     public function toHex(): string
     {
         return '0'
@@ -127,7 +78,6 @@ final class CLPublicKey extends CLValue
     }
 
     /**
-     * @return int[]
      * @throws \Exception
      */
     public function toAccountHash(): array

@@ -2,17 +2,20 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLAccountHash;
+use Casper\CLType\CLURef;
+
 class Transfer
 {
-    private string $deployHash;
+    private string $deployHash; // Hash
 
-    private string $from;
+    private CLAccountHash $from;
 
-    private ?string $to;
+    private ?CLAccountHash $to;
 
-    private string $source;
+    private CLURef $source;
 
-    private string $target;
+    private CLURef $target;
 
     private \GMP $amount;
 
@@ -22,10 +25,10 @@ class Transfer
 
     public function __construct(
         string $deployHash,
-        string $from,
-        ?string $to,
-        string $source,
-        string $target,
+        CLAccountHash $from,
+        ?CLAccountHash $to,
+        CLURef $source,
+        CLURef $target,
         \GMP $amount,
         \GMP $gas,
         ?int $id
@@ -46,22 +49,22 @@ class Transfer
         return $this->deployHash;
     }
 
-    public function getFrom(): string
+    public function getFrom(): CLAccountHash
     {
         return $this->from;
     }
 
-    public function getTo(): ?string
+    public function getTo(): ?CLAccountHash
     {
         return $this->to;
     }
 
-    public function getSource(): string
+    public function getSource(): CLURef
     {
         return $this->source;
     }
 
-    public function getTarget(): string
+    public function getTarget(): CLURef
     {
         return $this->target;
     }

@@ -4,6 +4,7 @@ namespace Casper\Entity;
 
 use Casper\CLType\CLValue;
 
+//TODO: Replace with key abstraction (https://docs.rs/casper-types/1.3.1/casper_types/enum.Key.html)
 class StoredValue
 {
     private ?CLValue $cLValue;
@@ -12,7 +13,7 @@ class StoredValue
 
     private ?string $contractWASM;
 
-    private ?ContractMetadata $contract;
+    private ?Contract $contract;
 
     private ?ContractPackage $contractPackage;
 
@@ -23,14 +24,14 @@ class StoredValue
     private ?EraInfo $eraInfo;
 
     public function __construct(
-        ?CLValue $cLValue,
-        ?Account $account,
-        ?string  $contractWASM,
-        ?ContractMetadata $contract,
+        ?CLValue         $cLValue,
+        ?Account         $account,
+        ?string          $contractWASM,
+        ?Contract        $contract,
         ?ContractPackage $contractPackage,
-        ?Transfer $transfer,
-        ?DeployInfo $deployInfo,
-        ?EraInfo $eraInfo
+        ?Transfer        $transfer,
+        ?DeployInfo      $deployInfo,
+        ?EraInfo         $eraInfo
     )
     {
         $this->cLValue = $cLValue;
@@ -58,7 +59,7 @@ class StoredValue
         return $this->contractWASM;
     }
 
-    public function getContract(): ?ContractMetadata
+    public function getContract(): ?Contract
     {
         return $this->contract;
     }

@@ -2,19 +2,21 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class SeigniorageAllocationValidator
 {
-    private string $validatorPublicKey;
+    private CLPublicKey $validatorPublicKey;
 
     private \GMP $amount;
 
-    public function __construct(string $validatorPublicKey, \GMP $amount)
+    public function __construct(CLPublicKey $validatorPublicKey, \GMP $amount)
     {
         $this->validatorPublicKey = $validatorPublicKey;
         $this->amount = $amount;
     }
 
-    public function getValidatorPublicKey(): string
+    public function getValidatorPublicKey(): CLPublicKey
     {
         return $this->validatorPublicKey;
     }

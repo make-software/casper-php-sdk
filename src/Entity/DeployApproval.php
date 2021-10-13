@@ -2,19 +2,21 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class DeployApproval
 {
-    private string $signer;
+    private CLPublicKey $signer;
 
-    private string $signature;
+    private string $signature; // Hash
 
-    public function __construct(string $signer, string $signature)
+    public function __construct(CLPublicKey $signer, string $signature)
     {
         $this->signer = $signer;
         $this->signature = $signature;
     }
 
-    public function getSigner(): string
+    public function getSigner(): CLPublicKey
     {
         return $this->signer;
     }

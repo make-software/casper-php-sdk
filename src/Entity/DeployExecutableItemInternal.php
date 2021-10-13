@@ -2,9 +2,7 @@
 
 namespace Casper\Entity;
 
-use Casper\Interfaces\ToBytesInterface;
-
-abstract class DeployExecutableItemInternal implements ToBytesInterface
+abstract class DeployExecutableItemInternal implements ToBytesConvertible
 {
     /**
      * @var DeployNamedArg[]

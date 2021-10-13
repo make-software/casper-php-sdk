@@ -3,11 +3,9 @@
 namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
-
-use Casper\Interfaces\ToBytesInterface;
 use Casper\CLType\CLValue;
 
-class DeployNamedArg implements ToBytesInterface
+class DeployNamedArg implements ToBytesConvertible
 {
     /**
      * Argument name mapped to an entry point parameter.

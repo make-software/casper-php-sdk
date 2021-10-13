@@ -2,9 +2,11 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLURef;
+
 class BidInfo
 {
-    private string $bondingPurse;
+    private CLURef $bondingPurse;
 
     private \GMP $stakedAmount;
 
@@ -17,15 +19,8 @@ class BidInfo
 
     private bool $inactive;
 
-    /**
-     * @param string $bondingPurse
-     * @param \GMP $stakedAmount
-     * @param int $delegationRate
-     * @param Delegator[] $delegators
-     * @param bool $inactive
-     */
     public function __construct(
-        string $bondingPurse,
+        CLURef $bondingPurse,
         \GMP $stakedAmount,
         int $delegationRate,
         array $delegators,
@@ -39,7 +34,7 @@ class BidInfo
         $this->inactive = $inactive;
     }
 
-    public function getBondingPurse(): string
+    public function getBondingPurse(): CLURef
     {
         return $this->bondingPurse;
     }

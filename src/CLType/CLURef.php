@@ -9,6 +9,8 @@ final class CLURef extends CLValue
     private const UREF_ACCESS_RIGHTS_LENGTH = 1;
     private const UREF_ADDRESS_LENGTH = 32;
 
+    public const UREF_PREFIX = 'uref-';
+
     // No permissions
     public const ACCESS_NONE = 0b0;
 
@@ -101,8 +103,8 @@ final class CLURef extends CLValue
 
     public function parsedValue(): string
     {
-        // TODO: Implement parsedValue() method.
-        return '';
+        return self::UREF_PREFIX . ByteUtil::byteArrayToHex($this->data)
+            . '-' . str_pad($this->accessRights, 3, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -112,11 +114,14 @@ final class CLURef extends CLValue
     private function assertURefAddressIsValid(array $urefAddress): void
     {
         if (!ByteUtil::isByteArray($urefAddress)) {
-            throw new \Exception('$urefAddress should be byte array');
+            $message = '$urefAddress should be byte array';
+        }
+        elseif (count($urefAddress) !== self::UREF_ADDRESS_LENGTH) {
+            $message = 'The length of URefAddress should be 32';
         }
 
-        if (count($urefAddress) !== self::UREF_ADDRESS_LENGTH) {
-            throw new \Exception('The length of URefAddress should be 32');
+        if (isset($message)) {
+            throw new \Exception($message);
         }
     }
 

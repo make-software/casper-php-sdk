@@ -2,7 +2,7 @@
 
 namespace Casper\Util;
 
-use Casper\Interfaces\ToBytesInterface;
+use Casper\Entity\ToBytesConvertible;
 
 class ByteUtil
 {
@@ -66,6 +66,11 @@ class ByteUtil
         return bin2hex($string);
     }
 
+    public static function hexToString(string $string): string
+    {
+        return hex2bin($string);
+    }
+
     /**
      * @param string $string
      * @return int[]
@@ -78,7 +83,7 @@ class ByteUtil
     }
 
     /**
-     * @param ToBytesInterface[] $vector
+     * @param ToBytesConvertible[] $vector
      * @return array
      * @throws \Exception
      */

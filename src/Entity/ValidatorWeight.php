@@ -2,19 +2,21 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class ValidatorWeight
 {
-    private string $publicKey;
+    private CLPublicKey $publicKey;
 
     private \GMP $weight;
 
-    public function __construct(string $publicKey, \GMP $weight)
+    public function __construct(CLPublicKey $publicKey, \GMP $weight)
     {
         $this->publicKey = $publicKey;
         $this->weight = $weight;
     }
 
-    public function getPublicKey(): string
+    public function getPublicKey(): CLPublicKey
     {
         return $this->publicKey;
     }

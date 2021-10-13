@@ -2,19 +2,17 @@
 
 namespace Casper\Entity;
 
-use Casper\Validation\EntityValidationAware;
+use Casper\CLType\CLType;
 
 class EntryPoint
 {
-    use EntityValidationAware;
-
     private string $access;
 
     private string $entryPointType;
 
     private string $name;
 
-    private string $ret;
+    private CLType $ret;
 
     /**
      * @var NamedCLTypeArg[]
@@ -24,10 +22,8 @@ class EntryPoint
     /**
      * @throws \Exception
      */
-    public function __construct(string $access, string $entryPointType, string $name, string $ret, array $args)
+    public function __construct(string $access, string $entryPointType, string $name, CLType $ret, array $args)
     {
-        $this->assertArrayContainsProperEntities($args, NamedCLTypeArg::class);
-
         $this->access = $access;
         $this->entryPointType = $entryPointType;
         $this->name = $name;
@@ -50,7 +46,7 @@ class EntryPoint
         return $this->name;
     }
 
-    public function getRet(): string
+    public function getRet(): CLType
     {
         return $this->ret;
     }

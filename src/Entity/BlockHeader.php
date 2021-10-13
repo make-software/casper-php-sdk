@@ -4,17 +4,17 @@ namespace Casper\Entity;
 
 class BlockHeader
 {
-    private string $parentHash;
+    private string $parentHash; // Hash
 
-    private string $stateRootHash;
+    private string $stateRootHash; // Hash
 
-    private string $bodyHash;
+    private string $bodyHash; // Hash
 
     private bool $randomBit;
 
-    private string $accumulatedSeed;
+    private string $accumulatedSeed; // Hash
 
-    private $eraEnd;
+    private ?EraEnd $eraEnd;
 
     private int $timestamp;
 
@@ -22,7 +22,7 @@ class BlockHeader
 
     private int $height;
 
-    private string $protocolVersion;
+    private string $protocolVersion; // Version
 
     public function __construct(
         string $parentHash,
@@ -30,7 +30,7 @@ class BlockHeader
         string $bodyHash,
         bool $randomBit,
         string $accumulatedSeed,
-        $eraEnd,
+        ?EraEnd $eraEnd,
         int $timestamp,
         int $eraId,
         int $height,
@@ -74,7 +74,7 @@ class BlockHeader
         return $this->accumulatedSeed;
     }
 
-    public function getEraEnd()
+    public function getEraEnd(): ?EraEnd
     {
         return $this->eraEnd;
     }

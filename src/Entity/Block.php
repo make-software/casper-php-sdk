@@ -4,7 +4,7 @@ namespace Casper\Entity;
 
 class Block
 {
-    private string $hash;
+    private string $hash; // Hash
 
     private BlockHeader $header;
 
@@ -15,6 +15,7 @@ class Block
      */
     private array $proofs;
 
+    // $hash can be string or Hash
     public function __construct(string $hash, BlockHeader $header, BlockBody $body, array $proofs)
     {
         $this->hash = $hash;

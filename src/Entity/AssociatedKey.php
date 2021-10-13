@@ -2,19 +2,21 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLAccountHash;
+
 class AssociatedKey
 {
-    private string $accountHash;
+    private CLAccountHash $accountHash;
 
     private int $weight;
 
-    public function __construct(string $accountHash, int $weight)
+    public function __construct(CLAccountHash $accountHash, int $weight)
     {
         $this->accountHash = $accountHash;
         $this->weight = $weight;
     }
 
-    public function getAccountHash(): string
+    public function getAccountHash(): CLAccountHash
     {
         return $this->accountHash;
     }

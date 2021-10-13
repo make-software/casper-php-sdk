@@ -6,6 +6,7 @@ use Casper\Util\ByteUtil;
 
 final class CLAccountHash extends CLValue
 {
+    public const ACCOUNT_HASH_PREFIX = 'account-hash-';
     public const ACCOUNT_HASH_LENGTH = 32;
 
     /**
@@ -51,7 +52,7 @@ final class CLAccountHash extends CLValue
 
     public function parsedValue(): string
     {
-        return ByteUtil::byteArrayToHex($this->data);
+        return 'account-hash-' . ByteUtil::byteArrayToHex($this->data);
     }
 
     /**
@@ -61,7 +62,14 @@ final class CLAccountHash extends CLValue
     private function assertByteArrayIsValid(array $byteArray): void
     {
         if (!ByteUtil::isByteArray($byteArray)) {
-            throw new \Exception('Incorrect byte array: ' . join(',', $byteArray));
+            $message = 'Incorrect byte array: ' . join(',', $byteArray);
+        }
+        elseif (count($byteArray) !== self::ACCOUNT_HASH_LENGTH) {
+            $message = 'Incorrect byte array length';
+        }
+
+        if (isset($message)) {
+            throw new \Exception($message);
         }
     }
 }

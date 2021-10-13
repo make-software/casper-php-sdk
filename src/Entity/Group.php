@@ -2,13 +2,18 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLURef;
+
 class Group
 {
     private string $group;
 
-    private string $keys;
+    /**
+     * @var CLURef[]
+     */
+    private array $keys;
 
-    public function __construct(string $group, string $keys)
+    public function __construct(string $group, array $keys)
     {
         $this->group = $group;
         $this->keys = $keys;
@@ -19,7 +24,7 @@ class Group
         return $this->group;
     }
 
-    public function getKeys(): string
+    public function getKeys(): array
     {
         return $this->keys;
     }

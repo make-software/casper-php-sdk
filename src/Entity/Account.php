@@ -2,15 +2,15 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLAccountHash;
+use Casper\CLType\CLURef;
+
 class Account
 {
-    private string $accountHash;
+    private CLAccountHash $accountHash;
 
-    private string $mainPurse;
+    private CLURef $mainPurse;
 
-    /**
-     * @var NamedKey[]
-     */
     private array $namedKeys;
 
     /**
@@ -20,20 +20,14 @@ class Account
 
     private ActionThresholds $actionThresholds;
 
-    /**
-     * @param string $accountHash
-     * @param string $mainPurse
-     * @param NamedKey[] $namedKeys
-     * @param AssociatedKey[] $associatedKeys
-     * @param ActionThresholds $actionThresholds
-     */
     public function __construct(
-        string $accountHash,
-        string $mainPurse,
+        CLAccountHash $accountHash,
+        CLURef $mainPurse,
         array $namedKeys,
         array $associatedKeys,
         ActionThresholds $actionThresholds
-    ) {
+    )
+    {
         $this->accountHash = $accountHash;
         $this->mainPurse = $mainPurse;
         $this->namedKeys = $namedKeys;
@@ -41,12 +35,12 @@ class Account
         $this->actionThresholds = $actionThresholds;
     }
 
-    public function getAccountHash(): string
+    public function getAccountHash(): CLAccountHash
     {
         return $this->accountHash;
     }
 
-    public function getMainPurse(): string
+    public function getMainPurse(): CLURef
     {
         return $this->mainPurse;
     }

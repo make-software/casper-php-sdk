@@ -2,22 +2,28 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLAccountHash;
+use Casper\CLType\CLURef;
+
 class DeployInfo
 {
-    private string $deployHash;
+    private string $deployHash; // Hash
 
-    private string $from;
+    private CLAccountHash $from;
 
-    private string $source;
+    private CLURef $source;
 
-    private string $gas;
+    private \GMP $gas;
 
-    /**
-     * @var string[]
-     */
     private array $transfers;
 
-    public function __construct(string $deployHash, string $from, string $source, string $gas, array $transfers)
+    public function __construct(
+        string $deployHash,
+        CLAccountHash $from,
+        CLURef $source,
+        \GMP $gas,
+        array $transfers
+    )
     {
         $this->deployHash = $deployHash;
         $this->from = $from;
@@ -31,17 +37,17 @@ class DeployInfo
         return $this->deployHash;
     }
 
-    public function getFrom(): string
+    public function getFrom(): CLAccountHash
     {
         return $this->from;
     }
 
-    public function getSource(): string
+    public function getSource(): CLURef
     {
         return $this->source;
     }
 
-    public function getGas(): string
+    public function getGas(): \GMP
     {
         return $this->gas;
     }

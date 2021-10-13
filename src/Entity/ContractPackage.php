@@ -2,13 +2,11 @@
 
 namespace Casper\Entity;
 
-use Casper\Validation\EntityValidationAware;
+use Casper\CLType\CLURef;
 
 class ContractPackage
 {
-    use EntityValidationAware;
-
-    private string $accessKey;
+    private CLURef $accessKey;
 
     /**
      * @var ContractVersion[]
@@ -28,19 +26,15 @@ class ContractPackage
     /**
      * @throws \Exception
      */
-    public function __construct(string $accessKey, array $contractVersions, array $disabledVersions, array $groups)
+    public function __construct(CLURef $accessKey, array $contractVersions, array $disabledVersions, array $groups)
     {
-        $this->assertArrayContainsProperEntities($contractVersions, ContractVersion::class);
-        $this->assertArrayContainsProperEntities($disabledVersions, DisabledVersion::class);
-        $this->assertArrayContainsProperEntities($groups, Group::class);
-
         $this->accessKey = $accessKey;
         $this->contractVersions = $contractVersions;
         $this->disabledVersions = $disabledVersions;
         $this->groups = $groups;
     }
 
-    public function getAccessKey(): string
+    public function getAccessKey(): CLURef
     {
         return $this->accessKey;
     }

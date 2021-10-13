@@ -2,19 +2,21 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class BlockProof
 {
-    private string $publicKey;
+    private CLPublicKey $publicKey;
 
-    private string $signature;
+    private string $signature; // Hash
 
-    public function __construct(string $publicKey, string $signature)
+    public function __construct(CLPublicKey $publicKey, string $signature)
     {
         $this->publicKey = $publicKey;
         $this->signature = $signature;
     }
 
-    public function getPublicKey(): string
+    public function getPublicKey(): CLPublicKey
     {
         return $this->publicKey;
     }

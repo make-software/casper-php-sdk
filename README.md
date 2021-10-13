@@ -22,9 +22,9 @@ $auctionState = $client->getAuctionState();
 
 Keys:
 ```php
-$key = new \Casper\Entity\Ed25519Key();
+$key = new \Casper\Util\Crypto\Ed25519Key();
 // or
-$key = new \Casper\Entity\Secp256K1Key();
+$key = new \Casper\Util\Crypto\Secp256K1Key();
 ```
 
 ```php
@@ -33,11 +33,11 @@ $publicKey = $key->exportPublicKeyInPem();
 $privateKey = $key->exportPrivateKeyInPem();
 
 // Sign the message
-$messageBytes = [1,2,3];
-$signature = $key->sign($messageBytes);
+$message = 'Hello';
+$signature = $key->sign($message);
 
 // Verify signature
-$verified = $key->verify($signature, $messageBytes);
+$verified = $key->verify($signature, $message);
 ```
 
 ## Roadmap
@@ -48,10 +48,6 @@ $verified = $key->verify($signature, $messageBytes);
 - [x] Add domain-specific entities
 - [x] Add deploy creation related services
 - [x] Add `Secp256k1` key support
-- [ ] Return `CLValue` types instead of `GMP`, `strings`, and byte arrays
-- [ ] Get rid of redundant methods/abstractions (e.g. deploy arguments)
-- [ ] Implement magic `__toString()` method for CLTypes where it makes sense
-- [ ] Ensure polymorphic RPC method signatures that accept strings and CLTypes
 - [ ] Add extensive validations
 - [ ] Add automated tests
 - [ ] Add documentation

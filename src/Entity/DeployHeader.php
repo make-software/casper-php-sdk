@@ -3,11 +3,9 @@
 namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
-use Casper\Interfaces\ToBytesInterface;
-
 use Casper\CLType\CLPublicKey;
 
-class DeployHeader implements ToBytesInterface
+class DeployHeader implements ToBytesConvertible
 {
     private CLPublicKey $publicKey;
 
@@ -17,15 +15,9 @@ class DeployHeader implements ToBytesInterface
 
     private int $gasPrice;
 
-    /**
-     * @var int[]
-     */
-    private array $bodyHash;
+    private array $bodyHash; // Hash
 
-    /**
-     * @var int[][]
-     */
-    private array $dependencies;
+    private array $dependencies; // Hash[]
 
     private string $chainName;
 
@@ -104,12 +96,9 @@ class DeployHeader implements ToBytesInterface
             ByteUtil::toBytesU64($this->ttl),
             ByteUtil::toBytesU64($this->gasPrice),
             $this->bodyHash,
-            ByteUtil::vectorToBytesU32(array_map(
-                function (array $hash) {
-                    return new DeployHash($hash);
-                },
-                $this->dependencies
-            )),
+            ByteUtil::vectorToBytesU32(array_map(function (array $hash) {
+                return new DeployHash($hash);
+            }, $this->dependencies)),
             ByteUtil::stringToBytesU32($this->chainName)
         );
     }

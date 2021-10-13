@@ -4,13 +4,13 @@ namespace Casper\Entity;
 
 class EraSummary
 {
-    private string $blockHash;
+    private string $blockHash; // Hash
 
     private int $eraId;
 
     private StoredValue $storedValue;
 
-    private string $stateRootHash;
+    private string $stateRootHash; // Hash
 
     public function __construct(string $blockHash, int $eraId, StoredValue $storedValue, string $stateRootHash)
     {

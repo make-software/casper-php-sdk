@@ -2,22 +2,24 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class BlockBody
 {
-    private string $proposer;
+    private CLPublicKey $proposer;
 
-    private array $deployHashes;
+    private array $deployHashes; // Hash[]
 
-    private array $transferHashes;
+    private array $transferHashes; // Hash[]
 
-    public function __construct(string $proposer, array $deployHashes, array $transferHashes)
+    public function __construct(CLPublicKey $proposer, array $deployHashes, array $transferHashes)
     {
         $this->proposer = $proposer;
         $this->deployHashes = $deployHashes;
         $this->transferHashes = $transferHashes;
     }
 
-    public function getProposer(): string
+    public function getProposer(): CLPublicKey
     {
         return $this->proposer;
     }

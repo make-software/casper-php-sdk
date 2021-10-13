@@ -2,17 +2,25 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+use Casper\CLType\CLURef;
+
 class Delegator
 {
-    private string $publicKey;
+    private CLPublicKey $publicKey;
 
     private \GMP $stakedAmount;
 
-    private string $bondingPurse;
+    private CLURef $bondingPurse;
 
-    private string $delegatee;
+    private CLPublicKey $delegatee;
 
-    public function __construct(string $publicKey, \GMP $stakedAmount, string $bondingPurse, string $delegatee)
+    public function __construct(
+        CLPublicKey $publicKey,
+        \GMP $stakedAmount,
+        CLURef $bondingPurse,
+        CLPublicKey $delegatee
+    )
     {
         $this->publicKey = $publicKey;
         $this->stakedAmount = $stakedAmount;
@@ -20,7 +28,7 @@ class Delegator
         $this->delegatee = $delegatee;
     }
 
-    public function getPublicKey(): string
+    public function getPublicKey(): CLPublicKey
     {
         return $this->publicKey;
     }
@@ -30,12 +38,12 @@ class Delegator
         return $this->stakedAmount;
     }
 
-    public function getBondingPurse(): string
+    public function getBondingPurse(): CLURef
     {
         return $this->bondingPurse;
     }
 
-    public function getDelegatee(): string
+    public function getDelegatee(): CLPublicKey
     {
         return $this->delegatee;
     }

@@ -2,15 +2,17 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class Status
 {
     private string $chainspecName;
 
-    private string $startingStateRootHash;
+    private string $startingStateRootHash; // Hash
 
     private BlockInfo $lastAddedBlockInfo;
 
-    private string $ourPublicSigningKey;
+    private CLPublicKey $ourPublicSigningKey;
 
     private ?int $roundLength;
 
@@ -23,21 +25,11 @@ class Status
      */
     private array $peers;
 
-    /**
-     * @param string $chainspecName
-     * @param string $startingStateRootHash
-     * @param BlockInfo $lastAddedBlockInfo
-     * @param string $ourPublicSigningKey
-     * @param int|null $roundLength
-     * @param string $buildVersion
-     * @param array|null $nextUpgrade
-     * @param Peer[] $peers
-     */
     public function __construct(
         string $chainspecName,
         string $startingStateRootHash,
         BlockInfo $lastAddedBlockInfo,
-        string $ourPublicSigningKey,
+        CLPublicKey $ourPublicSigningKey,
         ?int $roundLength,
         string $buildVersion,
         ?array $nextUpgrade,
@@ -69,7 +61,7 @@ class Status
         return $this->lastAddedBlockInfo;
     }
 
-    public function getOurPublicSigningKey(): string
+    public function getOurPublicSigningKey(): CLPublicKey
     {
         return $this->ourPublicSigningKey;
     }

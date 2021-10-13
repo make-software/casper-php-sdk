@@ -4,16 +4,10 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
-use Casper\Validation\EntityValidationAware;
 
-class Deploy
+class Deploy implements ToBytesConvertible
 {
-    use EntityValidationAware;
-
-    /**
-     * @var int[]
-     */
-    private array $hash;
+    private array $hash; // Hash
 
     private DeployHeader $header;
 
@@ -26,15 +20,6 @@ class Deploy
      */
     private array $approvals;
 
-    /**
-     * @param int[] $hash
-     * @param DeployHeader $header
-     * @param DeployExecutable $payment
-     * @param DeployExecutable $session
-     * @param DeployApproval[] $approvals
-     *
-     * @throws \Exception
-     */
     public function __construct(
         array $hash,
         DeployHeader $header,
@@ -43,8 +28,6 @@ class Deploy
         array $approvals = []
     )
     {
-        $this->assertArrayContainsProperEntities($approvals, DeployApproval::class);
-
         $this->hash = $hash;
         $this->header = $header;
         $this->payment = $payment;
@@ -72,7 +55,7 @@ class Deploy
         if ($this->payment->isModuleBytes()) {
             $moduleBytesEntity = $this->payment->getModuleBytes();
 
-            if ($moduleBytesEntity && count($moduleBytesEntity->getModuleBytes()) !== 0) {
+            if ($moduleBytesEntity && $moduleBytesEntity->getModuleBytes() !== '') {
                 return true;
             }
         }
@@ -107,20 +90,6 @@ class Deploy
     /**
      * @throws \Exception
      */
-    public function size(): int
-    {
-        $hashSize = count($this->hash);
-        $bodySize = count(array_merge($this->payment->toBytes(), $this->session->toBytes()));
-        $headerSize = count($this->header->toBytes());
-        $approvalsSize = 0;
-
-        foreach ($this->approvals as $approval) {
-            $approvalsSize += (strlen($approval->getSigner()) + strlen($approval->getSignature())) / 2;
-        }
-
-        return $hashSize + $bodySize + $headerSize + $approvalsSize;
-    }
-
     public function toBytes(): array
     {
         $approvalsBytes = ByteUtil::toBytesU32(count($this->approvals));
@@ -137,27 +106,9 @@ class Deploy
         return array_merge(
             $this->header->toBytes(),
             $this->hash,
-            array_merge($this->payment->toBytes(), $this->session->toBytes()),
+            $this->payment->toBytes(),
+            $this->session->toBytes(),
             $approvalsBytes
         );
-    }
-
-    public function validate(): bool
-    {
-        $bodyHash = HashUtil::blake2bHash(
-            array_merge($this->payment->toBytes(), $this->session->toBytes())
-        );
-
-        if ($this->header->getBodyHash() !== $bodyHash) {
-            return false;
-        }
-
-        $deployHash = HashUtil::blake2bHash($this->header->toBytes());
-
-        if ($this->hash !== $deployHash) {
-            return false;
-        }
-
-        return true;
     }
 }

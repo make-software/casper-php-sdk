@@ -2,9 +2,11 @@
 
 namespace Casper\Entity;
 
+use Casper\CLType\CLPublicKey;
+
 class BlockInfo
 {
-    private string $hash;
+    private string $hash; // Hash
 
     private int $timestamp;
 
@@ -12,9 +14,9 @@ class BlockInfo
 
     private int $height;
 
-    private string $stateRootHash;
+    private string $stateRootHash; // Hash
 
-    private string $creator;
+    private CLPublicKey $creator;
 
     public function __construct(
         string $hash,
@@ -22,8 +24,9 @@ class BlockInfo
         int $eraId,
         int $height,
         string $stateRootHash,
-        string $creator
-    ) {
+        CLPublicKey $creator
+    )
+    {
         $this->hash = $hash;
         $this->timestamp = $timestamp;
         $this->eraId = $eraId;
@@ -57,7 +60,7 @@ class BlockInfo
         return $this->stateRootHash;
     }
 
-    public function getCreator(): string
+    public function getCreator(): CLPublicKey
     {
         return $this->creator;
     }
