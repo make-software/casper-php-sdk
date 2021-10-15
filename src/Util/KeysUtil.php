@@ -31,12 +31,13 @@ class KeysUtil
      * @return string
      * @throws \Exception
      */
-    public static function accountHex(int $signatureAlgorithm, string $hexPublicKey): string
+    public static function addPrefixToPublicKey(int $signatureAlgorithm, string $hexPublicKey): string
     {
         if (!in_array($signatureAlgorithm, AsymmetricKey::SUPPORTED_SIGNATURE_ALGORITHM)) {
             throw new \Exception("$signatureAlgorithm invalid signature algorithm");
         }
 
-        return "0" . $signatureAlgorithm . $hexPublicKey;
+        $prefix = '0' . $signatureAlgorithm;
+        return $prefix . $hexPublicKey;
     }
 }

@@ -48,13 +48,11 @@ class DeployService
     public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
         $signer = CLPublicKeyStringSerializer::fromString(
-            KeysUtil::accountHex($key->getSignatureAlgorithm(), $key->getPublicKey())
+            KeysUtil::addPrefixToPublicKey($key->getSignatureAlgorithm(), $key->getPublicKey())
         );
-        $signature = KeysUtil::accountHex(
+        $signature = KeysUtil::addPrefixToPublicKey(
             $key->getSignatureAlgorithm(),
-            $key->sign(
-                ByteUtil::byteArrayToHex($deploy->getHash())
-            )
+            $key->sign(ByteUtil::byteArrayToHex($deploy->getHash()))
         );
 
         return $deploy
@@ -94,7 +92,7 @@ class DeployService
         $approvalsSize = 0;
 
         foreach ($deploy->getApprovals() as $approval) {
-            $approvalsSize += (strlen($approval->getSigner()->toHex()) + strlen($approval->getSignature())) / 2;
+            $approvalsSize += (strlen(CLPublicKeyStringSerializer::toHex($approval->getSigner())) + strlen($approval->getSignature())) / 2;
         }
 
         return $hashSize + $bodySize + $headerSize + $approvalsSize;

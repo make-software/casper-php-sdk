@@ -12,7 +12,7 @@ class BlockBodyJsonSerializer extends JsonSerializer
     public static function toJson($blockBody): array
     {
         return array(
-            'proposer' => CLPublicKeyStringSerializer::toString($blockBody->getProposer()),
+            'proposer' => CLPublicKeyStringSerializer::toHex($blockBody->getProposer()),
             'deploy_hashes' => $blockBody->getDeployHashes(),
             'transfer_hashes' => $blockBody->getTransferHashes(),
         );
@@ -21,7 +21,7 @@ class BlockBodyJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): BlockBody
     {
         return new BlockBody(
-            CLPublicKeyStringSerializer::fromString($json['proposer']),
+            CLPublicKeyStringSerializer::fromHex($json['proposer']),
             $json['deploy_hashes'],
             $json['transfer_hashes']
         );

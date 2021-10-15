@@ -13,7 +13,7 @@ class RewardJsonSerializer extends JsonSerializer
     {
         return array(
             'amount' => (string) $reward->getAmount(),
-            'validator' => CLPublicKeyStringSerializer::toString($reward->getValidator()),
+            'validator' => CLPublicKeyStringSerializer::toHex($reward->getValidator()),
         );
     }
 
@@ -21,7 +21,7 @@ class RewardJsonSerializer extends JsonSerializer
     {
         return new Reward(
             gmp_init($json['amount']),
-            CLPublicKeyStringSerializer::fromString($json['validator'])
+            CLPublicKeyStringSerializer::fromHex($json['validator'])
         );
     }
 }

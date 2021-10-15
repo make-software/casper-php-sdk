@@ -12,7 +12,7 @@ class ValidatorWeightJsonSerializer extends JsonSerializer
     public static function toJson($validatorWeight): array
     {
         return array(
-            'public_key' => CLPublicKeyStringSerializer::toString($validatorWeight->getPublicKey()),
+            'public_key' => CLPublicKeyStringSerializer::toHex($validatorWeight->getPublicKey()),
             'weight' => (string) $validatorWeight->getWeight(),
         );
     }
@@ -20,7 +20,7 @@ class ValidatorWeightJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): ValidatorWeight
     {
         return new ValidatorWeight(
-            CLPublicKeyStringSerializer::fromString($json['public_key']),
+            CLPublicKeyStringSerializer::fromHex($json['public_key']),
             gmp_init($json['weight'])
         );
     }

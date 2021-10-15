@@ -2,31 +2,46 @@
 
 namespace Casper\Serializer;
 
+use Casper\Util\ByteUtil;
+
 use Casper\CLType\CLPublicKey;
 use Casper\CLType\CLPublicKeyTag;
-use Casper\Util\ByteUtil;
 
 class CLPublicKeyStringSerializer extends StringSerializer
 {
-    /**
-     * @param CLPublicKey $clPublicKey
-     * @return string
-     */
-    public static function toString($clPublicKey): string
+    public static function toHex(CLPublicKey $clPublicKey): string
     {
-        return $clPublicKey->toHex();
+        return self::toString($clPublicKey);
     }
 
     /**
      * @throws \Exception
      */
-    public static function fromString(string $hex): CLPublicKey
+    public static function fromHex(string $hex): CLPublicKey
     {
-        if (strlen($hex) < 2) {
+        return self::fromString($hex);
+    }
+
+    /**
+     * @param CLPublicKey $clPublicKey
+     */
+    public static function toString($clPublicKey): string
+    {
+        return '0'
+            . $clPublicKey->tag()->getTagValue()
+            . ByteUtil::byteArrayToHex($clPublicKey->value());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromString(string $string): CLPublicKey
+    {
+        if (strlen($string) < 2) {
             throw new \Exception('Asymmetric key error: too short');
         }
 
-        $bytes = ByteUtil::hexToByteArray($hex);
+        $bytes = ByteUtil::hexToByteArray($string);
         $publicKeyTag = $bytes[0];
         $publicKeyBytes = array_slice($bytes, 1);
 

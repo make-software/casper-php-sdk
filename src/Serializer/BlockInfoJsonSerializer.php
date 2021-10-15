@@ -17,7 +17,7 @@ class BlockInfoJsonSerializer extends JsonSerializer
             'era_id' => $blockInfo->getEraId(),
             'height' => $blockInfo->getHeight(),
             'state_root_hash' => $blockInfo->getStateRootHash(),
-            'creator' => CLPublicKeyStringSerializer::toString($blockInfo->getCreator()),
+            'creator' => CLPublicKeyStringSerializer::toHex($blockInfo->getCreator()),
         );
     }
 
@@ -29,7 +29,7 @@ class BlockInfoJsonSerializer extends JsonSerializer
             $json['era_id'],
             $json['height'],
             $json['state_root_hash'],
-            CLPublicKeyStringSerializer::fromString($json['creator'])
+            CLPublicKeyStringSerializer::fromHex($json['creator'])
         );
     }
 }

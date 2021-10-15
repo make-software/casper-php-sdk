@@ -12,7 +12,7 @@ class BidJsonSerializer extends JsonSerializer
     public static function toJson($bid): array
     {
         return array(
-            'public_key' => CLPublicKeyStringSerializer::toString($bid->getPublicKey()),
+            'public_key' => CLPublicKeyStringSerializer::toHex($bid->getPublicKey()),
             'bid' => BidInfoJsonSerializer::toJson($bid->getInfo()),
         );
     }
@@ -20,7 +20,7 @@ class BidJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): Bid
     {
         return new Bid(
-            CLPublicKeyStringSerializer::fromString($json['public_key']),
+            CLPublicKeyStringSerializer::fromHex($json['public_key']),
             BidInfoJsonSerializer::fromJson($json['bid'])
         );
     }

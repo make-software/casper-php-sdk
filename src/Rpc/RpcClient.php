@@ -5,6 +5,7 @@ namespace Casper\Rpc;
 use Casper\Serializer\AccountJsonSerializer;
 use Casper\Serializer\AuctionStateJsonSerializer;
 use Casper\Serializer\CLAccountHashStringSerializer;
+use Casper\Serializer\CLPublicKeyStringSerializer;
 use Casper\Serializer\CLURefStringSerializer;
 use Casper\Serializer\EraSummaryJsonSerializer;
 use Casper\Serializer\PeerJsonSerializer;
@@ -155,7 +156,7 @@ class RpcClient
     }
 
     /**
-     * @throws RpcError
+     * @throws \Exception
      */
     public function getStatus(): Status
     {
@@ -195,7 +196,7 @@ class RpcClient
                 'block_identifier' => array(
                     'Hash' => $blockHash
                 ),
-                'public_key' => $publicKey->toHex(),
+                'public_key' => CLPublicKeyStringSerializer::toHex($publicKey),
             )
         );
 
@@ -310,7 +311,7 @@ class RpcClient
     }
 
     /**
-     * @throws RpcError
+     * @throws \Exception
      */
     public function getDictionaryItemByURef(
         string $stateRootHash,

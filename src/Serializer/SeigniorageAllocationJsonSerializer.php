@@ -15,15 +15,15 @@ class SeigniorageAllocationJsonSerializer extends JsonSerializer
     {
         if ($delegator = $seigniorageAllocation->getDelegator()) {
             $result['Delegator'] = array(
-                'delegator_public_key' => CLPublicKeyStringSerializer::toString($delegator->getDelegatorPublicKey()),
-                'validator_public_key' => CLPublicKeyStringSerializer::toString($delegator->getValidatorPublicKey()),
+                'delegator_public_key' => CLPublicKeyStringSerializer::toHex($delegator->getDelegatorPublicKey()),
+                'validator_public_key' => CLPublicKeyStringSerializer::toHex($delegator->getValidatorPublicKey()),
                 'amount' => (string) $delegator->getAmount(),
             );
         }
 
         if ($validator = $seigniorageAllocation->getValidator()) {
             $result['Validator'] = array(
-                'validator_public_key' => CLPublicKeyStringSerializer::toString($validator->getValidatorPublicKey()),
+                'validator_public_key' => CLPublicKeyStringSerializer::toHex($validator->getValidatorPublicKey()),
                 'amount' => (string) $validator->getAmount(),
             );
         }
@@ -38,15 +38,15 @@ class SeigniorageAllocationJsonSerializer extends JsonSerializer
 
         if ($delegatorJson) {
             $delegator = new SeigniorageAllocationDelegator(
-                CLPublicKeyStringSerializer::fromString($delegatorJson['delegator_public_key']),
-                CLPublicKeyStringSerializer::fromString($delegatorJson['validator_public_key']),
+                CLPublicKeyStringSerializer::fromHex($delegatorJson['delegator_public_key']),
+                CLPublicKeyStringSerializer::fromHex($delegatorJson['validator_public_key']),
                 gmp_init($delegatorJson['amount'])
             );
         }
 
         if ($validatorJson) {
             $validator = new SeigniorageAllocationValidator(
-                CLPublicKeyStringSerializer::fromString($validatorJson['validator_public_key']),
+                CLPublicKeyStringSerializer::fromHex($validatorJson['validator_public_key']),
                 gmp_init($validatorJson['amount'])
             );
         }

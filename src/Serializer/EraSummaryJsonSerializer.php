@@ -20,7 +20,7 @@ class EraSummaryJsonSerializer extends JsonSerializer
         );
     }
 
-    public static function fromJson(array $json): ?EraSummary
+    public static function fromJson(array $json): EraSummary
     {
         return new EraSummary(
             $json['block_hash'],

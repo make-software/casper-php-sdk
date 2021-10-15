@@ -12,7 +12,7 @@ class BlockProofJsonSerializer extends JsonSerializer
     public static function toJson($blockProof): array
     {
         return array(
-            'public_key' => CLPublicKeyStringSerializer::toString($blockProof->getPublicKey()),
+            'public_key' => CLPublicKeyStringSerializer::toHex($blockProof->getPublicKey()),
             'signature' => $blockProof->getSignature(),
         );
     }
@@ -20,7 +20,7 @@ class BlockProofJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): BlockProof
     {
         return new BlockProof(
-            CLPublicKeyStringSerializer::fromString($json['public_key']),
+            CLPublicKeyStringSerializer::fromHex($json['public_key']),
             $json['signature']
         );
     }

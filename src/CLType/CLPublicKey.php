@@ -55,6 +55,11 @@ final class CLPublicKey extends CLValue
         return $this->data;
     }
 
+    public function tag(): CLPublicKeyTag
+    {
+        return $this->tag;
+    }
+
     public function clType(): CLPublicKeyType
     {
         return new CLPublicKeyType();
@@ -68,13 +73,6 @@ final class CLPublicKey extends CLValue
     public function parsedValue(): string
     {
         return ByteUtil::byteArrayToHex($this->toBytes());
-    }
-
-    public function toHex(): string
-    {
-        return '0'
-            . $this->tag->getTagValue()
-            . ByteUtil::byteArrayToHex($this->data);
     }
 
     /**
@@ -110,10 +108,10 @@ final class CLPublicKey extends CLValue
         $tagValue = $tag->getTagValue();
 
         if ($tagValue === CLPublicKeyTag::ED25519 && $keyLength !== self::ED25519_LENGTH) {
-            $message = 'Wrong length of ED25519 key. Expected' . self::ED25519_LENGTH . ', but got ' . $keyLength;
+            $message = 'Wrong length of ED25519 key. Expected ' . self::ED25519_LENGTH . ', but got ' . $keyLength;
         }
         else if ($tagValue === CLPublicKeyTag::SECP256K1 && $keyLength !== self::SECP256K1_LENGTH) {
-            $message = 'Wrong length of SECP256K1 key. Expected' . self::SECP256K1_LENGTH . ', but got ' . $keyLength;
+            $message = 'Wrong length of SECP256K1 key. Expected ' . self::SECP256K1_LENGTH . ', but got ' . $keyLength;
         }
 
         if (isset($message)) {

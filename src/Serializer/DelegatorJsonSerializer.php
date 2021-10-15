@@ -12,20 +12,20 @@ class DelegatorJsonSerializer extends JsonSerializer
     public static function toJson($delegator): array
     {
         return array(
-            'public_key' => CLPublicKeyStringSerializer::toString($delegator->getPublicKey()),
+            'public_key' => CLPublicKeyStringSerializer::toHex($delegator->getPublicKey()),
             'staked_amount' => (string) $delegator->getStakedAmount(),
             'bonding_purse' => CLURefStringSerializer::toString($delegator->getBondingPurse()),
-            'delegatee' => CLPublicKeyStringSerializer::toString($delegator->getDelegatee()),
+            'delegatee' => CLPublicKeyStringSerializer::toHex($delegator->getDelegatee()),
         );
     }
 
     public static function fromJson(array $json): Delegator
     {
         return new Delegator(
-            CLPublicKeyStringSerializer::fromString($json['public_key']),
+            CLPublicKeyStringSerializer::fromHex($json['public_key']),
             gmp_init($json['staked_amount']),
             CLURefStringSerializer::fromString($json['bonding_purse']),
-            CLPublicKeyStringSerializer::fromString($json['delegatee'])
+            CLPublicKeyStringSerializer::fromHex($json['delegatee'])
         );
     }
 }

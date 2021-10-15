@@ -2,6 +2,7 @@
 
 namespace Casper\Entity;
 
+use Casper\Serializer\CLPublicKeyStringSerializer;
 use Casper\Util\ByteUtil;
 use Casper\Util\HashUtil;
 
@@ -96,7 +97,7 @@ class Deploy implements ToBytesConvertible
 
         foreach ($this->approvals as $approval) {
             $signerAndSignatureBytes = array_merge(
-                ByteUtil::hexToByteArray($approval->getSigner()),
+                ByteUtil::hexToByteArray(CLPublicKeyStringSerializer::toHex($approval->getSigner())),
                 ByteUtil::hexToByteArray($approval->getSignature())
             );
 

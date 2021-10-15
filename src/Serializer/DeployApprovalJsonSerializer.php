@@ -12,7 +12,7 @@ class DeployApprovalJsonSerializer extends JsonSerializer
     public static function toJson($deployApproval): array
     {
         return [
-            'signer' => CLPublicKeyStringSerializer::toString($deployApproval->getSigner()),
+            'signer' => CLPublicKeyStringSerializer::toHex($deployApproval->getSigner()),
             'signature' => $deployApproval->getSignature(),
         ];
     }
@@ -20,7 +20,7 @@ class DeployApprovalJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): DeployApproval
     {
         return new DeployApproval(
-            CLPublicKeyStringSerializer::fromString($json['signer']),
+            CLPublicKeyStringSerializer::fromHex($json['signer']),
             $json['signature']
         );
     }

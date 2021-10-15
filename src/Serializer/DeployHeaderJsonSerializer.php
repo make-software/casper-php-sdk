@@ -19,7 +19,7 @@ class DeployHeaderJsonSerializer extends JsonSerializer
     public static function toJson($header): array
     {
         return [
-            'account' => CLPublicKeyStringSerializer::toString($header->getPublicKey()),
+            'account' => CLPublicKeyStringSerializer::toHex($header->getPublicKey()),
             'body_hash' => ByteUtil::byteArrayToHex($header->getBodyHash()),
             'chain_name' => $header->getChainName(),
             'dependencies' => $header->getDependencies(),
@@ -35,7 +35,7 @@ class DeployHeaderJsonSerializer extends JsonSerializer
     public static function fromJson(array $json): DeployHeader
     {
         return new DeployHeader(
-            CLPublicKeyStringSerializer::fromString($json['account']),
+            CLPublicKeyStringSerializer::fromHex($json['account']),
             strtotime($json['timestamp']),
             self::ttlToInt($json['ttl']),
             (int) $json['gas_price'],
