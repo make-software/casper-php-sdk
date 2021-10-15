@@ -26,9 +26,7 @@ abstract class Numeric extends CLValue
     {
         $this->bitSize = $bitSize;
         $this->signed = $isSigned;
-        $this->data = gettype($value) === 'object' && get_class($value) === 'GMP'
-            ? $value
-            : gmp_init($value);
+        $this->data = ($value instanceof \GMP) ? $value : gmp_init($value);
 
         if ($isSigned === false && gmp_cmp($this->data, 0) === -1) {
             throw new \Exception('Can\'t provide negative numbers with isSigned=false');

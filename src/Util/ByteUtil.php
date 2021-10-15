@@ -38,7 +38,7 @@ class ByteUtil
 
     public static function byteArrayToHex(array $byteArray): string
     {
-        return bin2hex(join(array_map("chr", $byteArray)));
+        return bin2hex(self::byteArrayToString($byteArray));
     }
 
     /**
@@ -147,11 +147,9 @@ class ByteUtil
      */
     public static function toBytesNumber(int $bitSize, bool $signed, $value): array
     {
-        $bnValue = $value instanceof \GMP
-            ? $value
-            : gmp_init($value);
+        $bigNumberValue = $value instanceof \GMP ? $value : gmp_init($value);
 
-        if (!$bnValue instanceof \GMP) {
+        if (!$bigNumberValue instanceof \GMP) {
             throw new \Exception("Unable to convert variable to GMP. Invalid value: $value");
         }
 
@@ -160,20 +158,20 @@ class ByteUtil
         if ($signed) {
             $bounds = gmp_pow(2, $bitSize - 1) - 1;
 
-            // If $bnValue greater than $bounds or $bnValue less than ($bounds + 1) * -1
-            if (gmp_cmp($bnValue, $bounds) === 1 || gmp_cmp(($bounds + 1) * -1, $bnValue) === 1) {
-                throw new \Exception("Value out-of-bounds, value: $bnValue");
+            // If $bigNumberValue greater than $bounds or $bigNumberValue less than ($bounds + 1) * -1
+            if (gmp_cmp($bigNumberValue, $bounds) === 1 || gmp_cmp(($bounds + 1) * -1, $bigNumberValue) === 1) {
+                throw new \Exception("Value out-of-bounds, value: $bigNumberValue");
             }
         }
-        elseif (gmp_cmp(0, $bnValue) === 1 || gmp_cmp($bnValue, $maxUIntValue) === 1) {
-            throw new \Exception("Value out-of-bounds, value: $bnValue");
+        elseif (gmp_cmp(0, $bigNumberValue) === 1 || gmp_cmp($bigNumberValue, $maxUIntValue) === 1) {
+            throw new \Exception("Value out-of-bounds, value: $bigNumberValue");
         }
 
         // Bit mask
-        $bnValue = gmp_and($bnValue, $maxUIntValue);
-        $bytes = ByteUtil::stringToByteArray(gmp_export($bnValue));
+        $bigNumberValue = gmp_and($bigNumberValue, $maxUIntValue);
+        $bytes = ByteUtil::stringToByteArray(gmp_export($bigNumberValue));
 
-        if (gmp_cmp($bnValue, 0) !== -1) {
+        if (gmp_cmp($bigNumberValue, 0) !== -1) {
             // for positive number, we had to deal with paddings
             if ($bitSize > 64) {
                 // for u128, u256, u512, we have to and append extra byte for length
