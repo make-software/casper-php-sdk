@@ -2,6 +2,7 @@
 
 namespace Casper\Service;
 
+use Casper\Serializer\CLPublicKeyStringSerializer;
 use Casper\Util\ByteUtil;
 use Casper\Util\Crypto\AsymmetricKey;
 use Casper\Util\HashUtil;
@@ -46,7 +47,9 @@ class DeployService
      */
     public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
-        $signer = KeysUtil::accountHex($key->getSignatureAlgorithm(), $key->getPublicKey());
+        $signer = CLPublicKeyStringSerializer::fromString(
+            KeysUtil::accountHex($key->getSignatureAlgorithm(), $key->getPublicKey())
+        );
         $signature = KeysUtil::accountHex(
             $key->getSignatureAlgorithm(),
             $key->sign(
@@ -91,7 +94,7 @@ class DeployService
         $approvalsSize = 0;
 
         foreach ($deploy->getApprovals() as $approval) {
-            $approvalsSize += (strlen($approval->getSigner()) + strlen($approval->getSignature())) / 2;
+            $approvalsSize += (strlen($approval->getSigner()->toHex()) + strlen($approval->getSignature())) / 2;
         }
 
         return $hashSize + $bodySize + $headerSize + $approvalsSize;
