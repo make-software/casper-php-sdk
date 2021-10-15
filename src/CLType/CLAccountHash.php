@@ -40,6 +40,11 @@ final class CLAccountHash extends CLValue
         return $this->data;
     }
 
+    public function parsedValue(): string
+    {
+        return 'account-hash-' . ByteUtil::byteArrayToHex($this->data);
+    }
+
     public function clType(): CLAccountHashType
     {
         return new CLAccountHashType();
@@ -48,11 +53,6 @@ final class CLAccountHash extends CLValue
     public function toBytes(): array
     {
         return $this->data;
-    }
-
-    public function parsedValue(): string
-    {
-        return 'account-hash-' . ByteUtil::byteArrayToHex($this->data);
     }
 
     /**
