@@ -44,7 +44,7 @@ abstract class Numeric extends CLValue
      */
     public function toBytes(): array
     {
-        return ByteUtil::toBytesNumber($this->bitSize, $this->signed, $this->data);
+        return ByteUtil::numericValueToBytesArray($this->bitSize, $this->signed, $this->data);
     }
 
     public function parsedValue(): string

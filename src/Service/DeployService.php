@@ -52,7 +52,7 @@ class DeployService
         );
         $signature = KeysUtil::addPrefixToPublicKey(
             $key->getSignatureAlgorithm(),
-            $key->sign(ByteUtil::byteArrayToHex($deploy->getHash()))
+            $key->sign(ByteUtil::byteArrayToString($deploy->getHash()))
         );
 
         return $deploy

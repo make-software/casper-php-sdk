@@ -100,6 +100,7 @@ final class Secp256K1Key extends AsymmetricKey
     {
         try {
             $signature = $this->hexToSignature($signature);
+
             $hasher = new SignHasher(self::HASHING_ALGORITHM);
             $hash = $hasher->makeHash($message, $this->generator);
 

@@ -2,9 +2,10 @@
 
 namespace Casper\CLType;
 
+use Casper\Entity\ToBytesConvertible;
 use Casper\Util\ByteUtil;
 
-abstract class CLValue
+abstract class CLValue implements ToBytesConvertible
 {
     /**
      * @var mixed
@@ -19,8 +20,6 @@ abstract class CLValue
     abstract public function parsedValue();
 
     abstract public function clType(): CLType;
-
-    abstract public function toBytes(): array;
 
     abstract public static function fromBytesWithRemainder(array $bytes, ?CLType $innerType = null): CLValueWithRemainder;
 

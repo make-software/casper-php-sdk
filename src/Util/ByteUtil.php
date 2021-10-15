@@ -123,7 +123,7 @@ class ByteUtil
      */
     public static function toBytesU32($value): array
     {
-        return self::toBytesNumber(32, false, $value);
+        return self::numericValueToBytesArray(32, false, $value);
     }
 
     /**
@@ -134,7 +134,7 @@ class ByteUtil
      */
     public static function toBytesU64($value): array
     {
-        return self::toBytesNumber(64, false, $value);
+        return self::numericValueToBytesArray(64, false, $value);
     }
 
     /**
@@ -145,7 +145,7 @@ class ByteUtil
      *
      * @throws \Exception
      */
-    public static function toBytesNumber(int $bitSize, bool $signed, $value): array
+    public static function numericValueToBytesArray(int $bitSize, bool $signed, $value): array
     {
         $bigNumberValue = $value instanceof \GMP ? $value : gmp_init($value);
 
