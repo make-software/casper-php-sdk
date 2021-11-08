@@ -96,33 +96,33 @@ Put deploy into the network and returns deploy hash string
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$deploy```| ```Deploy``` | Signed deploy object | Yes |
+| ```$deploy```| ```Deploy``` | Signed Deploy object | Yes |
 
 #### Get deploy
 ```php
 getDeploy(string $deployHash): Deploy
 ```
-Returns Deploy object by deploy hash
+Returns the `Deploy` object by the given deploy hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$deployHash```| ```string``` | Deploy hash | Yes |
+| ```$deployHash```| ```string``` | Hex-encoded hash of the deploy | Yes |
 
 #### Get block by hash
 ```php
 getBlock(string $blockHash): Block
 ```
-Returns Block object by block hash
+Returns the `Block` object by the given  block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Block hash | Yes |
+| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
 
 #### Get block by height
 ```php
 getBlockByHeight(int $height): Block
 ```
-Returns Block object by block height
+Returns the `Block` object by the given  block height
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -132,77 +132,78 @@ Returns Block object by block height
 ```php
 getLatestBlock(): Block
 ```
-Returns Block object that represent the latest block from network
+Returns the `Block` object that represents the latest block from network
 
 #### Get peers
 ```php
 getPeers(): array
 ```
-Returns array of Peer objects
+Returns a list of peers (array of `Peer` objects) connected to the node
 
 #### Get status
 ```php
 getStatus(): Status
 ```
-Returns Status object
+Returns the current status (`Status` object) of the node
 
 #### Get auction state
 ```php
 getAuctionState(): AuctionState
 ```
-Returns AuctionState object
+Returns `AuctionState` object that contains the bids and validators as of either if specific block (by height or hash), or the most recently added block
 
 #### Get state root hash
 ```php
 getStateRootHash(string $blockHash): string
 ```
-Returns state root hash string by block hash
+Returns state root hash string by the given block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Block hash | Yes |
+| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
 
-#### Get state root hash
+#### Get account
 ```php
-getStateRootHash(string $blockHash): string
+getAccount(string $blockHash, CLPublicKey $publicKey): Account
 ```
-Returns state root hash string by block hash
+Returns `Account` object by the given block hash and account public key
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Block hash | Yes |
+| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
+| ```$publicKey```| ```CLPublicKey``` | Public key object | Yes |
 
 #### Get account balance
 ```php
 getAccountBalance(string $stateRootHash, CLURef $balanceUref): \GMP
 ```
-Returns account balance by state root hash and balance uref
+Returns purse's balance from the network
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | State root hash | Yes |
-| ```$balanceUref```| ```CLURef``` | Balance uref object | Yes |
+| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
+| ```$balanceUref```| ```CLURef``` | Balance URef object | Yes |
 
-#### Get account balance uref by account hash
+#### Get account balance URef by account hash
 ```php
 getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
 ```
-Returns account balance uref by state root hash and account hash
+Returns account balance URef object by the given state root hash and account hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | State root hash | Yes |
+| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
 | ```$accountHash```| ```CLAccountHash``` | Account hash object | Yes |
 
-#### Get account balance uref by public key
+#### Get account balance URef by public key
 ```php
 getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): CLURef
 ```
-Returns account balance uref by state root hash and public key
+Returns account balance URef by the given state root hash and public key
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | State root hash | Yes |
+| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
 | ```$publicKey```| ```CLPublicKey``` | Public key object | Yes |
 
 #### Get block state
@@ -213,35 +214,35 @@ Returns StoredValue object by state root hash, key and path
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | State root hash | Yes |
-| ```$key```| ```string``` | Key | Yes |
-| ```$path```| ```array``` | Path | No |
+| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
+| ```$key```| ```string``` | `casper_types::Key` as formatted string | Yes |
+| ```$path```| ```array``` | The path components starting from the key as base. | No |
 
 #### Get block transfers
 ```php
 getBlockTransfers(string $blockHash = null): array
 ```
-Returns array of Transfer objects by block hash
+Returns all transfers (array of `Transfer` objects) for a Block from the network by the given block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Block hash | No |
+| ```$blockHash```| ```string``` | Hex-encoded hash of the block | No |
 
 #### Get era summary by switch block hash
 ```php
 getEraSummaryBySwitchBlockHash(string $blockHash): ?EraSummary
 ```
-Returns EraSummary object or null by block hash
+Returns EraSummary object or null by the given block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Block hash | Yes |
+| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
 
 #### Get era summary by switch block height
 ```php
 getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
 ```
-Returns EraSummary object or null by block height
+Returns EraSummary object or null by the given block height
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -255,13 +256,13 @@ getDictionaryItemByURef(
     string $seedUref
 ): StoredValue
 ```
-Returns dictionary item by state root hash, dictionary item key and seed uref
+Returns an item from a Dictionary (`StoredValue` object) by the given state root hash, dictionary item key and seed URef
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | State root hash | Yes |
-| ```$dictionaryItemKey```| ```string``` | Dictionary item key | Yes |
-| ```$seedUref```| ```string``` | Seed uref | Yes |
+| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
+| ```$dictionaryItemKey```| ```string``` | The dictionary item key formatted as a string | Yes |
+| ```$seedUref```| ```string``` | The dictionary's seed URef | Yes |
 
 ## Roadmap
 - [x] Create an RPC client that returns array responses
