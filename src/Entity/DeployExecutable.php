@@ -28,7 +28,7 @@ class DeployExecutable implements ToBytesConvertible
      * @return DeployExecutable
      * @throws \Exception
      */
-    public static function newStandardPayment($amount): DeployExecutable
+    public static function newStandardPayment($amount): self
     {
         $moduleBytes = (new DeployExecutableModuleBytes(''))
             ->setArg(new DeployNamedArg('amount', new CLU512($amount)));

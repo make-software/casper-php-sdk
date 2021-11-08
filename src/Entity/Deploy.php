@@ -4,7 +4,6 @@ namespace Casper\Entity;
 
 use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Util\ByteUtil;
-use Casper\Util\HashUtil;
 
 class Deploy implements ToBytesConvertible
 {

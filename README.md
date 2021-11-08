@@ -86,7 +86,7 @@ __constructor(string $nodeUrl)
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$nodeUrl```| ```string``` | Full node url string | Yes |
+| `$nodeUrl` | `string` | Full node url string | Yes |
 
 #### Put deploy
 ```php
@@ -96,7 +96,7 @@ Put deploy into the network and returns deploy hash string
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$deploy```| ```Deploy``` | Signed Deploy object | Yes |
+| `$deploy` | `Deploy` | Signed Deploy object | Yes |
 
 #### Get deploy
 ```php
@@ -106,7 +106,7 @@ Returns the `Deploy` object by the given deploy hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$deployHash```| ```string``` | Hex-encoded hash of the deploy | Yes |
+| `$deployHash` | `string` | Hex-encoded hash of the deploy | Yes |
 
 #### Get block by hash
 ```php
@@ -116,7 +116,7 @@ Returns the `Block` object by the given  block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
 
 #### Get block by height
 ```php
@@ -126,7 +126,7 @@ Returns the `Block` object by the given  block height
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$height```| ```int``` | Block height | Yes |
+| `$height` | `int` | Block height | Yes |
 
 #### Get the latest block
 ```php
@@ -160,7 +160,7 @@ Returns state root hash string by the given block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
 
 #### Get account
 ```php
@@ -170,8 +170,8 @@ Returns `Account` object by the given block hash and account public key
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
-| ```$publicKey```| ```CLPublicKey``` | Public key object | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
+| `$publicKey` | `CLPublicKey` | Public key object | Yes |
 
 #### Get account balance
 ```php
@@ -181,8 +181,8 @@ Returns purse's balance from the network
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
-| ```$balanceUref```| ```CLURef``` | Balance URef object | Yes |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$balanceUref` | `CLURef` | Balance URef object | Yes |
 
 #### Get account balance URef by account hash
 ```php
@@ -192,8 +192,8 @@ Returns account balance URef object by the given state root hash and account has
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
-| ```$accountHash```| ```CLAccountHash``` | Account hash object | Yes |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$accountHash` | `CLAccountHash` | Account hash object | Yes |
 
 #### Get account balance URef by public key
 ```php
@@ -203,8 +203,8 @@ Returns account balance URef by the given state root hash and public key
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
-| ```$publicKey```| ```CLPublicKey``` | Public key object | Yes |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$publicKey` | `CLPublicKey` | Public key object | Yes |
 
 #### Get block state
 ```php
@@ -214,9 +214,9 @@ Returns StoredValue object by state root hash, key and path
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
-| ```$key```| ```string``` | `casper_types::Key` as formatted string | Yes |
-| ```$path```| ```array``` | The path components starting from the key as base. | No |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$key` | `string` | `casper_types::Key` as formatted string | Yes |
+| `$path` | `array` | The path components starting from the key as base. | No |
 
 #### Get block transfers
 ```php
@@ -226,7 +226,7 @@ Returns all transfers (array of `Transfer` objects) for a Block from the network
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Hex-encoded hash of the block | No |
+| `$blockHash` | `string` | Hex-encoded hash of the block | No |
 
 #### Get era summary by switch block hash
 ```php
@@ -236,7 +236,7 @@ Returns EraSummary object or null by the given block hash
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$blockHash```| ```string``` | Hex-encoded hash of the block | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
 
 #### Get era summary by switch block height
 ```php
@@ -246,7 +246,7 @@ Returns EraSummary object or null by the given block height
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$height```| ```int``` | Block height | Yes |
+| `$height` | `int` | Block height | Yes |
 
 #### Get dictionary item
 ```php
@@ -260,9 +260,9 @@ Returns an item from a Dictionary (`StoredValue` object) by the given state root
 ##### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| ```$stateRootHash```| ```string``` | Hex-encoded hash of the state root | Yes |
-| ```$dictionaryItemKey```| ```string``` | The dictionary item key formatted as a string | Yes |
-| ```$seedUref```| ```string``` | The dictionary's seed URef | Yes |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$dictionaryItemKey` | `string` | The dictionary item key formatted as a string | Yes |
+| `$seedUref` | `string` | The dictionary's seed URef | Yes |
 
 ## Roadmap
 - [x] Create an RPC client that returns array responses
