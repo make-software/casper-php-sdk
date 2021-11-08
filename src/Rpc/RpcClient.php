@@ -80,12 +80,12 @@ class RpcClient
     /**
      * @throws \Exception
      */
-    public function getDeploy(string $blockHashBase16): Deploy
+    public function getDeploy(string $deployHash): Deploy
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_DEPLOY_INFO,
             array(
-                'deploy_hash' => $blockHashBase16
+                'deploy_hash' => $deployHash
             )
         );
 
@@ -95,18 +95,18 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getBlock(string $deployHashBase16): Block
+    public function getBlock(string $blockHash): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,
             array(
                 'block_identifier' => array(
-                    'Hash' => $deployHashBase16
+                    'Hash' => $blockHash
                 )
             )
         );
 
-        if (isset($response['block']) && $response['block']['hash'] !== $deployHashBase16) {
+        if (isset($response['block']) && $response['block']['hash'] !== $blockHash) {
             throw new RpcError('Returned block does not have a matching hash');
         }
 
@@ -178,11 +178,11 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getStateRootHash(string $blockHashBase16): string
+    public function getStateRootHash(string $blockHash): string
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_STATE_ROOT_HASH,
-            array('block_hash' => $blockHashBase16)
+            array('block_hash' => $blockHash)
         );
 
         return $response['state_root_hash'];
@@ -222,7 +222,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getAccountBalanceUrefByAccountKeyHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
+    public function getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
     {
         return $this->getBlockState($stateRootHash, $accountHash->parsedValue(), [])
             ->getAccount()
@@ -234,7 +234,7 @@ class RpcClient
      */
     public function getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): CLURef
     {
-        return $this->getAccountBalanceUrefByAccountKeyHash(
+        return $this->getAccountBalanceUrefByAccountHash(
             $stateRootHsh,
             CLAccountHashSerializer::fromString($publicKey->toAccountHashString())
         );

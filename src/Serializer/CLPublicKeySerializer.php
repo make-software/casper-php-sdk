@@ -3,12 +3,24 @@
 namespace Casper\Serializer;
 
 use Casper\Util\ByteUtil;
+use Casper\Util\Crypto\AsymmetricKey;
+use Casper\Util\KeysUtil;
 
 use Casper\CLType\CLPublicKey;
 use Casper\CLType\CLPublicKeyTag;
 
 class CLPublicKeySerializer extends StringSerializer
 {
+    /**
+     * @throws \Exception
+     */
+    public static function fromAsymmetricKey(AsymmetricKey $asymmetricKey): CLPublicKey
+    {
+        return self::fromHex(
+            KeysUtil::addPrefixToPublicKey($asymmetricKey->getSignatureAlgorithm(), $asymmetricKey->getPublicKey())
+        );
+    }
+
     public static function toHex(CLPublicKey $clPublicKey): string
     {
         return self::toString($clPublicKey);
