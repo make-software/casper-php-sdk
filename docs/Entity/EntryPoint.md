@@ -27,4 +27,4 @@ Returns `CLType` object
 ```php
 getArgs(): array
 ```
-Returns list of `NamedCLTypeArg` objects
+Returns list of [NamedCLTypeArg](NamedCLTypeArg.md) objects

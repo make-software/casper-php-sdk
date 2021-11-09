@@ -18,7 +18,7 @@ Returns the last block height
 ```php
 getEraValidators(): array
 ```
-Returns list of `EraValidator` objects for the current era and the next era
+Returns list of [EraValidator](EraValidator.md) objects for the current era and the next era
 
 ---
 ```php

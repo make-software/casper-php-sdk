@@ -7,6 +7,6 @@ Returns signer public key object
 
 ---
 ```php
-getSignature(): array
+getSignature(): string
 ```
 Returns hex-encoded hash string
