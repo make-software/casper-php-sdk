@@ -8,8 +8,26 @@ composer require make-software/casper-php-sdk
 ```
 
 ## API
-
-- [RpcClient](docs/API/RpcClientAPI.md)
+### RpcClient
+- [`__constructor`](docs/API/RpcClientAPI.md#Constructor)
+- [`putDeploy`](docs/API/RpcClientAPI.md#Put deploy)
+- [`getDeploy`](docs/API/RpcClientAPI.md#Get deploy)
+- [`getBlock`](docs/API/RpcClientAPI.md#Get block by hash)
+- [`getBlockByHeight`](docs/API/RpcClientAPI.md#Get block by height)
+- [`getLatestBlock`](docs/API/RpcClientAPI.md#Get the latest block)
+- [`getPeers`](docs/API/RpcClientAPI.md#Get peers)
+- [`getStatus`](docs/API/RpcClientAPI.md#Get status)
+- [`getAuctionState`](docs/API/RpcClientAPI.md#Get auction state)
+- [`getStateRootHash`](docs/API/RpcClientAPI.md#Get state root hash)
+- [`getAccount`](docs/API/RpcClientAPI.md#Get account)
+- [`getAccountBalance`](docs/API/RpcClientAPI.md#Get account balance)
+- [`getAccountBalanceUrefByAccountHash`](docs/API/RpcClientAPI.md#Get account balance URef by account hash)
+- [`getAccountBalanceUrefByPublicKey`](docs/API/RpcClientAPI.md#Get account balance URef by public key)
+- [`getBlockState`](docs/API/RpcClientAPI.md#Get block state)
+- [`Get block transfers`](docs/API/RpcClientAPI.md#Get block transfers)
+- [`getEraSummaryBySwitchBlockHash`](docs/API/RpcClientAPI.md#Get era summary by switch block hash)
+- [`getEraSummaryBySwitchBlockHeight`](docs/API/RpcClientAPI.md#Get era summary by switch block height)
+- [`getDictionaryItemByURef`](docs/API/RpcClientAPI.md#Get dictionary item)
 
 ## Entity
 
@@ -18,7 +36,7 @@ composer require make-software/casper-php-sdk
 
 ## Examples
 
-#### Obtain some information from the network:
+### Obtain some information from the network:
 ```php
 use Casper\Rpc\RpcClient;
 
@@ -31,7 +49,7 @@ $auctionState = $client->getAuctionState();
 ...
 ```
 
-#### Generate key pair, export in pem, sign, and verify a message:
+### Generate key pair, export in pem, sign, and verify a message:
 ```php
 use Casper\Util\Crypto\Ed25519Key;
 use Casper\Util\Crypto\Secp256K1Key;
@@ -51,7 +69,7 @@ $signature = $keyPair->sign($message);
 $isVerified = $keyPair->verify($signature, $message);
 ```
 
-#### Sending a Transfer:
+### Sending a Transfer:
 ```php
 use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployParams;
