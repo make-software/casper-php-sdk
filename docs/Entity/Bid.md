@@ -1,6 +1,5 @@
 # Bid
 
----
 ```php
 getPublicKey(): CLPublicKey
 ```

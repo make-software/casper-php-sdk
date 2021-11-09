@@ -1,4 +1,5 @@
 # AuctionState
+
 Class that summarizing auction contract data
 
 ---

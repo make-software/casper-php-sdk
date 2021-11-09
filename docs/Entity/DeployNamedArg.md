@@ -1,6 +1,5 @@
 # DeployNamedArg
 
----
 ```php
 getName(): string
 ```

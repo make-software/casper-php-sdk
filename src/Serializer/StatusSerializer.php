@@ -18,7 +18,7 @@ class StatusSerializer extends JsonSerializer
             'our_public_signing_key' => CLPublicKeySerializer::toHex($status->getOurPublicSigningKey()),
             'round_length' => $status->getRoundLength(),
             'build_version' => $status->getBuildVersion(),
-            'next_upgrade' => $status->getNextUpgrade(),
+            'next_upgrade' => $status->getNextUpgrade() ? NextUpgradeSerializer::toJson($status->getNextUpgrade()) : null,
             'peers' => PeerSerializer::toJsonArray($status->getPeers()),
         );
     }
@@ -35,7 +35,7 @@ class StatusSerializer extends JsonSerializer
             CLPublicKeySerializer::fromHex($json['our_public_signing_key']),
             $json['round_length'],
             $json['build_version'],
-            $json['next_upgrade'],
+            isset($json['next_upgrade']) ? NextUpgradeSerializer::fromJson($json['next_upgrade']) : null,
             PeerSerializer::fromJsonArray($json['peers'])
         );
     }

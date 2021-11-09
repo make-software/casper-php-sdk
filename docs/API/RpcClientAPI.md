@@ -27,7 +27,7 @@ Put deploy into the network and returns deploy hash string
 ```php
 getDeploy(string $deployHash): Deploy
 ```
-Returns the `Deploy` object by the given deploy hash
+Returns the [Deploy](../Entity/Deploy.md) object by the given deploy hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -38,7 +38,7 @@ Returns the `Deploy` object by the given deploy hash
 ```php
 getBlock(string $blockHash): Block
 ```
-Returns the `Block` object by the given  block hash
+Returns the [Block](../Entity/Block.md) object by the given  block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -49,7 +49,7 @@ Returns the `Block` object by the given  block hash
 ```php
 getBlockByHeight(int $height): Block
 ```
-Returns the `Block` object by the given  block height
+Returns the [Block](../Entity/Block.md) object by the given  block height
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -60,28 +60,28 @@ Returns the `Block` object by the given  block height
 ```php
 getLatestBlock(): Block
 ```
-Returns the `Block` object that represents the latest block from network
+Returns the [Block](../Entity/Block.md) object that represents the latest block from network
 
 ---
 ## Get peers
 ```php
 getPeers(): array
 ```
-Returns a list of peers (array of `Peer` objects) connected to the node
+Returns a list of peers (array of [Peer](../Entity/Peer.md) objects) connected to the node
 
 ---
 ## Get status
 ```php
 getStatus(): Status
 ```
-Returns the current status (`Status` object) of the node
+Returns the current status ([Status](../Entity/Status.md) object) of the node
 
 ---
 ## Get auction state
 ```php
 getAuctionState(): AuctionState
 ```
-Returns `AuctionState` object that contains the bids and validators as of either if specific block (by height or hash), or the most recently added block
+Returns [AuctionState](../Entity/AuctionState.md) object that contains the bids and validators as of either if specific block (by height or hash), or the most recently added block
 
 ---
 ## Get state root hash
@@ -99,7 +99,7 @@ Returns state root hash string by the given block hash
 ```php
 getAccount(string $blockHash, CLPublicKey $publicKey): Account
 ```
-Returns `Account` object by the given block hash and account public key
+Returns [Account](../Entity/Account.md) object by the given block hash and account public key
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -147,7 +147,7 @@ Returns account balance URef by the given state root hash and public key
 ```php
 getBlockState(string $stateRootHash, string $key, array $path = []): StoredValue
 ```
-Returns StoredValue object by state root hash, key and path
+Returns `StoredValue` object by state root hash, key and path
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -160,7 +160,7 @@ Returns StoredValue object by state root hash, key and path
 ```php
 getBlockTransfers(string $blockHash = null): array
 ```
-Returns all transfers (array of `Transfer` objects) for a Block from the network by the given block hash
+Returns all transfers (array of [Transfer](../Entity/Transfer.md) objects) for a Block from the network by the given block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -182,7 +182,7 @@ Returns EraSummary object or null by the given block hash
 ```php
 getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
 ```
-Returns EraSummary object or null by the given block height
+Returns [EraSummary](../Entity/EraSummary.md) object or null by the given block height
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|

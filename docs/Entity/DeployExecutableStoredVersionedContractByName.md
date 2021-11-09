@@ -1,6 +1,5 @@
 # DeployExecutableStoredVersionedContractByName
 
----
 ```php
 getVersion(): ?int
 ```

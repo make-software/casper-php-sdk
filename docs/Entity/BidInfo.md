@@ -1,6 +1,5 @@
 # BidInfo
 
----
 ```php
 getBondingPurse(): CLURef
 ```
@@ -22,7 +21,7 @@ Returns validator's delegation rate
 ```php
 getDelegators(): array
 ```
-Returns list of `Delegator` objects
+Returns list of [Delegator](Delegator.md) objects
 
 ---
 ```php

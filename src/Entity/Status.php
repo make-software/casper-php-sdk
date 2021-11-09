@@ -18,7 +18,7 @@ class Status
 
     private string $buildVersion;
 
-    private ?array $nextUpgrade;
+    private ?NextUpgrade $nextUpgrade;
 
     /**
      * @var Peer[]
@@ -32,7 +32,7 @@ class Status
         CLPublicKey $ourPublicSigningKey,
         ?int $roundLength,
         string $buildVersion,
-        ?array $nextUpgrade,
+        ?NextUpgrade $nextUpgrade,
         array $peers
     )
     {
@@ -76,7 +76,7 @@ class Status
         return $this->buildVersion;
     }
 
-    public function getNextUpgrade(): ?array
+    public function getNextUpgrade(): ?NextUpgrade
     {
         return $this->nextUpgrade;
     }

@@ -1,6 +1,5 @@
 # DeployApproval
 
----
 ```php
 getSigner(): CLPublicKey
 ```

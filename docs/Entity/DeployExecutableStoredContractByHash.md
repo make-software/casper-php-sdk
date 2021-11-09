@@ -1,10 +1,9 @@
 # DeployExecutableStoredContractByHash
 
----
 ```php
 getHash(): string
 ```
-Returns Hex-encoded hash string
+Returns hex-encoded hash string
 
 ---
 ```php

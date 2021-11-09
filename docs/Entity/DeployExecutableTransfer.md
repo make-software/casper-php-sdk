@@ -1,6 +1,5 @@
 # DeployExecutableTransfer
 
----
 ```php
 toBytes(): array
 ```

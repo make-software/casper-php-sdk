@@ -1,6 +1,5 @@
 # DeployExecutableModuleBytes
 
----
 ```php
 getModuleBytes(): string
 ```

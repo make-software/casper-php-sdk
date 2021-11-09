@@ -1,6 +1,5 @@
 # DeployExecutable
 
----
 ```php
 static newStandardPayment($amount): self
 ```

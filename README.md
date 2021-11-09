@@ -2,7 +2,6 @@
 The PHP SDK allows developers to interact with the Casper Network using PHP. This page covers different examples of using the SDK.
 
 ## Install
-
 ```
 composer require make-software/casper-php-sdk
 ```
@@ -30,8 +29,10 @@ composer require make-software/casper-php-sdk
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
 
 ## Entity
-
 - [Account](docs/Entity/Account.md)
+- [Bid](docs/Entity/Bid.md)
+- [Block](docs/Entity/Block.md)
+- [Contract](docs/Entity/Contract.md)
 - [Deploy](docs/Entity/Deploy.md)
 
 ## Examples
