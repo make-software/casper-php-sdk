@@ -16,7 +16,7 @@ __constructor(string $nodeUrl)
 ```php
 putDeploy(Deploy $deploy): string
 ```
-Put deploy into the network and returns deploy hash string
+Put deploy into the network and returns deploy hash `string`
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -60,21 +60,21 @@ Returns the [Block](../Entity/Block.md) object by the given  block height
 ```php
 getLatestBlock(): Block
 ```
-Returns the [Block](../Entity/Block.md) object that represents the latest block from network
+Returns the [Block](../Entity/Block.md) object that represents the latest block from the network
 
 ---
 ## Get peers
 ```php
 getPeers(): array
 ```
-Returns a list of peers (array of [Peer](../Entity/Peer.md) objects) connected to the node
+Returns a list of [Peer](../Entity/Peer.md) objects connected to the node
 
 ---
 ## Get status
 ```php
 getStatus(): Status
 ```
-Returns the current status ([Status](../Entity/Status.md) object) of the node
+Returns the current [Status](../Entity/Status.md) of the node
 
 ---
 ## Get auction state
@@ -88,7 +88,7 @@ Returns [AuctionState](../Entity/AuctionState.md) object that contains the bids 
 ```php
 getStateRootHash(string $blockHash): string
 ```
-Returns state root hash string by the given block hash
+Returns state root hash `string` by the given block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -123,7 +123,7 @@ Returns purse's balance from the network
 ```php
 getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
 ```
-Returns account balance URef object by the given state root hash and account hash
+Returns account balance URef by the given state root hash and account hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -135,7 +135,7 @@ Returns account balance URef object by the given state root hash and account has
 ```php
 getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): CLURef
 ```
-Returns account balance URef by the given state root hash and public key
+Returns account balance CLURef by the given state root hash and public key
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -147,7 +147,7 @@ Returns account balance URef by the given state root hash and public key
 ```php
 getBlockState(string $stateRootHash, string $key, array $path = []): StoredValue
 ```
-Returns `StoredValue` object by state root hash, key and path
+Returns [StoredValue](../Entity/StoredValue.md) object by state root hash, key and path
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -171,7 +171,7 @@ Returns all transfers (array of [Transfer](../Entity/Transfer.md) objects) for a
 ```php
 getEraSummaryBySwitchBlockHash(string $blockHash): ?EraSummary
 ```
-Returns EraSummary object or null by the given block hash
+Returns [EraSummary](../Entity/EraSummary.md) object or `null` by the given block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -182,7 +182,7 @@ Returns EraSummary object or null by the given block hash
 ```php
 getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
 ```
-Returns [EraSummary](../Entity/EraSummary.md) object or null by the given block height
+Returns [EraSummary](../Entity/EraSummary.md) object or `null` by the given block height
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -197,7 +197,7 @@ getDictionaryItemByURef(
     string $seedUref
 ): StoredValue
 ```
-Returns an item from a Dictionary (`StoredValue` object) by the given state root hash, dictionary item key and seed URef
+Returns an item from a Dictionary ([StoredValue](../Entity/StoredValue.md) object) by the given state root hash, dictionary item key and seed URef
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|

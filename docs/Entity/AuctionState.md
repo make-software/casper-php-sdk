@@ -6,7 +6,7 @@ Class that summarizing auction contract data
 ```php
 getStateRootHash(): string
 ```
-Returns global state hash
+Returns global state hex-encoded hash string
 
 ---
 ```php
