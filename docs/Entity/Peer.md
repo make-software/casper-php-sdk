@@ -1,6 +1,5 @@
 # Peer
 
-
 ```php
 getNodeId(): string
 ```
