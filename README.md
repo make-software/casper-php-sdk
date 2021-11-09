@@ -34,6 +34,7 @@ composer require make-software/casper-php-sdk
 - [Block](docs/Entity/Block.md)
 - [Contract](docs/Entity/Contract.md)
 - [Deploy](docs/Entity/Deploy.md)
+- [Transfer](docs/Entity/Transfer.md)
 
 ## Examples
 
