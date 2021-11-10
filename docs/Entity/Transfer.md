@@ -50,6 +50,7 @@ getId(): ?int
 Returns user-defined transfer id
 
 ## JSON Representation
+Below is an example of a transfer JSON returned by node RPC API
 ```json
 {
     "deploy_hash": "f6c123456789c0ad77b58eccaa65f1901c37583c094a13c0b2b1c336cc4638f6",

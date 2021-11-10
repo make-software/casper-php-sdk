@@ -24,6 +24,7 @@ getProofs(): array
 Returns list of [BlockProof](BlockProof.md) objects
 
 ## JSON Representation
+Below is an example of a block JSON returned by node RPC API
 ```json
 {
     "hash": "8cc1234567899f187b9b92ac07d9546d61b0344673ea8760f2a5982a4f68c768",

@@ -24,6 +24,7 @@ getStateRootHash(): string
 Returns global state hex-encoded hash string
 
 ## JSON Representation
+Below is an example of era summary JSON returned by node RPC API
 ```json
 {
     "block_hash": "ca0b462123456789b54ac508901225591105c0f2bf888086e1e906059382c582",

@@ -27,6 +27,7 @@ getBids(): array
 Returns list of [Bid](Bid.md) objects
 
 ## JSON Representation
+Below is an example of auction state JSON returned by node RPC API
 ```json
 {
     "state_root_hash": "11c87261f5f00de726cc1f8bd6c263051b931e29727817e49e346aa9e314dc84",

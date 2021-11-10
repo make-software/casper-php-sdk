@@ -67,6 +67,7 @@ Push [DeployApproval](DeployApproval.md) to deploy and returns `self` object
 | `$approval`| `DeployApproval` | [DeployApproval](DeployApproval.md) object | Yes |
 
 ## JSON Representation
+Below is an example of a deploy JSON returned by node RPC API
 ```json
 {
     "hash": "c1234567894c930b5d181d7ad3ebb07ecd38d732d10c90ceef44de16d3ac8e1f",

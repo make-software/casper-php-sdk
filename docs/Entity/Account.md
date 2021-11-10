@@ -32,6 +32,7 @@ getActionThresholds(): ActionThresholds
 Returns the account's [ActionThresholds](ActionThresholds.md)
 
 ## JSON Representation
+Below is an example of an account JSON returned by node RPC API
 ```json
 {
     "account_hash": "account-hash-7203e3b0592b7ed4f6d552829c1887c493e525fb35b842aed68c56bec38f4e62",
