@@ -15,7 +15,7 @@ $client = new Casper\Rpc\RpcClient($nodeUrl);
 ```
 
 ### RPC call examples
-You can find all RpcClient methods on the [RpcClientAPI page](docs/API/RpcClientAPI). Here you can see a several of examples of using RpcClient. All examples below are supposed to be ran against the Testnet
+You can find all RpcClient methods on the [RpcClientAPI page](docs/API/RpcClientAPI.md). Here you can see a several of examples of using RpcClient. All examples below are supposed to be ran against the Testnet
 
 #### Get deploy by deploy hash
 ```php
