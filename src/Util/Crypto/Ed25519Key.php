@@ -51,7 +51,7 @@ final class Ed25519Key extends AsymmetricKey
         $derPrefix = ByteUtil::byteArrayToString([48, 46, 2, 1, 0, 48, 5, 6, 3, 43, 101, 112, 4, 34, 4, 32]);
         $encoded = base64_encode($derPrefix . self::parsePrivateKey($this->privateKey));
 
-        return "-----BEGIN PRIVATE KEY-----\n$encoded\n-----END PUBLIC KEY-----\n";
+        return "-----BEGIN PRIVATE KEY-----\n$encoded\n-----END PRIVATE KEY-----\n";
     }
 
     /**
