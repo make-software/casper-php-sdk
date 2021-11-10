@@ -1,32 +1,42 @@
-# Sending a Transfer example:
+# Sending a Transfer
 
+Prepare an instance of the client and a couple of keys that will be used during the example:
 ```php
-use Casper\Entity\DeployExecutable;
-use Casper\Entity\DeployParams;
-use Casper\Rpc\RpcClient;
-use Casper\Serializer\CLPublicKeySerializer;
-use Casper\Service\DeployService;
-use Casper\Util\Crypto\Secp256K1Key;
+$nodeAddress = 'http://127.0.0.1:7777'
+$rpcClient = new Casper\Rpc\RpcClient($nodeAddress);
 
 // Replace '/path/to/secp256k1_secret_key.pem' by real path to secret key
-$senderKeyPair = Secp256K1Key::createFromPrivateKeyFile('/path/to/secp256k1_secret_key.pem');
-$senderPublicKey = CLPublicKeySerializer::fromAsymmetricKey($senderKeyPair);
-$networkName = 'casper';
-$deployParams = new DeployParams($senderPublicKey, $networkName);
+$senderKeyPair = Casper\Util\Crypto\Secp256K1Key::createFromPrivateKeyFile('/path/to/secp256k1_secret_key.pem');
+$senderPublicKey = Casper\Serializer\CLPublicKeySerializer::fromAsymmetricKey($senderKeyPair);
 
 // Replace 'recipient_hex_public_key_here' by real public key
-$recipientPublicKey = CLPublicKeySerializer::fromHex('recipient_hex_public_key_here');
+$recipientPublicKey = Casper\Serializer\CLPublicKeySerializer::fromHex('recipient_hex_public_key_here');
+```
+
+Create new transfer by calling `Casper\Entity\DeployExecutable::newTransfer` method with passed custom transfer id and transfer amount to this method
+```php
 $transferId = 1;
 $transferAmount = 2500000000;
-$session = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
+$transfer = Casper\Entity\DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
+```
 
+Create new standard payment by calling `Casper\Entity\DeployExecutable::newStandardPayment` method with passed payment amount
+```php
 $paymentAmount = 10;
-$payment = DeployExecutable::newStandardPayment($paymentAmount);
+$payment = Casper\Entity\DeployExecutable::newStandardPayment($paymentAmount);
+```
 
-$deployService = new DeployService();
+Create deploy params and make new deploy
+```php
+$networkName = 'casper';
+$deployParams = new Casper\Entity\DeployParams($senderPublicKey, $networkName);
+
+$deployService = new Casper\Service\DeployService();
 $deploy = $deployService->makeDeploy($deployParams, $session, $payment);
-$signedDeploy = $deployService->signDeploy($deploy, $senderKeyPair);
+```
 
-$rpcClient = new RpcClient('http://127.0.0.1:7777');
+Sign deploy and put to the network
+```php
+$signedDeploy = $deployService->signDeploy($deploy, $senderKeyPair);
 $deployHash = $rpcClient->putDeploy($signedDeploy);
 ```
