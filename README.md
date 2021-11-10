@@ -53,4 +53,4 @@ composer require make-software/casper-php-sdk
 - [x] Add `Secp256k1` key support
 - [ ] Add extensive validations
 - [ ] Add automated tests
-- [ ] Add documentation
+- [x] Add documentation
