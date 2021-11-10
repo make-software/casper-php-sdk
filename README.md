@@ -77,9 +77,7 @@ $latestBlockHash = $latestBlock->getHash();
 ## Entities
 - [Account](docs/Entity/Account.md)
 - [AuctionState](docs/Entity/AuctionState.md)
-- [Bid](docs/Entity/Bid.md)
 - [Block](docs/Entity/Block.md)
-- [Contract](docs/Entity/Contract.md)
 - [Deploy](docs/Entity/Deploy.md)
 - [EraSummary](docs/Entity/EraSummary.md)
 - [Transfer](docs/Entity/Transfer.md)

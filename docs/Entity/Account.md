@@ -30,3 +30,22 @@ Returns list of [AssociatedKey](AssociatedKey.md) objects
 getActionThresholds(): ActionThresholds
 ```
 Returns the account's [ActionThresholds](ActionThresholds.md)
+
+## JSON Representation
+```json
+{
+    "account_hash": "account-hash-7203e3b0592b7ed4f6d552829c1887c493e525fb35b842aed68c56bec38f4e62",
+    "named_keys": [],
+    "main_purse": "uref-b9fcc2dca866a0eee6458bcb63933edd1893a136b812dd850cebc2de8fb15c08-007",
+    "associated_keys": [
+        {
+            "account_hash": "account-hash-7203e3b0592b7ed4f6d552829c1887c493e525fb35b842aed68c56bec38f4e62",
+            "weight": 1
+        }
+    ],
+    "action_thresholds": {
+        "deployment": 1,
+        "key_management": 1
+    }
+}
+```
