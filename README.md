@@ -39,7 +39,7 @@ composer require make-software/casper-php-sdk
 - [Transfer](docs/Entity/Transfer.md)
 
 ## Examples
-- [RPC calls](docs/Example/RpcCall.md)
+- [RPC Client](docs/Example/RPCClient.md)
 - [Key management](docs/Example/KeyManagement.md)
 - [Sending a Transfer](docs/Example/SendingTransfer.md)
 
