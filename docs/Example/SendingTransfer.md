@@ -32,7 +32,7 @@ $networkName = 'casper';
 $deployParams = new Casper\Entity\DeployParams($senderPublicKey, $networkName);
 
 $deployService = new Casper\Service\DeployService();
-$deploy = $deployService->makeDeploy($deployParams, $session, $payment);
+$deploy = $deployService->makeDeploy($deployParams, $transfer, $payment);
 ```
 
 Sign deploy and put to the network

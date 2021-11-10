@@ -95,7 +95,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getBlock(string $blockHash): Block
+    public function getBlockByHash(string $blockHash): Block
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_BLOCK_INFO,

@@ -6,12 +6,58 @@ The PHP SDK allows developers to interact with the Casper Network using PHP. Thi
 composer require make-software/casper-php-sdk
 ```
 
+## Usage
+### Creating RpcClient
+Create `RpcClient` by passing node url to constructor
+```php
+$nodeUrl = 'http://127.0.0.1:7777';
+$client = new Casper\Rpc\RpcClient($nodeUrl);
+```
+
+### RPC call examples
+You can find all RpcClient methods on the [RpcClientAPI page](../API/RpcClientAPI). Here you can see a several of examples of using RpcClient. All examples below are supposed to be ran against the Testnet
+
+#### Get deploy by deploy hash
+```php
+$deploy = $client->getDeploy('fa815fc43c38da30f6ab4e5a6c8a1b31f09df2bf4b344019ffef60c1270d4e49');
+
+$deployHeader = $deploy->getHeader();
+$creationTime = $deployHeader->getTimestamp();
+```
+
+#### Get auction state information
+```php
+$auctionState = $client->getAuctionState();
+
+$stateRootHash = $auctionState->getStateRootHash();
+$blockHeight = $auctionState->getBlockHeight();
+```
+
+#### Get peers from the network
+```php
+$peers = $client->getPeers();
+
+foreach ($peers as $peer) {
+    ...
+}
+```
+
+#### Get the latest block information
+```php
+$latestBlock = $client->getLatestBlock();
+$latestBlockHash = $latestBlock->getHash();
+```
+
+## More examples
+- [Key management](docs/Example/KeyManagement.md)
+- [Sending a Transfer](docs/Example/SendingTransfer.md)
+
 ## API
 ### RpcClient
-- [__constructor](docs/API/RpcClientAPI.md#Constructor)
+- [RpcClient](docs/API/RpcClientAPI.md#Constructor)
 - [putDeploy](docs/API/RpcClientAPI.md#Put-deploy)
 - [getDeploy](docs/API/RpcClientAPI.md#Get-deploy)
-- [getBlock](docs/API/RpcClientAPI.md#Get-block-by-hash)
+- [getBlockByHash](docs/API/RpcClientAPI.md#Get-block-by-hash)
 - [getBlockByHeight](docs/API/RpcClientAPI.md#Get-block-by-height)
 - [getLatestBlock](docs/API/RpcClientAPI.md#Get-the-latest-block)
 - [getPeers](docs/API/RpcClientAPI.md#Get-peers)
@@ -28,7 +74,7 @@ composer require make-software/casper-php-sdk
 - [getEraSummaryBySwitchBlockHeight](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-height)
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
 
-## Entity
+## Entities
 - [Account](docs/Entity/Account.md)
 - [AuctionState](docs/Entity/AuctionState.md)
 - [Bid](docs/Entity/Bid.md)
@@ -38,10 +84,11 @@ composer require make-software/casper-php-sdk
 - [EraSummary](docs/Entity/EraSummary.md)
 - [Transfer](docs/Entity/Transfer.md)
 
-## Examples
-- [RPC Client](docs/Example/RPCClient.md)
-- [Key management](docs/Example/KeyManagement.md)
-- [Sending a Transfer](docs/Example/SendingTransfer.md)
+## Testing
+Run the following command from the project directory. Replace `http://127.0.0.1:7777` by the node url before running
+```shell
+export CASPER_PHP_SDK_TEST_NODE_URL="http://127.0.0.1:7777" && php vendor/bin/phpunit tests
+```
 
 ## Roadmap
 - [x] Create an RPC client that returns array responses

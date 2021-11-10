@@ -36,7 +36,7 @@ Returns the [Deploy](../Entity/Deploy.md) object by the given deploy hash
 ---
 ## Get block by hash
 ```php
-getBlock(string $blockHash): Block
+getBlockByHash(string $blockHash): Block
 ```
 Returns the [Block](../Entity/Block.md) object by the given  block hash
 ### Parameters

@@ -19,10 +19,14 @@
   },
   "autoload": {
     "psr-4": {
-      "Casper\\": "src/"
+      "Casper\\": "src/",
+      "Tests\\": "tests/"
     }
   },
   "config": {
     "platform-check": false
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9"
   }
 }
