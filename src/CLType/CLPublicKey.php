@@ -96,7 +96,7 @@ final class CLPublicKey extends CLValue
      */
     public function toAccountHashString(): string
     {
-        return ByteUtil::byteArrayToHex($this->toAccountHash());
+        return CLAccountHash::ACCOUNT_HASH_PREFIX . ByteUtil::byteArrayToHex($this->toAccountHash());
     }
 
     /**

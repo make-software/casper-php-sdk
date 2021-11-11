@@ -2,10 +2,17 @@
 
 namespace Tests\Rpc;
 
+use Casper\Entity\Account;
 use PHPUnit\Framework\TestCase;
 
-use Casper\Entity\Block;
+use Casper\Serializer\CLPublicKeySerializer;
+use Casper\Util\ByteUtil;
+
 use Casper\Rpc\RpcClient;
+
+use Casper\Entity\BlockBody;
+use Casper\Entity\BlockHeader;
+use Casper\Entity\Block;
 
 class RpcClientTest extends TestCase
 {
@@ -27,7 +34,7 @@ class RpcClientTest extends TestCase
         $this->rpcClient = null;
     }
 
-    public function testLastApiVersion(): void
+    public function testGetLastApiVersion(): void
     {
         $lastApiVersionBeforeAnyRpcCall = $this->rpcClient->getLastApiVersion();
         $this->assertNull($lastApiVersionBeforeAnyRpcCall);
@@ -38,10 +45,23 @@ class RpcClientTest extends TestCase
         $this->assertNotNull($lastApiVersionAfterSomeRpcCall);
     }
 
+    public function testGetDeploy(): void
+    {
+        $deployHashFromTheTestnet = '7ab7208819bead36b7143757c3d4b7d0d749e5fd2e49b7ae58d490ea3d323371';
+
+        $deploy = $this->rpcClient->getDeploy($deployHashFromTheTestnet);
+        $this->assertEquals(ByteUtil::hexToByteArray($deployHashFromTheTestnet), $deploy->getHash());
+        $this->assertNotNull($deploy->getPayment()->getModuleBytes());
+        $this->assertNotEmpty($deploy->getApprovals());
+    }
+
     public function testGetLatestBlock(): Block
     {
         $latestBlock = $this->rpcClient->getLatestBlock();
-        $this->assertInstanceOf(Block::class, $latestBlock);
+        $this->assertNotEmpty($latestBlock->getHash());
+        $this->assertInstanceOf(BlockHeader::class, $latestBlock->getHeader());
+        $this->assertInstanceOf(BlockBody::class, $latestBlock->getBody());
+        $this->assertIsArray($latestBlock->getProofs());
 
         return $latestBlock;
     }
@@ -62,5 +82,94 @@ class RpcClientTest extends TestCase
     {
         $block = $this->rpcClient->getBlockByHeight($latestBlock->getHeader()->getHeight());
         $this->assertEquals($block->getHash(), $latestBlock->getHash());
+    }
+
+    public function testGetPeers(): void
+    {
+        $peers = $this->rpcClient->getPeers();
+        $this->assertIsArray($peers);
+
+        $firstPeer = $peers[0];
+        $this->assertNotEmpty($firstPeer->getNodeId());
+        $this->assertNotEmpty($firstPeer->getAddress());
+    }
+
+    public function testGetStatus(): void
+    {
+        $status = $this->rpcClient->getStatus();
+        $this->assertNotEmpty($status->getChainspecName());
+        $this->assertNotEmpty($status->getStartingStateRootHash());
+        $this->assertNotEmpty($status->getLastAddedBlockInfo()->getHash());
+        $this->assertNotEmpty($status->getOurPublicSigningKey()->parsedValue());
+        $this->assertNotEmpty($status->getBuildVersion());
+    }
+
+    public function testGetAuctionState(): void
+    {
+        $auctionState = $this->rpcClient->getAuctionState();
+        $this->assertNotEmpty($auctionState->getStateRootHash());
+        $this->assertGreaterThan(0, $auctionState->getBlockHeight());
+
+        $firstEraValidator = $auctionState->getEraValidators()[0];
+        $this->assertGreaterThan(0, $firstEraValidator->getEraId());
+        $this->assertNotEmpty($firstEraValidator->getValidatorWeights());
+
+        $firstBid = $auctionState->getBids()[0];
+        $this->assertNotEmpty($firstBid->getPublicKey()->value());
+    }
+
+    /**
+     * @depends testGetLatestBlock
+     */
+    public function testGetStateRootHash(Block $latestBlock): string
+    {
+        $stateRootHash = $this->rpcClient->getStateRootHash($latestBlock->getHash());
+        $this->assertMatchesRegularExpression('/[a-f\d]{64}/', $stateRootHash);
+
+        return $stateRootHash;
+    }
+
+    public function testGetAccount(): Account
+    {
+        $blockHashFromTheTestnet = '037e916018fd181be3455df1d54e9a1b3a5f1784627b0044201b7ad378542a02';
+        $accountPublicKeyFromTheTestnet = CLPublicKeySerializer::fromHex('011b5b2e370411b6df3a3d8ac0063b35e2003994a634dba48dd5422247fc1e7c41');
+        $accountHashFromTheTestnet = 'account-hash-7203e3b0592b7ed4f63552829c5887c493e525fb35b842aed68c56bec38f4e6b';
+
+        $account = $this->rpcClient->getAccount($blockHashFromTheTestnet, $accountPublicKeyFromTheTestnet);
+        $this->assertEquals($account->getAccountHash()->parsedValue(), $accountHashFromTheTestnet);
+
+        return $account;
+    }
+
+    /**
+     * @depends testGetStateRootHash
+     * @depends testGetAccount
+     */
+    public function testGetAccountBalance(string $stateRootHash, Account $account): void
+    {
+        $accountBalance = $this->rpcClient->getAccountBalance($stateRootHash, $account->getMainPurse());
+        $this->assertGreaterThanOrEqual(0, gmp_cmp($accountBalance, 0));
+    }
+
+    /**
+     * @depends testGetStateRootHash
+     * @depends testGetAccount
+     */
+    public function testGetAccountBalanceUrefByAccountHash(string $stateRootHash, Account $account): void
+    {
+        $accountMainPurse = $this->rpcClient->getAccountBalanceUrefByAccountHash($stateRootHash, $account->getAccountHash());
+        $this->assertEquals($account->getMainPurse()->parsedValue(), $accountMainPurse->parsedValue());
+    }
+
+    /**
+     * @depends testGetStateRootHash
+     */
+    public function testGetAccountBalanceUrefByAccountPublicKey(string $stateRootHash): void
+    {
+        $accountPublicKeyFromTheTestnet = CLPublicKeySerializer::fromHex('011b5b2e370411b6df3a3d8ac0063b35e2003994a634dba48dd5422247fc1e7c41');
+        $accountMainPurseFromTheTestnet = 'uref-84bc62373fdb3ffabb0c85d8d3dcf80ac780ed9c0afad28f959f697effeef043-007';
+
+        $accountMainPurse = $this->rpcClient->getAccountBalanceUrefByPublicKey($stateRootHash, $accountPublicKeyFromTheTestnet);
+        $this->assertEquals($accountMainPurseFromTheTestnet, $accountMainPurse->parsedValue());
     }
 }

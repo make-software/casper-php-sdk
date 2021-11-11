@@ -83,7 +83,9 @@ $latestBlockHash = $latestBlock->getHash();
 - [Transfer](docs/Entity/Transfer.md)
 
 ## Testing
-Run the following command from the project directory. Replace `http://127.0.0.1:7777` by the node url before running
+Run the following command from the project directory. 
+
+**Replace `http://127.0.0.1:7777` by the any Testnet node url before running**
 ```shell
 export CASPER_PHP_SDK_TEST_NODE_URL="http://127.0.0.1:7777" && php vendor/bin/phpunit tests
 ```
