@@ -172,4 +172,45 @@ class RpcClientTest extends TestCase
         $accountMainPurse = $this->rpcClient->getAccountBalanceUrefByPublicKey($stateRootHash, $accountPublicKeyFromTheTestnet);
         $this->assertEquals($accountMainPurseFromTheTestnet, $accountMainPurse->parsedValue());
     }
+
+    /**
+     * @depends testGetStateRootHash
+     * @depends testGetAccount
+     */
+    public function testGetBlockState(string $stateRootHash, Account $account): void
+    {
+        $accountHash = $account->getAccountHash()->parsedValue();
+
+        $blockState = $this->rpcClient->getBlockState($stateRootHash, $accountHash);
+        $this->assertNotNull($blockState->getAccount());
+        $this->assertEquals($accountHash, $blockState->getAccount()->getAccountHash()->parsedValue());
+    }
+
+    public function testGetBlockTransfers(): void
+    {
+        $blockHashFromTheTestnet = 'a1f829cff2389cf6637ed89fb2fab48351b1278c131ee8445e1e28333c9a44d0';
+
+        $blockTransfers = $this->rpcClient->getBlockTransfers($blockHashFromTheTestnet);
+        $this->assertNotEmpty($blockTransfers);
+    }
+
+    public function testGetEraSummaryBySwitchBlockHash(): void
+    {
+        $switchingBlockHashFromTheTestnet = 'de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e';
+
+        $eraSummary = $this->rpcClient->getEraSummaryBySwitchBlockHash($switchingBlockHashFromTheTestnet);
+        $this->assertEquals(1, $eraSummary->getEraId());
+        $this->assertEquals($switchingBlockHashFromTheTestnet, $eraSummary->getBlockHash());
+        $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
+    }
+
+    public function testGetEraSummaryBySwitchBlockHeight(): void
+    {
+        $switchingBlockHeightFromTheTestnet = 219;
+
+        $eraSummary = $this->rpcClient->getEraSummaryBySwitchBlockHeight($switchingBlockHeightFromTheTestnet);
+        $this->assertEquals(1, $eraSummary->getEraId());
+        $this->assertEquals('de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e', $eraSummary->getBlockHash());
+        $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
+    }
 }

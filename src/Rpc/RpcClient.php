@@ -224,7 +224,7 @@ class RpcClient
      */
     public function getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
     {
-        return $this->getBlockState($stateRootHash, $accountHash->parsedValue(), [])
+        return $this->getBlockState($stateRootHash, $accountHash->parsedValue())
             ->getAccount()
             ->getMainPurse();
     }
