@@ -2,7 +2,6 @@
 
 namespace Tests\Rpc;
 
-use Casper\Entity\Account;
 use PHPUnit\Framework\TestCase;
 
 use Casper\Serializer\CLPublicKeySerializer;
@@ -10,6 +9,7 @@ use Casper\Util\ByteUtil;
 
 use Casper\Rpc\RpcClient;
 
+use Casper\Entity\Account;
 use Casper\Entity\BlockBody;
 use Casper\Entity\BlockHeader;
 use Casper\Entity\Block;
