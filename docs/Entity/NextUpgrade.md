@@ -11,4 +11,4 @@ Returns the first era id to which the associated protocol version applies
 ```php
 getProtocolVersion(): string
 ```
-Returns protocol version
+Returns the protocol version

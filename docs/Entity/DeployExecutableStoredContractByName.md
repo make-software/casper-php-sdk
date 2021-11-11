@@ -9,13 +9,13 @@ Returns hex-encoded hash string
 ```php
 getEntryPoint(): string
 ```
-Returns entry point string
+Returns an entry point string
 
 ---
 ```php
 toBytes(): array
 ```
-Converts current `DeployExecutableStoredContractByName` to byte array
+Converts current `DeployExecutableStoredContractByName` to the byte array
 
 ---
 ```php
@@ -27,7 +27,7 @@ Set [DeployNamedArg](DeployNamedArg.md) and return `self`
 ```php
 getArgs(): array
 ```
-Returns array of [DeployNamedArg](DeployNamedArg.md) or empty array if no args
+Returns a list of [DeployNamedArg](DeployNamedArg.md) or empty list if no args
 
 ---
 ```php

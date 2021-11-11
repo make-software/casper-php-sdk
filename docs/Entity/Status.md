@@ -45,4 +45,4 @@ Returns [NextUpgrade](NextUpgrade.md) object or `null`
 ```php
 getPeers(): array
 ```
-Returns list of [Peer](Peer.md) objects that connected to the network
+Returns a list of [Peer](Peer.md) objects that connected to the network

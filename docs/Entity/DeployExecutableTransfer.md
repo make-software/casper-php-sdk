@@ -3,7 +3,7 @@
 ```php
 toBytes(): array
 ```
-Converts current `DeployExecutableTransfer` to byte array
+Converts current `DeployExecutableTransfer` to the byte array
 
 ---
 ```php
@@ -15,7 +15,7 @@ Set [DeployNamedArg](DeployNamedArg.md) to current `DeployExecutableTransfer` an
 ```php
 getArgs(): array
 ```
-Returns array of [DeployNamedArg](DeployNamedArg.md) or empty array if no args
+Returns a list of [DeployNamedArg](DeployNamedArg.md) or empty list if no args
 
 ---
 ```php

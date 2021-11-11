@@ -9,7 +9,7 @@ Returns block hex-encoded hash string
 ```php
 getTimestamp(): int
 ```
-Returns timestamp
+Returns block creation time
 
 ---
 ```php
@@ -21,13 +21,13 @@ Returns era id
 ```php
 getHeight(): int
 ```
-Returns block height
+Returns a block height
 
 ---
 ```php
 getStateRootHash(): string
 ```
-Returns global state hex-encoded hash string
+Returns the global state hex-encoded hash string
 
 ---
 ```php

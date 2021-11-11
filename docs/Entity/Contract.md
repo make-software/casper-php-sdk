@@ -21,10 +21,10 @@ Returns protocol version
 ```php
 getEntryPoints(): array
 ```
-Returns list of [EntryPoint](EntryPoint.md) objects
+Returns a list of [EntryPoint](EntryPoint.md) objects
 
 ---
 ```php
 getNamedKeys(): array
 ```
-Returns list of named keys
+Returns a list of named keys

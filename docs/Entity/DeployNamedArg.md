@@ -3,10 +3,10 @@
 ```php
 getName(): string
 ```
-Returns argument name
+Returns the argument name
 
 ---
 ```php
 getValue(): CLValue
 ```
-Returns argument value
+Returns the argument value

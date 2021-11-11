@@ -9,13 +9,13 @@ Returns hex-encoded block hash string
 ```php
 getEraId(): int
 ```
-Returns era id
+Returns the era id
 
 ---
 ```php
 getStoredValue(): StoredValue
 ```
-Returns [StoredValue](StoredValue.md) object that contains era information
+Returns [StoredValue](StoredValue.md) object that contains the era information
 
 ---
 ```php

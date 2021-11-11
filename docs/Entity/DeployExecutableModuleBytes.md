@@ -3,13 +3,13 @@
 ```php
 getModuleBytes(): string
 ```
-Returns module bytes string
+Returns a module bytes string
 
 ---
 ```php
 toBytes(): array
 ```
-Converts current `DeployExecutableModuleBytes` to byte array
+Converts current `DeployExecutableModuleBytes` to the byte array
 
 ---
 ```php
@@ -21,7 +21,7 @@ Set [DeployNamedArg](DeployNamedArg.md) and returns `self`
 ```php
 getArgs(): array
 ```
-Returns array of [DeployNamedArg](DeployNamedArg.md) or empty array if no args
+Returns a list of [DeployNamedArg](DeployNamedArg.md) or empty list if no args
 
 ---
 ```php

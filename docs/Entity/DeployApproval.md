@@ -3,7 +3,7 @@
 ```php
 getSigner(): CLPublicKey
 ```
-Returns signer public key object
+Returns a signer public key object
 
 ---
 ```php

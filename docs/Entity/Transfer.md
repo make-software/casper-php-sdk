@@ -23,25 +23,25 @@ Returns `CLAccountHash` object that representing account's hash to which funds w
 ```php
 getSource(): CLURef
 ```
-Returns `CLURef` object that representing source purse
+Returns `CLURef` object that representing the source purse
 
 ---
 ```php
 getTarget(): CLURef
 ```
-Returns `CLURef` object that representing target purse
+Returns `CLURef` object that representing the target purse
 
 ---
 ```php
 getAmount(): \GMP
 ```
-Returns transfer amount
+Returns the transfer amount
 
 ---
 ```php
 getGas(): \GMP
 ```
-Returns transfer gas
+Returns the transfer gas
 
 ---
 ```php

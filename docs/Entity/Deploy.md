@@ -1,6 +1,6 @@
 # Deploy
 
-A deploy represents a request from a user to perform computation on casper platform. It has the following information:
+Deploy represents a request from a user to perform computation on casper platform. It has the following information:
 
 - Deploy hash: the blake2b256 hash of the Header
 - Header: containing
@@ -17,7 +17,7 @@ Each deploy is an atomic piece of computation in the sense that, whatever effect
 ```php
 getHash(): array
 ```
-Returns deploy hash byte array
+Returns a deploy hash byte array
 
 ---
 ```php
@@ -29,7 +29,7 @@ Returns [DeployHeader](DeployHeader.md) object
 ```php
 getPayment(): DeployExecutable
 ```
-Returns [DeployExecutable](DeployExecutable.md) object that representing deploy payment
+Returns [DeployExecutable](DeployExecutable.md) object that representing a deploy payment
 
 ---
 ```php
@@ -41,13 +41,13 @@ Returns `true` if deploy payment is standard payment
 ```php
 getSession(): DeployExecutable
 ```
-Returns [DeployExecutable](DeployExecutable.md) object that representing deploy session
+Returns [DeployExecutable](DeployExecutable.md) object that representing a deploy session
 
 ---
 ```php
 isTransfer(): bool
 ```
-Returns `true` if deploy session is transfer
+Returns `true` if a deploy session is transfer
 
 ---
 ```php

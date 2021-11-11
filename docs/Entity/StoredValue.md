@@ -15,7 +15,7 @@ Returns [Account](Account.md) object or `null`
 ```php
 getContractWASM(): ?string
 ```
-Returns contract wasm string or `null`
+Returns the contract wasm string or `null`
 
 ---
 ```php

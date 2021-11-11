@@ -1,5 +1,4 @@
 # AuctionState
-
 Class that summarizing auction contract data
 
 ---
@@ -18,13 +17,13 @@ Returns the last block height
 ```php
 getEraValidators(): array
 ```
-Returns list of [EraValidator](EraValidator.md) objects for the current era and the next era
+Returns a list of [EraValidator](EraValidator.md) objects for the current era and the next era
 
 ---
 ```php
 getBids(): array
 ```
-Returns list of [Bid](Bid.md) objects
+Returns a list of [Bid](Bid.md) objects
 
 ## JSON Representation
 Below is an example of auction state JSON returned by node RPC API

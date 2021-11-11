@@ -21,7 +21,7 @@ Returns [BlockBody](BlockBody.md) object
 ```php
 getProofs(): array
 ```
-Returns list of [BlockProof](BlockProof.md) objects
+Returns a list of [BlockProof](BlockProof.md) objects
 
 ## JSON Representation
 Below is an example of a block JSON returned by node RPC API

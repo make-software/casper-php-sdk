@@ -3,10 +3,10 @@
 ```php
 getEraId(): int
 ```
-Returns era id
+Returns an era id
 
 ---
 ```php
 getValidatorWeights(): array
 ```
-Returns list of [ValidatorWeight](ValidatorWeight.md) objects
+Returns a list of [ValidatorWeight](ValidatorWeight.md) objects

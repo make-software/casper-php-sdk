@@ -3,10 +3,10 @@
 ```php
 getName(): string
 ```
-Returns arg name
+Returns the arg name
 
 ---
 ```php
 getClType(): CLType
 ```
-Returns `CLType`
+Returns `CLType` object

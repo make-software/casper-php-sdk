@@ -3,7 +3,7 @@
 ```php
 getParentHash(): string
 ```
-Returns parent block hex-encoded hash string
+Returns a parent block hex-encoded hash string
 
 ---
 ```php
@@ -15,13 +15,13 @@ Returns global state hex-encoded hash string
 ```php
 getBodyHash(): string
 ```
-Returns block body hex-encoded hash string
+Returns a block body hex-encoded hash string
 
 ---
 ```php
 isRandomBit(): bool
 ```
-Returns is random bit flag
+Returns is_random bit flag
 
 ---
 ```php
@@ -39,7 +39,7 @@ Returns [EraEnd](EraEnd.md) object or `null`
 ```php
 getTimestamp(): int
 ```
-Returns timestamp
+Returns a block creation time
 
 ---
 ```php
@@ -51,7 +51,7 @@ Returns era id
 ```php
 getHeight(): int
 ```
-Returns the block height
+Returns a block height
 
 ---
 ```php

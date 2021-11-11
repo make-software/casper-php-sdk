@@ -3,10 +3,10 @@
 ```php
 getGroup(): string
 ```
-Returns group string
+Returns a group string
 
 ---
 ```php
 getKeys(): array
 ```
-Returns list of `CLURef` objects
+Returns a list of `CLURef` objects

@@ -15,7 +15,7 @@ Returns entry point type string (Context of method execution). Can have `Session
 ```php
 getName(): string
 ```
-Returns entry point name
+Returns an entry point name
 
 ---
 ```php
@@ -27,4 +27,4 @@ Returns `CLType` object
 ```php
 getArgs(): array
 ```
-Returns list of [NamedCLTypeArg](NamedCLTypeArg.md) objects
+Returns a list of [NamedCLTypeArg](NamedCLTypeArg.md) objects

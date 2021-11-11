@@ -3,10 +3,10 @@
 ```php
 getNodeId(): string
 ```
-Returns node id
+Returns the node id
 
 ---
 ```php
 getAddress(): string
 ```
-Returns node address
+Returns the node address

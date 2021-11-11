@@ -3,7 +3,7 @@
 ```php
 getBondingPurse(): CLURef
 ```
-Returns `CLURef` object that representing validator's bounding purse
+Returns `CLURef` object that representing validator's bonding purse
 
 ---
 ```php
@@ -21,7 +21,7 @@ Returns validator's delegation rate
 ```php
 getDelegators(): array
 ```
-Returns list of [Delegator](Delegator.md) objects
+Returns a list of [Delegator](Delegator.md) objects
 
 ---
 ```php

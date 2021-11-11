@@ -3,13 +3,13 @@
 ```php
 getPublicKey(): CLPublicKey
 ```
-Returns public key object
+Returns a public key object
 
 ---
 ```php
 getTimestamp(): int
 ```
-Returns timestamp
+Returns a deploy creation time
 
 ---
 ```php
@@ -27,13 +27,13 @@ Returns gas price
 ```php
 getBodyHash(): array
 ```
-Returns body hash byte array
+Returns the body hash byte array
 
 ---
 ```php
 getDependencies(): array
 ```
-Returns list of dependencies byte arrays
+Returns a list of dependencies byte arrays
 
 ---
 ```php

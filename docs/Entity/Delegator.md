@@ -9,13 +9,13 @@ Returns `CLPublicKey` object that representing delegator's public key
 ```php
 getStakedAmount(): \GMP
 ```
-Returns stacked amount
+Returns staked amount
 
 ---
 ```php
 getBondingPurse(): CLURef
 ```
-Returns `CLURef` object that representing delegator's bounding purse
+Returns `CLURef` object that representing delegator's bonding purse
 
 ---
 ```php
