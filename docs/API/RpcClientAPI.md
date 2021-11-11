@@ -20,36 +20,36 @@ Put deploy into the network and returns deploy hash `string`
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| `$deploy` | `Deploy` | Signed Deploy object | Yes |
+| `$deploy` | `Deploy` | Signed [Deploy](../Entity/Deploy.md) object | Yes |
 
 ---
 ## Get deploy
 ```php
 getDeploy(string $deployHash): Deploy
 ```
-Returns the [Deploy](../Entity/Deploy.md) object by the given deploy hash
+Returns a [Deploy](../Entity/Deploy.md) object by the given deploy hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| `$deployHash` | `string` | Hex-encoded hash of the deploy | Yes |
+| `$deployHash` | `string` | Hex-encoded hash of a deploy | Yes |
 
 ---
 ## Get block by hash
 ```php
 getBlockByHash(string $blockHash): Block
 ```
-Returns the [Block](../Entity/Block.md) object by the given  block hash
+Returns a [Block](../Entity/Block.md) object by the given  block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
-| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of a block | Yes |
 
 ---
 ## Get block by height
 ```php
 getBlockByHeight(int $height): Block
 ```
-Returns the [Block](../Entity/Block.md) object by the given  block height
+Returns a [Block](../Entity/Block.md) object by the given  block height
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -60,7 +60,7 @@ Returns the [Block](../Entity/Block.md) object by the given  block height
 ```php
 getLatestBlock(): Block
 ```
-Returns the [Block](../Entity/Block.md) object that represents the latest block from the network
+Returns a [Block](../Entity/Block.md) object that represents the latest block from the network
 
 ---
 ## Get peers
@@ -99,7 +99,7 @@ Returns state root hash `string` by the given block hash
 ```php
 getAccount(string $blockHash, CLPublicKey $publicKey): Account
 ```
-Returns [Account](../Entity/Account.md) object by the given block hash and account public key
+Returns an [Account](../Entity/Account.md) object by the given block hash and account public key
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -123,7 +123,7 @@ Returns purse's balance from the network
 ```php
 getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
 ```
-Returns account balance URef by the given state root hash and account hash
+Returns an account balance URef by the given state root hash and account hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -135,7 +135,7 @@ Returns account balance URef by the given state root hash and account hash
 ```php
 getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): CLURef
 ```
-Returns account balance CLURef by the given state root hash and public key
+Returns an account balance CLURef by the given state root hash and public key
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -160,7 +160,7 @@ Returns [StoredValue](../Entity/StoredValue.md) object by state root hash, key a
 ```php
 getBlockTransfers(string $blockHash = null): array
 ```
-Returns all transfers (array of [Transfer](../Entity/Transfer.md) objects) for a Block from the network by the given block hash
+Returns a list of [Transfer](../Entity/Transfer.md) objects for the block from the network by the given block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -171,7 +171,7 @@ Returns all transfers (array of [Transfer](../Entity/Transfer.md) objects) for a
 ```php
 getEraSummaryBySwitchBlockHash(string $blockHash): ?EraSummary
 ```
-Returns [EraSummary](../Entity/EraSummary.md) object or `null` by the given block hash
+Returns an [EraSummary](../Entity/EraSummary.md) object or `null` by the given block hash
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
@@ -182,7 +182,7 @@ Returns [EraSummary](../Entity/EraSummary.md) object or `null` by the given bloc
 ```php
 getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
 ```
-Returns [EraSummary](../Entity/EraSummary.md) object or `null` by the given block height
+Returns an [EraSummary](../Entity/EraSummary.md) object or `null` by the given block height
 ### Parameters
 | Name | Type | Description | Required |
 |---|---|---|---|
