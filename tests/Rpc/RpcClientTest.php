@@ -8,6 +8,7 @@ use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Util\ByteUtil;
 
 use Casper\Rpc\RpcClient;
+use Casper\Rpc\RpcError;
 
 use Casper\Entity\Account;
 use Casper\Entity\BlockBody;
@@ -55,6 +56,16 @@ class RpcClientTest extends TestCase
         $this->assertNotEmpty($deploy->getApprovals());
     }
 
+    public function testGetDeployByFakeHash(): void
+    {
+        $fakeDeployHash = '1234567891234567891234567891234567891234567891234567891234567891';
+        $errorMessage = 'deploy not know';
+
+        $this->expectException(RpcError::class);
+        $this->expectExceptionMessage($errorMessage);
+        $this->rpcClient->getDeploy($fakeDeployHash);
+    }
+
     public function testGetLatestBlock(): Block
     {
         $latestBlock = $this->rpcClient->getLatestBlock();
@@ -75,6 +86,16 @@ class RpcClientTest extends TestCase
         $this->assertEquals($block->getHash(), $latestBlock->getHash());
     }
 
+    public function testGetBlockByFakeHash(): void
+    {
+        $fakeBlockHash = '1234567891234567891234567891234567891234567891234567891234567891';
+        $errorMessage = 'block not know';
+
+        $this->expectException(RpcError::class);
+        $this->expectExceptionMessage($errorMessage);
+        $this->rpcClient->getBlockByHash($fakeBlockHash);
+    }
+
     /**
      * @depends testGetLatestBlock
      */
@@ -82,6 +103,12 @@ class RpcClientTest extends TestCase
     {
         $block = $this->rpcClient->getBlockByHeight($latestBlock->getHeader()->getHeight());
         $this->assertEquals($block->getHash(), $latestBlock->getHash());
+    }
+
+    public function testGetBlockByIncorrectHeight(): void
+    {
+        $this->expectException(RpcError::class);
+        $this->rpcClient->getBlockByHeight(-1);
     }
 
     public function testGetPeers(): void
