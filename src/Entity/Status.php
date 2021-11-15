@@ -14,7 +14,7 @@ class Status
 
     private CLPublicKey $ourPublicSigningKey;
 
-    private ?int $roundLength;
+    private ?string $roundLength;
 
     private string $buildVersion;
 
@@ -30,7 +30,7 @@ class Status
         string $startingStateRootHash,
         BlockInfo $lastAddedBlockInfo,
         CLPublicKey $ourPublicSigningKey,
-        ?int $roundLength,
+        ?string $roundLength,
         string $buildVersion,
         ?NextUpgrade $nextUpgrade,
         array $peers
@@ -66,7 +66,7 @@ class Status
         return $this->ourPublicSigningKey;
     }
 
-    public function getRoundLength(): ?int
+    public function getRoundLength(): ?string
     {
         return $this->roundLength;
     }
