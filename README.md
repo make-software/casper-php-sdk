@@ -74,6 +74,12 @@ $latestBlockHash = $latestBlock->getHash();
 - [getEraSummaryBySwitchBlockHeight](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-height)
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
 
+### DeployService
+- [makeDeploy](docs/API/DeployServiceAPI.md#Make-deploy)
+- [signDeploy](docs/API/DeployServiceAPI.md#Sign-deploy)
+- [validateDeploy](docs/API/DeployServiceAPI.md#Validate-deploy)
+- [getDeploySize](docs/API/DeployServiceAPI.md#Get-deploy-size)
+
 ## Entities
 - [Account](docs/Entity/Account.md)
 - [AuctionState](docs/Entity/AuctionState.md)
