@@ -113,7 +113,7 @@ final class Ed25519Key extends AsymmetricKey
         }
 
         if ($key === null || count($key) !== 32) {
-            throw new \Exception('Unexpected key length: ' . count($key));
+            throw new \Exception('Unexpected key length');
         }
 
         return ByteUtil::byteArrayToString($key);

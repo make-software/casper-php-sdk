@@ -71,12 +71,12 @@ final class Secp256K1Key extends AsymmetricKey
 
     public function exportPublicKeyInPem(): string
     {
-        return $this->publicKeySerializer->serialize($this->secpPublicKey);
+        return $this->publicKeySerializer->serialize($this->secpPublicKey) . PHP_EOL;
     }
 
     public function exportPrivateKeyInPem(): string
     {
-        return $this->privateKeySerializer->serialize($this->secpPrivateKey);
+        return $this->privateKeySerializer->serialize($this->secpPrivateKey) . PHP_EOL;
     }
 
     /**
