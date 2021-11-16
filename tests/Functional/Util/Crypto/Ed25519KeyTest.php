@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Util\Crypto;
+namespace Tests\Functional\Util\Crypto;
 
 use PHPUnit\Framework\TestCase;
 
