@@ -29,6 +29,9 @@ use Casper\Entity\Status;
 use Casper\Entity\StoredValue;
 use Casper\Entity\Transfer;
 
+/**
+ * Class for interacting with the network via RPC
+ */
 class RpcClient
 {
     private const ID = 1;
@@ -63,6 +66,11 @@ class RpcClient
     }
 
     /**
+     * Put deploy into the network
+     *
+     * @param Deploy $deploy
+     * @return string
+     *
      * @throws RpcError
      */
     public function putDeploy(Deploy $deploy): string
@@ -78,6 +86,11 @@ class RpcClient
     }
 
     /**
+     * Obtain a deploy from the network by deploy hash
+     *
+     * @param string $deployHash
+     * @return Deploy
+     *
      * @throws \Exception
      */
     public function getDeploy(string $deployHash): Deploy

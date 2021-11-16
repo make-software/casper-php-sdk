@@ -20,6 +20,9 @@ use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Phactor\Math;
 
+/**
+ * Secp255K1 key implementation
+ */
 final class Secp256K1Key extends AsymmetricKey
 {
     use Math;
@@ -57,6 +60,7 @@ final class Secp256K1Key extends AsymmetricKey
     }
 
     /**
+     * @inheritDoc
      * @throws \Exception
      */
     public static function createFromPrivateKeyFile(string $pathToPrivateKey): self
@@ -69,18 +73,28 @@ final class Secp256K1Key extends AsymmetricKey
         );
     }
 
+    /**
+     * @inheritDoc
+     * @return string
+     */
     public function exportPublicKeyInPem(): string
     {
         return $this->publicKeySerializer->serialize($this->secpPublicKey) . PHP_EOL;
     }
 
+    /**
+     * @inheritDoc
+     * @return string
+     */
     public function exportPrivateKeyInPem(): string
     {
         return $this->privateKeySerializer->serialize($this->secpPrivateKey) . PHP_EOL;
     }
 
     /**
-     * @throws \Exception
+     * @inheritDoc
+     * @param string $message
+     * @return string
      */
     public function sign(string $message): string
     {
@@ -96,6 +110,12 @@ final class Secp256K1Key extends AsymmetricKey
         return $this->signatureToHex($signature);
     }
 
+    /**
+     * @inheritDoc
+     * @param string $signature
+     * @param string $message
+     * @return bool
+     */
     public function verify(string $signature, string $message): bool
     {
         try {

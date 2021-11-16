@@ -5,6 +5,9 @@ namespace Casper\Util\Crypto;
 use Casper\Util\ByteUtil;
 use Casper\Util\KeysUtil;
 
+/**
+ * Ed25519 key implementation
+ */
 final class Ed25519Key extends AsymmetricKey
 {
     /**
@@ -22,6 +25,7 @@ final class Ed25519Key extends AsymmetricKey
     }
 
     /**
+     * @inheritDoc
      * @throws \Exception
      */
     public static function createFromPrivateKeyFile(string $pathToPrivateKey): self
@@ -35,6 +39,10 @@ final class Ed25519Key extends AsymmetricKey
         return new self($publicKey, $privateKey);
     }
 
+    /**
+     * @inheritDoc
+     * @return string
+     */
     public function exportPublicKeyInPem(): string
     {
         $derPrefix = ByteUtil::byteArrayToString([48, 42, 48, 5, 6, 3, 43, 101, 112, 3, 33, 0]);
@@ -44,6 +52,9 @@ final class Ed25519Key extends AsymmetricKey
     }
 
     /**
+     * @inheritDoc
+     * @return string
+     *
      * @throws \Exception
      */
     public function exportPrivateKeyInPem(): string
@@ -55,6 +66,9 @@ final class Ed25519Key extends AsymmetricKey
     }
 
     /**
+     * @inheritDoc
+     * @return string
+     *
      * @throws \Exception
      */
     public function sign(string $message): string
@@ -63,6 +77,9 @@ final class Ed25519Key extends AsymmetricKey
     }
 
     /**
+     * @inheritDoc
+     * @return string
+     *
      * @throws \SodiumException
      */
     public function verify(string $signature, string $message): bool
