@@ -14,9 +14,19 @@ use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployHeader;
 use Casper\Entity\DeployParams;
 
+/**
+ * Class that allows performs operations around Deploy object
+ */
 class DeployService
 {
     /**
+     * Construct the unsigned Deploy
+     *
+     * @param DeployParams $deployParams
+     * @param DeployExecutable $session
+     * @param DeployExecutable $payment
+     * @return Deploy
+     *
      * @throws \Exception
      */
     public function makeDeploy(
@@ -43,6 +53,12 @@ class DeployService
     }
 
     /**
+     * Add signature to the Deploy
+     *
+     * @param Deploy $deploy
+     * @param AsymmetricKey $key
+     * @return Deploy
+     *
      * @throws \Exception
      */
     public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
@@ -60,6 +76,11 @@ class DeployService
     }
 
     /**
+     * Validate the Deploy by checking body and deploy hash
+     *
+     * @param Deploy $deploy
+     * @return bool
+     *
      * @throws \Exception
      */
     public function validateDeploy(Deploy $deploy): bool
@@ -82,6 +103,11 @@ class DeployService
     }
 
     /**
+     * Get deploy size in bytes
+     *
+     * @param Deploy $deploy
+     * @return int
+     *
      * @throws \Exception
      */
     public function getDeploySize(Deploy $deploy): int
