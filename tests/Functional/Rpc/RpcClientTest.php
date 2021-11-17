@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Rpc;
+namespace Tests\Functional\Rpc;
 
 use PHPUnit\Framework\TestCase;
 
