@@ -151,7 +151,7 @@ class RpcClientTest extends TestCase
     public function testGetStateRootHash(Block $latestBlock): string
     {
         $stateRootHash = $this->rpcClient->getStateRootHash($latestBlock->getHash());
-        $this->assertMatchesRegularExpression('/[a-f\d]{64}/', $stateRootHash);
+        $this->assertMatchesRegularExpression('/[a-fA-F\d]{64}/', $stateRootHash);
 
         return $stateRootHash;
     }
@@ -227,7 +227,7 @@ class RpcClientTest extends TestCase
 
         $eraSummary = $this->rpcClient->getEraSummaryBySwitchBlockHash($switchingBlockHashFromTheTestnet);
         $this->assertEquals(1, $eraSummary->getEraId());
-        $this->assertEquals($switchingBlockHashFromTheTestnet, $eraSummary->getBlockHash());
+        $this->assertEquals($switchingBlockHashFromTheTestnet, strtolower($eraSummary->getBlockHash()));
         $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
     }
 
@@ -237,7 +237,7 @@ class RpcClientTest extends TestCase
 
         $eraSummary = $this->rpcClient->getEraSummaryBySwitchBlockHeight($switchingBlockHeightFromTheTestnet);
         $this->assertEquals(1, $eraSummary->getEraId());
-        $this->assertEquals('de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e', $eraSummary->getBlockHash());
+        $this->assertEquals('de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e', strtolower($eraSummary->getBlockHash()));
         $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
     }
 }
