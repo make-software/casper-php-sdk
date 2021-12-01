@@ -4,7 +4,7 @@ namespace Casper\Util;
 
 class CEP57ChecksumUtil
 {
-    private const BLACK2B_HASH_LENGTH = 64;
+    private const BLAKE2B_HASH_LENGTH = 64;
     private const HEX_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 
     /**
@@ -44,7 +44,7 @@ class CEP57ChecksumUtil
     public static function encode(array $bytes): string
     {
         $nibbles = self::byteToNibbles($bytes);
-        $hashBits = self::bytesToBitsCycle(HashUtil::blake2bHash($bytes, self::BLACK2B_HASH_LENGTH));
+        $hashBits = self::bytesToBitsCycle(HashUtil::blake2bHash($bytes, self::BLAKE2B_HASH_LENGTH));
 
         $bitIndex = 0;
         foreach ($nibbles as $nibble) {
