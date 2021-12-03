@@ -51,6 +51,7 @@ $latestBlockHash = $latestBlock->getHash();
 ## More examples
 - [Key management](docs/Example/KeyManagement.md)
 - [Sending a Transfer](docs/Example/SendingTransfer.md)
+- [Event Stream](docs/Example/EventStream.md)
 
 ## API
 ### RpcClient
