@@ -17,9 +17,7 @@ class Event
     public function __construct(string $data)
     {
         if (preg_match_all("/data:(?<data>.*)/", $data, $match)) {
-            foreach ($match['data'] as $dataLine) {
-                $this->data = json_decode($dataLine, true);
-            }
+            $this->data = json_decode($match['data'][0], true);
         }
 
         if (preg_match_all("/(?<key>id|name)\:(?<value>.*)/", $data, $match)) {
