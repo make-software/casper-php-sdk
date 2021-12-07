@@ -2,7 +2,6 @@
 
 namespace Casper\Entity;
 
-use Casper\CLType\CLByteArray;
 use Casper\CLType\CLOption;
 use Casper\CLType\CLPublicKey;
 use Casper\CLType\CLU512;
@@ -47,13 +46,7 @@ class DeployExecutable implements ToBytesConvertible
      */
     public static function newTransfer($id, $amount, $target, CLURef $sourcePurse = null): self
     {
-        if ($target instanceof CLURef) {
-            $targetValue = $target;
-        }
-        elseif ($target instanceof CLPublicKey) {
-            $targetValue = new CLByteArray($target->toAccountHash());
-        }
-        else {
+        if (!in_array(get_class($target), [CLURef::class, CLPublicKey::class])) {
             throw new \Exception('Please specify target');
         }
 
@@ -65,7 +58,7 @@ class DeployExecutable implements ToBytesConvertible
         }
 
         $transfer
-            ->setArg(new DeployNamedArg('target', $targetValue))
+            ->setArg(new DeployNamedArg('target', $target))
             ->setArg(new DeployNamedArg('id', new CLOption(new CLU64($id))));
 
         return (new self())

@@ -33,4 +33,19 @@ abstract class DeployExecutableItemInternal implements ToBytesConvertible
 
         return null;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function getArgParsedValueByName(string $name)
+    {
+        $arg = $this->getArgByName($name);
+
+        if (!$arg) {
+            throw new \Exception('Argument not found');
+        }
+
+        return $arg->getValue()
+            ->parsedValue();
+    }
 }

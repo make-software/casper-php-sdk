@@ -28,6 +28,9 @@ class DeployExecutableStoredContractByName extends DeployExecutableItemInternal
         return $this->entryPoint;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toBytes(): array
     {
         return array_merge(

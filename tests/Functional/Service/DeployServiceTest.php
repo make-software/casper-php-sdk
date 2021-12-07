@@ -42,7 +42,6 @@ class DeployServiceTest extends TestCase
         $transferAmount = 2500000000;
         $fakePublicKeyHex = '0202181123456789693bcd1066f00abe6759c588efe94504a7c9911be77ec365c08e';
         $recipientPublicKey = CLPublicKeySerializer::fromHex($fakePublicKeyHex);
-        $recipientAccountHashString = ByteUtil::byteArrayToHex($recipientPublicKey->toAccountHash());
         $transfer = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 
         $paymentAmount = 10;
@@ -51,40 +50,30 @@ class DeployServiceTest extends TestCase
         $deploy = $this->deployService
             ->makeDeploy($deployParams, $transfer, $payment);
 
-        $createdDeployChainName = $deploy->getHeader()->getChainName();
+        $createdDeployChainName = $deploy->getHeader()
+            ->getChainName();
         $this->assertEquals($networkName, $createdDeployChainName);
 
         // Check deploy transfer
-        $createdDeployTransfer = $deploy->getSession()->getTransfer();
+        $createdDeployTransfer = $deploy->getSession()
+            ->getTransfer();
         $this->assertNotNull($createdDeployTransfer);
 
-        $createdDeployTransferId = (int) $createdDeployTransfer
-            ->getArgByName('id')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployTransferId = (int) $createdDeployTransfer->getArgParsedValueByName('id');
         $this->assertEquals($transferId, $createdDeployTransferId);
 
-        $createdDeployTransferAmount = (int) $createdDeployTransfer
-            ->getArgByName('amount')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployTransferAmount = (int) $createdDeployTransfer->getArgParsedValueByName('amount');
         $this->assertEquals($transferAmount, $createdDeployTransferAmount);
 
-        $createdDeployTargetAccountHashString = $createdDeployTransfer
-            ->getArgByName('target')
-            ->getValue()
-            ->parsedValue();
-        $this->assertEquals($recipientAccountHashString, $createdDeployTargetAccountHashString);
+        $createdDeployTransferTarget = $createdDeployTransfer->getArgParsedValueByName('target');
+        $this->assertEquals($fakePublicKeyHex, $createdDeployTransferTarget);
 
         // Check deploy payment
         $createdDeployPayment = $deploy->getPayment();
         $this->assertNotNull($createdDeployPayment->getModuleBytes());
 
-        $createdDeployPaymentAmount = (int) $createdDeployPayment
-            ->getModuleBytes()
-            ->getArgByName('amount')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployPaymentAmount = (int) $createdDeployPayment->getModuleBytes()
+            ->getArgParsedValueByName('amount');
         $this->assertEquals($paymentAmount, $createdDeployPaymentAmount);
 
         return $deploy;
@@ -114,6 +103,7 @@ class DeployServiceTest extends TestCase
 
     /**
      * @depends testMakeDeploy
+     * @throws \Exception
      */
     public function testValidateDeploy(Deploy $notCorruptedDeploy): void
     {
@@ -133,6 +123,7 @@ class DeployServiceTest extends TestCase
 
     /**
      * @depends testMakeDeploy
+     * @throws \Exception
      */
     public function testGetDeploySize(Deploy $deploy): void
     {

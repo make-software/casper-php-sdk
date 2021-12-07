@@ -53,7 +53,7 @@ class DeployParams
         $this->gasPrice = $gasPrice;
         $this->ttl = $ttl;
         $this->dependencies = $dependencies;
-        $this->timestamp = $timestamp ?? time();
+        $this->timestamp = $timestamp ?? (time() * 1000);
     }
 
     public function getAccountPublicKey(): CLPublicKey

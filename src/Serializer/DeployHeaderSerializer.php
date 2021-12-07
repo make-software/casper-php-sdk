@@ -24,7 +24,7 @@ class DeployHeaderSerializer extends JsonSerializer
             'chain_name' => $header->getChainName(),
             'dependencies' => $header->getDependencies(),
             'gas_price' => $header->getGasPrice(),
-            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $header->getTimestamp()),
+            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $header->getTimestamp() / 1000),
             'ttl' => self::ttlToString($header->getTtl()),
         ];
     }
@@ -36,7 +36,7 @@ class DeployHeaderSerializer extends JsonSerializer
     {
         return new DeployHeader(
             CLPublicKeySerializer::fromHex($json['account']),
-            strtotime($json['timestamp']),
+            strtotime($json['timestamp']) * 1000,
             self::ttlToInt($json['ttl']),
             (int) $json['gas_price'],
             ByteUtil::hexToByteArray($json['body_hash']),
