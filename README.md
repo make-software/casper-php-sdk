@@ -95,15 +95,3 @@ Run the following command from the project directory.
 ```shell
 export CASPER_PHP_SDK_TEST_NODE_URL="http://127.0.0.1:7777" && php vendor/bin/phpunit tests
 ```
-
-## Roadmap
-- [x] Create an RPC client that returns array responses
-- [x] Implement all GET requests
-- [x] Add `Ed25519` key support
-- [x] Add `CLType` primitives
-- [x] Add domain-specific entities
-- [x] Add deploy creation related services
-- [x] Add `Secp256k1` key support
-- [ ] Add extensive validations
-- [ ] Add automated tests
-- [x] Add documentation
