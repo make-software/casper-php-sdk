@@ -8,6 +8,7 @@ use Casper\Serializer\CLAccountHashSerializer;
 use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Serializer\CLURefSerializer;
 use Casper\Serializer\EraSummarySerializer;
+use Casper\Serializer\GlobalStateSerializer;
 use Casper\Serializer\PeerSerializer;
 use Casper\Serializer\BlockSerializer;
 use Casper\Serializer\DeploySerializer;
@@ -24,6 +25,7 @@ use Casper\Entity\AuctionState;
 use Casper\Entity\Block;
 use Casper\Entity\Deploy;
 use Casper\Entity\EraSummary;
+use Casper\Entity\GlobalState;
 use Casper\Entity\Peer;
 use Casper\Entity\Status;
 use Casper\Entity\StoredValue;
@@ -50,6 +52,7 @@ class RpcClient
     private const RPC_METHOD_GET_ACCOUNT_BALANCE = 'state_get_balance';
     private const RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK = 'chain_get_era_info_by_switch_block';
     private const RPC_METHOD_GET_DICTIONARY_ITEM = 'state_get_dictionary_item';
+    private const RPC_METHOD_QUERY_GLOBAL_STATE = 'query_global_state';
 
     private string $nodeUrl;
 
@@ -346,6 +349,25 @@ class RpcClient
         );
 
         return StoredValueSerializer::fromJson($response['stored_value']);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getGlobalState(string $blockHash, string $key, array $path = []): GlobalState
+    {
+        $response = $this->rpcCallMethod(
+            self::RPC_METHOD_QUERY_GLOBAL_STATE,
+            array(
+                'state_identifier' => array(
+                    'BlockHash' => $blockHash
+                ),
+                'key' => $key,
+                'path' => $path,
+            )
+        );
+
+        return GlobalStateSerializer::fromJson($response);
     }
 
     /**
