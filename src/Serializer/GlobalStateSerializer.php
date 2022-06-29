@@ -12,8 +12,8 @@ class GlobalStateSerializer extends JsonSerializer
     public static function toJson($globalState): array
     {
         return array(
-            'node_id' => BlockHeaderSerializer::toJson($globalState->getBlockHeader()),
-            'address' => StoredValueSerializer::toJson($globalState->getStoredValue()),
+            'block_header' => BlockHeaderSerializer::toJson($globalState->getBlockHeader()),
+            'stored_value' => StoredValueSerializer::toJson($globalState->getStoredValue()),
         );
     }
 
