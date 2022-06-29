@@ -2,28 +2,22 @@
 
 namespace Casper\Util;
 
-use deemru\Blake2b;
-
 class HashUtil
 {
-    private static Blake2b $blake2b;
-
     /**
      * @param int[]
+     * @param int $length
      * @return int[]
      *
-     * @throws \Exception
+     * @throws \SodiumException
      */
-    public static function blake2bHash(array $bytes): array
+    public static function blake2bHash(array $bytes, int $length = 32): array
     {
-        if (!isset(self::$blake2b)) {
-            self::$blake2b = new Blake2b();
-        }
+        $hashState = sodium_crypto_generichash_init('', $length);
+        sodium_crypto_generichash_update($hashState, ByteUtil::byteArrayToString($bytes));
 
         return ByteUtil::stringToByteArray(
-            self::$blake2b->hash(
-                ByteUtil::byteArrayToString($bytes)
-            )
+            sodium_crypto_generichash_final($hashState, $length)
         );
     }
 }
