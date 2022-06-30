@@ -4,9 +4,7 @@ namespace Casper\EventStream;
 
 class Event
 {
-    private ?string $id = null;
-
-    private ?string $name = null;
+    private ?int $id = null;
 
     private ?array $data = null;
 
@@ -20,25 +18,14 @@ class Event
             $this->data = json_decode($match['data'][0], true);
         }
 
-        if (preg_match_all("/(?<key>id|name)\:(?<value>.*)/", $data, $match)) {
-            foreach ($match['key'] as $i => $key) {
-                $this->{$key} = trim($match['value'][$i]);
-            }
-        }
-
-        if (!$this->data) {
-            throw new \Exception('Invalid event');
+        if (preg_match_all("/id:(?<id>.*)/", $data, $match)) {
+            $this->id = $match['id'][0];
         }
     }
 
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
     }
 
     public function getData(): ?array

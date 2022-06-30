@@ -1,33 +1,26 @@
 # Event stream
 
-Create `EventSource` instance by passing node url to constructor
+Create `EventStream` instance by passing node url and stream path to the constructor. The third argument `$startFromEvent` is not required but can be used to filter out all events with id below `$startFromEvent` value.  
 
-```php
-$nodeUrl = 'http://3.208.91.63:9999';
-$es = new Casper\EventStream\EventSource($nodeUrl);
-```
+Available stream paths:
+- `EventStream::STREAM_PATH_MAIN` - listen system events
+- `EventStream::STREAM_PATH_DEPLOYS` - listen deploy events
+- `EventStream::STREAM_PATH_SIGS` - listen finality signatures events
 
-Use `connect()` method for connecting to the node. The method has two parameters `$eventsType` and `$startFrom`. The first one is mandatory and second is optional. 
-
-Available events type:
-- `EventSource::EVENT_TYPE_MAIN` - listen system events
-- `EventSource::EVENT_TYPE_DEPLOYS` - listen deploy events
-- `EventSource::EVENT_TYPE_SIGS` - listen finality signatures events
-
-```php
-$es->connect(\Casper\EventStream\EventSource::EVENT_TYPE_MAIN);
-```
-
-Set event handler callback function to `EventSource` instance with `onMessage()` method.
+Set event handler callback function to `EventStream` instance with `onEvent()` method.
 For event stream aborting use `abort()` method.
+
+Use `listen()` method for connecting to the node.
 
 ## Example
 
 ```php
 $nodeUrl = 'http://localhost:9999';
-$es = new Casper\EventStream\EventSource($nodeUrl);
+$streamPath = \Casper\EventStream\EventStream::STREAM_PATH_MAIN;
+$startFromEvent = 12345;
 
-$es->onMessage(
+$es = new Casper\EventStream\EventStream($nodeUrl, $streamPath, $startFromEvent);
+$es->onEvent(
     function (\Casper\EventStream\Event $event) use ($es) {
         if ($event->getId() === null) {
             $es->abort();
@@ -38,5 +31,5 @@ $es->onMessage(
     }
 );
 
-$es->connect(\Casper\EventStream\EventSource::EVENT_TYPE_MAIN);
+$es->listen();
 ```
