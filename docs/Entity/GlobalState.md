@@ -1,7 +1,7 @@
 # GlobalState
 
 ```php
-getBlockHeader(): BlockHeader
+getBlockHeader(): ?BlockHeader
 ```
 Returns [BlockHeader](BlockHeader.md) object
 
