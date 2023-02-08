@@ -4,17 +4,17 @@ namespace Casper\Entity;
 
 class GlobalState
 {
-    private BlockHeader $blockHeader;
+    private ?BlockHeader $blockHeader;
 
     private StoredValue $storedValue;
 
-    public function __construct(BlockHeader $blockHeader, StoredValue $storedValue)
+    public function __construct(?BlockHeader $blockHeader, StoredValue $storedValue)
     {
         $this->blockHeader = $blockHeader;
         $this->storedValue = $storedValue;
     }
 
-    public function getBlockHeader(): BlockHeader
+    public function getBlockHeader(): ?BlockHeader
     {
         return $this->blockHeader;
     }

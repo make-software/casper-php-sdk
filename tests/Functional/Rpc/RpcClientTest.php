@@ -241,12 +241,22 @@ class RpcClientTest extends TestCase
         $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
     }
 
-    public function testGetGlobalState(): void
+    public function testGetGlobalStateByBlock(): void
     {
         $blockHashFromTheTestnet = '009516c04e6cb56d1d9b43070fd45cd80bf968739d39555282d8e66a8194e2e3';
         $deployHashFromTheTestnet = 'deploy-39cf80560c87af0e69eb4a2c49f2404842244eafc63c497a6c8eb92f89b3c102';
 
-        $globalState = $this->rpcClient->getGlobalState($blockHashFromTheTestnet, $deployHashFromTheTestnet);
+        $globalState = $this->rpcClient->getGlobalStateByBlock($blockHashFromTheTestnet, $deployHashFromTheTestnet);
+        $this->assertEquals($deployHashFromTheTestnet, 'deploy-' . $globalState->getStoredValue()->getDeployInfo()->getDeployHash());
+    }
+
+    public function testGetGlobalStateByStateRootHash(): void
+    {
+        $blockHashFromTheTestnet = '009516c04e6cb56d1d9b43070fd45cd80bf968739d39555282d8e66a8194e2e3';
+        $deployHashFromTheTestnet = 'deploy-39cf80560c87af0e69eb4a2c49f2404842244eafc63c497a6c8eb92f89b3c102';
+        $stateRootHash = $this->rpcClient->getStateRootHash($blockHashFromTheTestnet);
+
+        $globalState = $this->rpcClient->getGlobalStateByStateRootHash($stateRootHash, $deployHashFromTheTestnet);
         $this->assertEquals($deployHashFromTheTestnet, 'deploy-' . $globalState->getStoredValue()->getDeployInfo()->getDeployHash());
     }
 }

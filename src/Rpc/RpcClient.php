@@ -354,13 +354,29 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getGlobalState(string $blockHash, string $key, array $path = []): GlobalState
+    public function getGlobalStateByBlock(string $blockHash, string $key, array $path = []): GlobalState
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_QUERY_GLOBAL_STATE,
             array(
                 'state_identifier' => array(
                     'BlockHash' => $blockHash
+                ),
+                'key' => $key,
+                'path' => $path,
+            )
+        );
+
+        return GlobalStateSerializer::fromJson($response);
+    }
+
+    public function getGlobalStateByStateRootHash(string $stateRootHash, string $key, array $path = []): GlobalState
+    {
+        $response = $this->rpcCallMethod(
+            self::RPC_METHOD_QUERY_GLOBAL_STATE,
+            array(
+                'state_identifier' => array(
+                    'StateRootHash' => $stateRootHash
                 ),
                 'key' => $key,
                 'path' => $path,

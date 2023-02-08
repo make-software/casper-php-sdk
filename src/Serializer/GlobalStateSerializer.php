@@ -20,7 +20,7 @@ class GlobalStateSerializer extends JsonSerializer
     public static function fromJson(array $json): GlobalState
     {
         return new GlobalState(
-            BlockHeaderSerializer::fromJson($json['block_header']),
+            isset($json['block_header']) ? BlockHeaderSerializer::fromJson($json['block_header']) : null,
             StoredValueSerializer::fromJson($json['stored_value'])
         );
     }
