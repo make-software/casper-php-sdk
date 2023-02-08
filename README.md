@@ -73,6 +73,8 @@ $latestBlockHash = $latestBlock->getHash();
 - [getEraSummaryBySwitchBlockHash](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-hash)
 - [getEraSummaryBySwitchBlockHeight](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-height)
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
+- [getGlobalStateByBlock](docs/API/RpcClientAPI.md#Get-global-state-by-block)
+- [getGlobalStateByStateRootHash](docs/API/RpcClientAPI.md#Get-global-state-by-state-root-hash)
 
 ### DeployService
 - [makeDeploy](docs/API/DeployServiceAPI.md#Make-deploy)
