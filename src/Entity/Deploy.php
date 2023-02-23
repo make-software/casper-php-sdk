@@ -55,7 +55,7 @@ class Deploy implements ToBytesConvertible
         if ($this->payment->isModuleBytes()) {
             $moduleBytesEntity = $this->payment->getModuleBytes();
 
-            if ($moduleBytesEntity && $moduleBytesEntity->getModuleBytes() !== '') {
+            if ($moduleBytesEntity && $moduleBytesEntity->getHexModuleBytes() !== '') {
                 return true;
             }
         }

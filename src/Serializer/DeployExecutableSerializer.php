@@ -19,7 +19,7 @@ class DeployExecutableSerializer extends JsonSerializer
     {
         if ($deployExecutable->isModuleBytes()) {
             $result['ModuleBytes'] = array(
-                'module_bytes' => $deployExecutable->getModuleBytes()->getModuleBytes(),
+                'module_bytes' => $deployExecutable->getModuleBytes()->getHexModuleBytes(),
                 'args' => DeployNamedArgSerializer::toJsonArray(
                     $deployExecutable->getModuleBytes()->getArgs()
                 )

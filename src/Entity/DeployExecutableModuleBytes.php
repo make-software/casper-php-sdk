@@ -8,19 +8,19 @@ final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
 {
     protected const TAG = 0;
 
-    private string $moduleBytes;
+    private string $hexModuleBytes;
 
     /**
-     * @param string $moduleBytes
+     * @param string $hexModuleBytes
      */
-    public function __construct(string $moduleBytes)
+    public function __construct(string $hexModuleBytes)
     {
-        $this->moduleBytes = $moduleBytes;
+        $this->hexModuleBytes = $hexModuleBytes;
     }
 
-    public function getModuleBytes(): string
+    public function getHexModuleBytes(): string
     {
-        return $this->moduleBytes;
+        return $this->hexModuleBytes;
     }
 
     /**
@@ -31,7 +31,7 @@ final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
     {
         return array_merge(
             [self::TAG],
-            ByteUtil::toBytesArrayU8(ByteUtil::hexToByteArray($this->moduleBytes)),
+            ByteUtil::toBytesArrayU8(ByteUtil::hexToByteArray($this->hexModuleBytes)),
             ByteUtil::vectorToBytesU32($this->args)
         );
     }

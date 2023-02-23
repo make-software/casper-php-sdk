@@ -31,12 +31,11 @@ Create deploy params and make new deploy
 $networkName = 'casper';
 $deployParams = new Casper\Entity\DeployParams($senderPublicKey, $networkName);
 
-$deployService = new Casper\Service\DeployService();
-$deploy = $deployService->makeDeploy($deployParams, $transfer, $payment);
+$deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 ```
 
 Sign deploy and put to the network
 ```php
-$signedDeploy = $deployService->signDeploy($deploy, $senderKeyPair);
+$signedDeploy = DeployService::signDeploy($deploy, $senderKeyPair);
 $deployHash = $rpcClient->putDeploy($signedDeploy);
 ```

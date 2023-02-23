@@ -29,8 +29,19 @@ class DeployExecutable implements ToBytesConvertible
      */
     public static function newStandardPayment($amount): self
     {
-        $moduleBytes = (new DeployExecutableModuleBytes(''))
-            ->setArg(new DeployNamedArg('amount', new CLU512($amount)));
+        return self::newModuleBytes(
+            '',
+            [new DeployNamedArg('amount', new CLU512($amount))]
+        );
+    }
+
+    public static function newModuleBytes(string $hexModuleBytes, array $args): self
+    {
+        $moduleBytes = new DeployExecutableModuleBytes($hexModuleBytes);
+
+        foreach ($args as $arg) {
+            $moduleBytes->setArg($arg);
+        }
 
         return (new self())
             ->setModuleBytes($moduleBytes);
@@ -63,6 +74,18 @@ class DeployExecutable implements ToBytesConvertible
 
         return (new self())
             ->setTransfer($transfer);
+    }
+
+    public static function newStoredContractByHash(string $hexContractHash, string $entrypoint, array $args): self
+    {
+        $storedContractByHash = new DeployExecutableStoredContractByHash($hexContractHash, $entrypoint);
+
+        foreach ($args as $arg) {
+            $storedContractByHash->setArg($arg);
+        }
+
+        return (new self())
+            ->setStoredContractByHash($storedContractByHash);
     }
 
     public function setModuleBytes(?DeployExecutableModuleBytes $moduleBytes): self

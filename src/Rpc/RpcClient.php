@@ -194,7 +194,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function getStateRootHash(string $blockHash): string
+    public function getStateRootHash(string $blockHash = ''): string
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_STATE_ROOT_HASH,

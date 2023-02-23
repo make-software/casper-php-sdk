@@ -17,18 +17,6 @@ use Casper\Entity\DeployParams;
 
 class DeployServiceTest extends TestCase
 {
-    protected ?DeployService $deployService;
-
-    protected function setUp(): void
-    {
-        $this->deployService = new DeployService();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->deployService = null;
-    }
-
     /**
      * @throws \Exception
      */
@@ -47,8 +35,7 @@ class DeployServiceTest extends TestCase
         $paymentAmount = 10;
         $payment = DeployExecutable::newStandardPayment($paymentAmount);
 
-        $deploy = $this->deployService
-            ->makeDeploy($deployParams, $transfer, $payment);
+        $deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 
         $createdDeployChainName = $deploy->getHeader()
             ->getChainName();
@@ -88,7 +75,7 @@ class DeployServiceTest extends TestCase
         $this->assertEmpty($deploy->getApprovals());
 
         $ed25519KeyPair = new Ed25519Key();
-        $this->deployService->signDeploy($deploy, $ed25519KeyPair);
+        DeployService::signDeploy($deploy, $ed25519KeyPair);
 
         $approvals = $deploy->getApprovals();
         $this->assertNotEmpty($approvals);
@@ -107,7 +94,7 @@ class DeployServiceTest extends TestCase
      */
     public function testValidateDeploy(Deploy $notCorruptedDeploy): void
     {
-        $deployIsValid = $this->deployService->validateDeploy($notCorruptedDeploy);
+        $deployIsValid = DeployService::validateDeploy($notCorruptedDeploy);
         $this->assertTrue($deployIsValid);
 
         // Change hash in deploy object and check if deploy is valid
@@ -117,7 +104,7 @@ class DeployServiceTest extends TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($corruptedDeploy, array_merge($corruptedDeploy->getHash(), [1]));
 
-        $deployIsValid = $this->deployService->validateDeploy($corruptedDeploy);
+        $deployIsValid = DeployService::validateDeploy($corruptedDeploy);
         $this->assertFalse($deployIsValid);
     }
 
@@ -139,7 +126,7 @@ class DeployServiceTest extends TestCase
         $bodySize = count(array_merge($notSignedDeploy->getPayment()->toBytes(), $notSignedDeploy->getSession()->toBytes()));
 
         $expectedNotSignedDeploySize = $hashSize + $headerSize + $bodySize;
-        $actualNotSignedDeploySize = $this->deployService->getDeploySize($notSignedDeploy);
+        $actualNotSignedDeploySize = DeployService::getDeploySize($notSignedDeploy);
 
         $this->assertEquals($expectedNotSignedDeploySize, $actualNotSignedDeploySize);
     }
