@@ -13,17 +13,19 @@ $senderPublicKey = Casper\Serializer\CLPublicKeySerializer::fromAsymmetricKey($s
 $recipientPublicKey = Casper\Serializer\CLPublicKeySerializer::fromHex('recipient_hex_public_key_here');
 ```
 
-Create new transfer by calling `Casper\Entity\DeployExecutable::newTransfer` method with passed custom transfer id and transfer amount to this method
+Create new transfer by calling `Casper\Entity\DeployExecutableFactory::newTransfer` method with passed custom transfer id and transfer amount to this method
+
 ```php
 $transferId = 1;
 $transferAmount = 2500000000;
-$transfer = Casper\Entity\DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
+$transfer = Casper\Entity\DeployExecutableFactory::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 ```
 
-Create new standard payment by calling `Casper\Entity\DeployExecutable::newStandardPayment` method with passed payment amount
+Create new standard payment by calling `Casper\Entity\DeployExecutableFactory::newStandardPayment` method with passed payment amount
+
 ```php
 $paymentAmount = 10;
-$payment = Casper\Entity\DeployExecutable::newStandardPayment($paymentAmount);
+$payment = Casper\Entity\DeployExecutableFactory::newStandardPayment($paymentAmount);
 ```
 
 Create deploy params and make new deploy

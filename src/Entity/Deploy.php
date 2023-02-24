@@ -7,7 +7,7 @@ use Casper\Util\ByteUtil;
 
 class Deploy implements ToBytesConvertible
 {
-    private array $hash; // Hash
+    private array $hash;
 
     private DeployHeader $header;
 
@@ -52,15 +52,8 @@ class Deploy implements ToBytesConvertible
 
     public function isStandardPayment(): bool
     {
-        if ($this->payment->isModuleBytes()) {
-            $moduleBytesEntity = $this->payment->getModuleBytes();
-
-            if ($moduleBytesEntity && $moduleBytesEntity->getHexModuleBytes() !== '') {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->payment instanceof DeployExecutableModuleBytes &&
+            $this->payment->getHexModuleBytes() !== '';
     }
 
     public function getSession(): DeployExecutable
@@ -70,7 +63,7 @@ class Deploy implements ToBytesConvertible
 
     public function isTransfer(): bool
     {
-        return $this->session->isTransfer();
+        return $this->session instanceof DeployExecutableTransfer;
     }
 
     public function pushApproval(DeployApproval $approval): self

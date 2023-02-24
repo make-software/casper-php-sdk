@@ -10,7 +10,7 @@ use Casper\Util\Crypto\AsymmetricKey;
 use Casper\CLType\CLPublicKey;
 
 use Casper\Entity\Deploy;
-use Casper\Entity\DeployExecutable;
+use Casper\Entity\DeployExecutableFactory;
 use Casper\Entity\DeployParams;
 
 class ContractService
@@ -40,8 +40,8 @@ class ContractService
     ): Deploy {
         $deploy = DeployService::makeDeploy(
             new DeployParams($sender, $chainName),
-            DeployExecutable::newModuleBytes(ByteUtil::byteArrayToHex($wasm), $args),
-            DeployExecutable::newStandardPayment($paymentAmount)
+            DeployExecutableFactory::newModuleBytes(ByteUtil::byteArrayToHex($wasm), $args),
+            DeployExecutableFactory::newStandardPayment($paymentAmount)
         );
 
         foreach ($signingKeys as $signingKey) {
@@ -113,8 +113,8 @@ class ContractService
     ): Deploy {
         $deploy = DeployService::makeDeploy(
             new DeployParams($sender, $chainName, 1, $ttl),
-            DeployExecutable::newStoredContractByHash($this->contractHash, $entrypoint, $args),
-            DeployExecutable::newStandardPayment($paymentAmount)
+            DeployExecutableFactory::newStoredContractByHash($entrypoint, $args, $this->contractHash),
+            DeployExecutableFactory::newStandardPayment($paymentAmount)
         );
 
         foreach ($signingKeys as $signingKey) {

@@ -12,7 +12,7 @@ use Casper\Service\DeployService;
 
 use Casper\Entity\Deploy;
 use Casper\Entity\DeployApproval;
-use Casper\Entity\DeployExecutable;
+use Casper\Entity\DeployExecutableFactory;
 use Casper\Entity\DeployParams;
 
 class DeployServiceTest extends TestCase
@@ -30,10 +30,10 @@ class DeployServiceTest extends TestCase
         $transferAmount = 2500000000;
         $fakePublicKeyHex = '0202181123456789693bcd1066f00abe6759c588efe94504a7c9911be77ec365c08e';
         $recipientPublicKey = CLPublicKeySerializer::fromHex($fakePublicKeyHex);
-        $transfer = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
+        $transfer = DeployExecutableFactory::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 
         $paymentAmount = 10;
-        $payment = DeployExecutable::newStandardPayment($paymentAmount);
+        $payment = DeployExecutableFactory::newStandardPayment($paymentAmount);
 
         $deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 
@@ -42,8 +42,7 @@ class DeployServiceTest extends TestCase
         $this->assertEquals($networkName, $createdDeployChainName);
 
         // Check deploy transfer
-        $createdDeployTransfer = $deploy->getSession()
-            ->getTransfer();
+        $createdDeployTransfer = $deploy->getSession();
         $this->assertNotNull($createdDeployTransfer);
 
         $createdDeployTransferId = (int) $createdDeployTransfer->getArgParsedValueByName('id');
@@ -56,10 +55,9 @@ class DeployServiceTest extends TestCase
         $this->assertEquals($fakePublicKeyHex, $createdDeployTransferTarget);
 
         // Check deploy payment
-        $createdDeployPayment = $deploy->getPayment();
-        $this->assertNotNull($createdDeployPayment->getModuleBytes());
+        $this->assertNotNull($deploy->getPayment());
 
-        $createdDeployPaymentAmount = (int) $createdDeployPayment->getModuleBytes()
+        $createdDeployPaymentAmount = (int) $deploy->getPayment()
             ->getArgParsedValueByName('amount');
         $this->assertEquals($paymentAmount, $createdDeployPaymentAmount);
 

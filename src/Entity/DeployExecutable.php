@@ -2,215 +2,59 @@
 
 namespace Casper\Entity;
 
-use Casper\CLType\CLOption;
-use Casper\CLType\CLPublicKey;
-use Casper\CLType\CLU512;
-use Casper\CLType\CLU64;
-use Casper\CLType\CLURef;
-
-class DeployExecutable implements ToBytesConvertible
+abstract class DeployExecutable implements ToBytesConvertible
 {
-    private ?DeployExecutableModuleBytes $moduleBytes = null;
-
-    private ?DeployExecutableTransfer $transfer = null;
-
-    private ?DeployExecutableStoredContractByHash $storedContractByHash = null;
-
-    private ?DeployExecutableStoredContractByName $storedContractByName = null;
-
-    private ?DeployExecutableStoredVersionedContractByHash $storedVersionedContractByHash = null;
-
-    private ?DeployExecutableStoredVersionedContractByName $storedVersionedContractByName = null;
-
     /**
-     * @param string|int|\GMP $amount
-     * @return DeployExecutable
-     * @throws \Exception
+     * @var DeployNamedArg[]
      */
-    public static function newStandardPayment($amount): self
+    protected array $args = array();
+
+    public function setArg(DeployNamedArg $deployNamedArg): self
     {
-        return self::newModuleBytes(
-            '',
-            [new DeployNamedArg('amount', new CLU512($amount))]
-        );
+        $this->args[] = $deployNamedArg;
+        return $this;
     }
 
-    public static function newModuleBytes(string $hexModuleBytes, array $args): self
+    public function setArgs(array $deployNamedArgs): self
     {
-        $moduleBytes = new DeployExecutableModuleBytes($hexModuleBytes);
-
-        foreach ($args as $arg) {
-            $moduleBytes->setArg($arg);
+        foreach ($deployNamedArgs as $deployNamedArg) {
+            $this->setArg($deployNamedArg);
         }
 
-        return (new self())
-            ->setModuleBytes($moduleBytes);
+        return $this;
     }
 
     /**
-     * @param string|int|\GMP $id
-     * @param string|int|\GMP $amount
-     * @param CLURef|CLPublicKey $target
-     * @param CLURef|null $sourcePurse
-     * @return DeployExecutable
-     * @throws \Exception
+     * @return DeployNamedArg[]
      */
-    public static function newTransfer($id, $amount, $target, CLURef $sourcePurse = null): self
+    public function getArgs(): array
     {
-        if (!in_array(get_class($target), [CLURef::class, CLPublicKey::class])) {
-            throw new \Exception('Please specify target');
+        return $this->args;
+    }
+
+    public function getArgByName(string $name): ?DeployNamedArg
+    {
+        foreach ($this->args as $arg) {
+            if ($arg->getName() === $name) {
+                return $arg;
+            }
         }
 
-        $transfer = (new DeployExecutableTransfer())
-            ->setArg(new DeployNamedArg('amount', new CLU512($amount)));
-
-        if ($sourcePurse !== null) {
-            $transfer->setArg(new DeployNamedArg('source', $sourcePurse));
-        }
-
-        $transfer
-            ->setArg(new DeployNamedArg('target', $target))
-            ->setArg(new DeployNamedArg('id', new CLOption(new CLU64($id))));
-
-        return (new self())
-            ->setTransfer($transfer);
-    }
-
-    public static function newStoredContractByHash(string $hexContractHash, string $entrypoint, array $args): self
-    {
-        $storedContractByHash = new DeployExecutableStoredContractByHash($hexContractHash, $entrypoint);
-
-        foreach ($args as $arg) {
-            $storedContractByHash->setArg($arg);
-        }
-
-        return (new self())
-            ->setStoredContractByHash($storedContractByHash);
-    }
-
-    public function setModuleBytes(?DeployExecutableModuleBytes $moduleBytes): self
-    {
-        $this->moduleBytes = $moduleBytes;
-        return $this;
-    }
-
-    public function getModuleBytes(): ?DeployExecutableModuleBytes
-    {
-        return $this->moduleBytes;
-    }
-
-    public function isModuleBytes(): bool
-    {
-        return isset($this->moduleBytes);
-    }
-
-    public function setTransfer(?DeployExecutableTransfer $transfer): self
-    {
-        $this->transfer = $transfer;
-        return $this;
-    }
-
-    public function getTransfer(): ?DeployExecutableTransfer
-    {
-        return $this->transfer;
-    }
-
-    public function isTransfer(): bool
-    {
-        return isset($this->transfer);
-    }
-
-    public function setStoredContractByHash(?DeployExecutableStoredContractByHash $storedContractByHash): self
-    {
-        $this->storedContractByHash = $storedContractByHash;
-        return $this;
-    }
-
-    public function getStoredContractByHash(): ?DeployExecutableStoredContractByHash
-    {
-        return $this->storedContractByHash;
-    }
-
-    public function isStoredContractByHash(): bool
-    {
-        return isset($this->storedContractByHash);
-    }
-
-    public function setStoredContractByName(?DeployExecutableStoredContractByName $storedContractByName): self
-    {
-        $this->storedContractByName = $storedContractByName;
-        return $this;
-    }
-
-    public function getStoredContractByName(): ?DeployExecutableStoredContractByName
-    {
-        return $this->storedContractByName;
-    }
-
-    public function isStoredContractByName(): bool
-    {
-        return isset($this->storedContractByName);
-    }
-
-    public function setStoredVersionedContractByHash(
-        ?DeployExecutableStoredVersionedContractByHash $storedVersionedContractByHash
-    ): self
-    {
-        $this->storedVersionedContractByHash = $storedVersionedContractByHash;
-        return $this;
-    }
-
-    public function getStoredVersionedContractByHash(): ?DeployExecutableStoredVersionedContractByHash
-    {
-        return $this->storedVersionedContractByHash;
-    }
-
-    public function isStoredVersionedContractByHash(): bool
-    {
-        return isset($this->storedVersionedContractByHash);
-    }
-
-    public function setStoredVersionedContractByName(?DeployExecutableStoredVersionedContractByName $storedVersionedContractByName): self
-    {
-        $this->storedVersionedContractByName = $storedVersionedContractByName;
-        return $this;
-    }
-
-    public function getStoredVersionedContractByName(): ?DeployExecutableStoredVersionedContractByName
-    {
-        return $this->storedVersionedContractByName;
-    }
-
-    public function isStoredVersionedContractByName(): bool
-    {
-        return isset($this->storedVersionedContractByName);
+        return null;
     }
 
     /**
-     * @return int[]
      * @throws \Exception
      */
-    public function toBytes(): array
+    public function getArgParsedValueByName(string $name)
     {
-        if ($this->isModuleBytes()) {
-            return $this->moduleBytes->toBytes();
-        }
-        elseif ($this->isTransfer()) {
-            return $this->transfer->toBytes();
-        }
-        elseif ($this->isStoredContractByHash()) {
-            return $this->storedContractByHash->toBytes();
-        }
-        elseif ($this->isStoredContractByName()) {
-            return $this->storedContractByName->toBytes();
-        }
-        elseif ($this->isStoredVersionedContractByHash()) {
-            return $this->storedVersionedContractByHash->toBytes();
-        }
-        elseif ($this->isStoredVersionedContractByName()) {
-            return $this->storedVersionedContractByHash->toBytes();
+        $arg = $this->getArgByName($name);
+
+        if (!$arg) {
+            throw new \Exception('Argument not found');
         }
 
-        throw new \Exception('Failed to serialize ExecutableDeployItemJsonWrapper');
+        return $arg->getValue()
+            ->parsedValue();
     }
 }

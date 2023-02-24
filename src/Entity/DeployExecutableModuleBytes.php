@@ -4,7 +4,7 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 
-final class DeployExecutableModuleBytes extends DeployExecutableItemInternal
+final class DeployExecutableModuleBytes extends DeployExecutable
 {
     protected const TAG = 0;
 
