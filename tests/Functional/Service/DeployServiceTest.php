@@ -12,7 +12,7 @@ use Casper\Service\DeployService;
 
 use Casper\Entity\Deploy;
 use Casper\Entity\DeployApproval;
-use Casper\Entity\DeployExecutableFactory;
+use Casper\Entity\DeployExecutable;
 use Casper\Entity\DeployParams;
 
 class DeployServiceTest extends TestCase
@@ -30,10 +30,10 @@ class DeployServiceTest extends TestCase
         $transferAmount = 2500000000;
         $fakePublicKeyHex = '0202181123456789693bcd1066f00abe6759c588efe94504a7c9911be77ec365c08e';
         $recipientPublicKey = CLPublicKeySerializer::fromHex($fakePublicKeyHex);
-        $transfer = DeployExecutableFactory::newTransfer($transferId, $transferAmount, $recipientPublicKey);
+        $transfer = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 
         $paymentAmount = 10;
-        $payment = DeployExecutableFactory::newStandardPayment($paymentAmount);
+        $payment = DeployExecutable::newStandardPayment($paymentAmount);
 
         $deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 

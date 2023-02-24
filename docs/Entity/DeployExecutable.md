@@ -1,4 +1,4 @@
-# DeployExecutableFactory
+# DeployExecutable
 
 ```php
 static newStandardPayment($amount): DeployExecutableModuleBytes
