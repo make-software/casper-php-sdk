@@ -52,7 +52,7 @@ class RpcClientTest extends TestCase
 
         $deploy = $this->rpcClient->getDeploy($deployHashFromTheTestnet);
         $this->assertEquals(ByteUtil::hexToByteArray($deployHashFromTheTestnet), $deploy->getHash());
-        $this->assertNotNull($deploy->getPayment()->getModuleBytes());
+        $this->assertNotNull($deploy->getPayment());
         $this->assertNotEmpty($deploy->getApprovals());
     }
 

@@ -17,12 +17,18 @@ final class CLKey extends CLValue
     );
 
     /**
-     * @param CLByteArray|CLURef|CLAccountHash $keyParam
+     * @param CLByteArray|CLURef|CLAccountHash|CLPublicKey $keyParam
      * @throws \Exception
      */
     public function __construct($keyParam)
     {
         $this->assertCLKeyParametersAreValid($keyParam);
+
+        if ($keyParam instanceof CLPublicKey) {
+            $this->data = new CLAccountHash($keyParam->toAccountHash());
+            return;
+        }
+
         $this->data = $keyParam;
     }
 
@@ -105,6 +111,7 @@ final class CLKey extends CLValue
             CLByteArray::class,
             CLURef::class,
             CLAccountHash::class,
+            CLPublicKey::class,
         ];
 
         if (!is_object($keyParam) || !in_array(get_class($keyParam), $availableParams)) {

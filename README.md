@@ -51,6 +51,9 @@ $latestBlockHash = $latestBlock->getHash();
 ## More examples
 - [Key management](docs/Example/KeyManagement.md)
 - [Sending a Transfer](docs/Example/SendingTransfer.md)
+- CEP78
+    - [Install](docs/Example/CEP78/Install.md)
+    - [Mint](docs/Example/CEP78/Mint.md)
 
 ## API
 ### RpcClient
@@ -81,6 +84,13 @@ $latestBlockHash = $latestBlock->getHash();
 - [signDeploy](docs/API/DeployServiceAPI.md#Sign-deploy)
 - [validateDeploy](docs/API/DeployServiceAPI.md#Validate-deploy)
 - [getDeploySize](docs/API/DeployServiceAPI.md#Get-deploy-size)
+
+### ContractService
+- [ContractService](docs/API/ContractServiceAPI.md#Constructor)
+- [createInstallDeploy](docs/API/ContractServiceAPI.md#Create-Install-deploy)
+- [install](docs/API/ContractServiceAPI.md#Install)
+- [createCallEntryPointDeploy](docs/API/ContractServiceAPI.md#Create-CallEntryPoint-deploy)
+- [callEntryPoint](docs/API/ContractServiceAPI.md#Call-entrypoint)
 
 ## Entities
 - [Account](docs/Entity/Account.md)

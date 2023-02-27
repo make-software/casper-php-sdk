@@ -4,7 +4,7 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 
-class DeployExecutableStoredContractByHash extends DeployExecutableItemInternal
+class DeployExecutableStoredContractByHash extends DeployExecutable
 {
     protected const TAG = 1;
 

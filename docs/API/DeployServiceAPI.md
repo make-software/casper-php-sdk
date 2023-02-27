@@ -3,7 +3,7 @@
 ---
 ## Make deploy
 ```php
-makeDeploy(DeployParams $deployParams, DeployExecutable $session, DeployExecutable $payment): Deploy
+static makeDeploy(DeployParams $deployParams, DeployExecutable $session, DeployExecutable $payment): Deploy
 ```
 Returns new deploy object created by `$deployParams` with `$session` and `$payment`
 ### Parameters
@@ -16,7 +16,7 @@ Returns new deploy object created by `$deployParams` with `$session` and `$payme
 ---
 ## Sign deploy
 ```php
-signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
+static signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
 ```
 Signs and returns the `$deploy` object
 ### Parameters
@@ -28,7 +28,7 @@ Signs and returns the `$deploy` object
 ---
 ## Validate deploy
 ```php
-validateDeploy(Deploy $deploy): bool
+static validateDeploy(Deploy $deploy): bool
 ```
 Returns `true` if both the deploy body hash and the deploy hash are valid
 ### Parameters
@@ -39,7 +39,7 @@ Returns `true` if both the deploy body hash and the deploy hash are valid
 ---
 ## Get deploy size
 ```php
-getDeploySize(Deploy $deploy): int
+static getDeploySize(Deploy $deploy): int
 ```
 Returns a deploy size in bytes
 ### Parameters
