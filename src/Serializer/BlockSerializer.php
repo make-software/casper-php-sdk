@@ -3,9 +3,6 @@
 namespace Casper\Serializer;
 
 use Casper\Entity\Block;
-use Casper\Entity\BlockBody;
-use Casper\Entity\BlockHeader;
-use Casper\Entity\BlockProof;
 
 class BlockSerializer extends JsonSerializer
 {
