@@ -11,7 +11,7 @@ class DateUtil
 
     public static function getFormattedDateFromTimestampMs(int $timestampMs): string
     {
-        return \DateTime::createFromFormat('U.u', $timestampMs / 1000)
+        return \DateTime::createFromFormat('U.u', number_format($timestampMs / 1000, '3', '.', ''))
             ->format('Y-m-d\TH:i:s.v\Z');
     }
 
