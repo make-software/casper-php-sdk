@@ -82,10 +82,10 @@ final class Ed25519Key extends AsymmetricKey
      *
      * @throws \SodiumException
      */
-    public function verify(string $signature, string $message): bool
+    public function verify(string $hexSignature, string $message): bool
     {
-        $signature = ByteUtil::hexToString($signature);
-        return sodium_crypto_sign_verify_detached($signature, $message, $this->publicKey);
+        $hexSignature = ByteUtil::hexToString($hexSignature);
+        return sodium_crypto_sign_verify_detached($hexSignature, $message, $this->publicKey);
     }
 
     /**
