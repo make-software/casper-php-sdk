@@ -15,16 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
-
-      - uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-
       - name: Clone libsecp256k1 repository
         uses: GuillaumeFalourd/clone-github-repo-action@v2
         with:
@@ -42,6 +32,17 @@ jobs:
 
       - name: Install secp256k1-php
         run: cd secp256k1-php/secp256k1 && phpize && ./configure --with-secp256k1 && make && sudo make install && cd ..
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          ini-values: extension=secp256k1.so
+
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
       - name: Run test suite
         run: composer run-script test
