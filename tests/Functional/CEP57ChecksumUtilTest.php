@@ -14,7 +14,7 @@ class CEP57ChecksumUtilTest extends TestCase
      */
     public function testHasCheckSum(): void
     {
-        $hexWithCheckSum = 'de8649985929090b7CB225e35a5A7B4087fb8fcB3D18C8C9a58DA68e4edA8a2E';
+        $hexWithCheckSum = 'dE8649985929090B7Cb225e35a5a7B4087Fb8FCB3D18c8c9a58da68e4eDA8A2e';
         $this->assertTrue(CEP57ChecksumUtil::hasChecksum($hexWithCheckSum));
 
         $hexWithoutCheckSum = 'de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e';
@@ -26,7 +26,7 @@ class CEP57ChecksumUtilTest extends TestCase
      */
     public function testEncode(): void
     {
-        $hex = 'de8649985929090b7CB225e35a5A7B4087fb8fcB3D18C8C9a58DA68e4edA8a2E';
+        $hex = 'dE8649985929090B7Cb225e35a5a7B4087Fb8FCB3D18c8c9a58da68e4eDA8A2e';
         $bytes = ByteUtil::hexToByteArray($hex);
 
         $encodedHex = CEP57ChecksumUtil::encode($bytes);
@@ -38,7 +38,7 @@ class CEP57ChecksumUtilTest extends TestCase
      */
     public function testDecode(): void
     {
-        $hex = 'de8649985929090b7CB225e35a5A7B4087fb8fcB3D18C8C9a58DA68e4edA8a2E';
+        $hex = 'dE8649985929090B7Cb225e35a5a7B4087Fb8FCB3D18c8c9a58da68e4eDA8A2e';
 
         $decodedByteArray = CEP57ChecksumUtil::decode($hex);
         $this->assertIsArray($decodedByteArray);

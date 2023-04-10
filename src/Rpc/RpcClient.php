@@ -414,8 +414,11 @@ class RpcClient
 
         $decodedResponse = json_decode($response, true);
 
-        if (isset($decodedResponse['error'])) {
-            throw new RpcError($decodedResponse['error']['message'], $decodedResponse['error']['code']);
+        if ($decodedResponse === null || isset($decodedResponse['error'])) {
+            $message = $decodedResponse['error']['message'] ?? 'Empty response';
+            $code = $decodedResponse['error']['code'] ?? 0;
+
+            throw new RpcError($message, $code);
         }
 
         $this->lastApiVersion = $decodedResponse['result']['api_version'];

@@ -64,7 +64,10 @@ class DeployService
     public static function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
         $signer = CLPublicKeySerializer::fromString(
-            KeysUtil::addPrefixToPublicKey($key->getSignatureAlgorithm(), $key->getPublicKey())
+            KeysUtil::addPrefixToPublicKey(
+                $key->getSignatureAlgorithm(),
+                $key->getPublicKey()
+            )
         );
         $signature = KeysUtil::addPrefixToPublicKey(
             $key->getSignatureAlgorithm(),
