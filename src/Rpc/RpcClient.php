@@ -198,7 +198,7 @@ class RpcClient
     {
         $response = $this->rpcCallMethod(
             self::RPC_METHOD_GET_STATE_ROOT_HASH,
-            array('block_hash' => $blockHash)
+            $blockHash ? [array('Hash' => $blockHash)] : []
         );
 
         return $response['state_root_hash'];
