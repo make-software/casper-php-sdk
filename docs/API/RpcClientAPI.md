@@ -204,3 +204,37 @@ Returns an item from a Dictionary ([StoredValue](../Entity/StoredValue.md) objec
 | `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
 | `$dictionaryItemKey` | `string` | The dictionary item key formatted as a string | Yes |
 | `$seedUref` | `string` | The dictionary's seed URef | Yes |
+
+---
+## Get global state by block
+```php
+getGlobalStateByBlock(
+    string $blockHash,
+    string $key,
+    array $path
+): GlobalState
+```
+Returns an [GlobalState](../Entity/GlobalState.md) object by the given block hash and key
+### Parameters
+| Name | Type | Description | Required |
+|---|------|-------------|----|
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |
+| `$key` | `string` | `casper_types::Key` as formatted string | Yes |
+| `$path` | `array` | The path components starting from the key as base | No |
+
+---
+## Get global state by state root hash
+```php
+getGlobalStateByStateRootHash(
+    string $stateRootHash,
+    string $key,
+    array $path
+): GlobalState
+```
+Returns an [GlobalState](../Entity/GlobalState.md) object by the given state root hash and key
+### Parameters
+| Name | Type | Description | Required |
+|---|------|-------------|----|
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
+| `$key` | `string` | `casper_types::Key` as formatted string | Yes |
+| `$path` | `array` | The path components starting from the key as base | No |

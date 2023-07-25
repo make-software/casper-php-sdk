@@ -6,6 +6,29 @@ The PHP SDK allows developers to interact with the Casper Network using PHP. Thi
 composer require make-software/casper-php-sdk
 ```
 
+### IMPORTANT
+For using `Secp256K1` keys you need to install and enable [secp256k1-php](https://github.com/Bit-Wasp/secp256k1-php) extension:
+```bash
+git clone git@github.com:bitcoin-core/secp256k1 && \
+    cd secp256k1 && \
+    ./autogen.sh && \
+    ./configure --enable-experimental --enable-module-{ecdh,recovery} && \
+    make && sudo make install && \
+    cd ../
+```
+```bash
+git clone git@github.com:Bit-Wasp/secp256k1-php && \
+    cd secp256k1-php/secp256k1 && \
+    phpize && \ 
+    ./configure --with-secp256k1 && \  
+    make && sudo make install && \
+    cd ../../
+```
+Enable extension by adding the following line to your `php.ini` file
+```
+extension=secp256k1.so
+```
+
 ## Usage
 ### Creating RpcClient
 Create `RpcClient` by passing node url to constructor
@@ -52,6 +75,9 @@ $latestBlockHash = $latestBlock->getHash();
 - [Key management](docs/Example/KeyManagement.md)
 - [Sending a Transfer](docs/Example/SendingTransfer.md)
 - [Event Stream](docs/Example/EventStream.md)
+- CEP78
+    - [Install](docs/Example/CEP78/Install.md)
+    - [Mint](docs/Example/CEP78/Mint.md)
 
 ## API
 ### RpcClient
@@ -74,12 +100,21 @@ $latestBlockHash = $latestBlock->getHash();
 - [getEraSummaryBySwitchBlockHash](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-hash)
 - [getEraSummaryBySwitchBlockHeight](docs/API/RpcClientAPI.md#Get-era-summary-by-switch-block-height)
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
+- [getGlobalStateByBlock](docs/API/RpcClientAPI.md#Get-global-state-by-block)
+- [getGlobalStateByStateRootHash](docs/API/RpcClientAPI.md#Get-global-state-by-state-root-hash)
 
 ### DeployService
 - [makeDeploy](docs/API/DeployServiceAPI.md#Make-deploy)
 - [signDeploy](docs/API/DeployServiceAPI.md#Sign-deploy)
 - [validateDeploy](docs/API/DeployServiceAPI.md#Validate-deploy)
 - [getDeploySize](docs/API/DeployServiceAPI.md#Get-deploy-size)
+
+### ContractService
+- [ContractService](docs/API/ContractServiceAPI.md#Constructor)
+- [createInstallDeploy](docs/API/ContractServiceAPI.md#Create-Install-deploy)
+- [install](docs/API/ContractServiceAPI.md#Install)
+- [createCallEntryPointDeploy](docs/API/ContractServiceAPI.md#Create-CallEntryPoint-deploy)
+- [callEntryPoint](docs/API/ContractServiceAPI.md#Call-entrypoint)
 
 ## Entities
 - [Account](docs/Entity/Account.md)
@@ -96,15 +131,3 @@ Run the following command from the project directory.
 ```shell
 export CASPER_PHP_SDK_TEST_NODE_URL="http://127.0.0.1:7777" && php vendor/bin/phpunit tests
 ```
-
-## Roadmap
-- [x] Create an RPC client that returns array responses
-- [x] Implement all GET requests
-- [x] Add `Ed25519` key support
-- [x] Add `CLType` primitives
-- [x] Add domain-specific entities
-- [x] Add deploy creation related services
-- [x] Add `Secp256k1` key support
-- [ ] Add extensive validations
-- [ ] Add automated tests
-- [x] Add documentation

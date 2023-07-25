@@ -17,18 +17,6 @@ use Casper\Entity\DeployParams;
 
 class DeployServiceTest extends TestCase
 {
-    protected ?DeployService $deployService;
-
-    protected function setUp(): void
-    {
-        $this->deployService = new DeployService();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->deployService = null;
-    }
-
     /**
      * @throws \Exception
      */
@@ -42,49 +30,35 @@ class DeployServiceTest extends TestCase
         $transferAmount = 2500000000;
         $fakePublicKeyHex = '0202181123456789693bcd1066f00abe6759c588efe94504a7c9911be77ec365c08e';
         $recipientPublicKey = CLPublicKeySerializer::fromHex($fakePublicKeyHex);
-        $recipientAccountHashString = ByteUtil::byteArrayToHex($recipientPublicKey->toAccountHash());
         $transfer = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 
         $paymentAmount = 10;
         $payment = DeployExecutable::newStandardPayment($paymentAmount);
 
-        $deploy = $this->deployService
-            ->makeDeploy($deployParams, $transfer, $payment);
+        $deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 
-        $createdDeployChainName = $deploy->getHeader()->getChainName();
+        $createdDeployChainName = $deploy->getHeader()
+            ->getChainName();
         $this->assertEquals($networkName, $createdDeployChainName);
 
         // Check deploy transfer
-        $createdDeployTransfer = $deploy->getSession()->getTransfer();
+        $createdDeployTransfer = $deploy->getSession();
         $this->assertNotNull($createdDeployTransfer);
 
-        $createdDeployTransferId = (int) $createdDeployTransfer
-            ->getArgByName('id')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployTransferId = (int) $createdDeployTransfer->getArgParsedValueByName('id');
         $this->assertEquals($transferId, $createdDeployTransferId);
 
-        $createdDeployTransferAmount = (int) $createdDeployTransfer
-            ->getArgByName('amount')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployTransferAmount = (int) $createdDeployTransfer->getArgParsedValueByName('amount');
         $this->assertEquals($transferAmount, $createdDeployTransferAmount);
 
-        $createdDeployTargetAccountHashString = $createdDeployTransfer
-            ->getArgByName('target')
-            ->getValue()
-            ->parsedValue();
-        $this->assertEquals($recipientAccountHashString, $createdDeployTargetAccountHashString);
+        $createdDeployTransferTarget = $createdDeployTransfer->getArgParsedValueByName('target');
+        $this->assertEquals($fakePublicKeyHex, $createdDeployTransferTarget);
 
         // Check deploy payment
-        $createdDeployPayment = $deploy->getPayment();
-        $this->assertNotNull($createdDeployPayment->getModuleBytes());
+        $this->assertNotNull($deploy->getPayment());
 
-        $createdDeployPaymentAmount = (int) $createdDeployPayment
-            ->getModuleBytes()
-            ->getArgByName('amount')
-            ->getValue()
-            ->parsedValue();
+        $createdDeployPaymentAmount = (int) $deploy->getPayment()
+            ->getArgParsedValueByName('amount');
         $this->assertEquals($paymentAmount, $createdDeployPaymentAmount);
 
         return $deploy;
@@ -99,7 +73,7 @@ class DeployServiceTest extends TestCase
         $this->assertEmpty($deploy->getApprovals());
 
         $ed25519KeyPair = new Ed25519Key();
-        $this->deployService->signDeploy($deploy, $ed25519KeyPair);
+        DeployService::signDeploy($deploy, $ed25519KeyPair);
 
         $approvals = $deploy->getApprovals();
         $this->assertNotEmpty($approvals);
@@ -114,10 +88,11 @@ class DeployServiceTest extends TestCase
 
     /**
      * @depends testMakeDeploy
+     * @throws \Exception
      */
     public function testValidateDeploy(Deploy $notCorruptedDeploy): void
     {
-        $deployIsValid = $this->deployService->validateDeploy($notCorruptedDeploy);
+        $deployIsValid = DeployService::validateDeploy($notCorruptedDeploy);
         $this->assertTrue($deployIsValid);
 
         // Change hash in deploy object and check if deploy is valid
@@ -127,12 +102,13 @@ class DeployServiceTest extends TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($corruptedDeploy, array_merge($corruptedDeploy->getHash(), [1]));
 
-        $deployIsValid = $this->deployService->validateDeploy($corruptedDeploy);
+        $deployIsValid = DeployService::validateDeploy($corruptedDeploy);
         $this->assertFalse($deployIsValid);
     }
 
     /**
      * @depends testMakeDeploy
+     * @throws \Exception
      */
     public function testGetDeploySize(Deploy $deploy): void
     {
@@ -148,7 +124,7 @@ class DeployServiceTest extends TestCase
         $bodySize = count(array_merge($notSignedDeploy->getPayment()->toBytes(), $notSignedDeploy->getSession()->toBytes()));
 
         $expectedNotSignedDeploySize = $hashSize + $headerSize + $bodySize;
-        $actualNotSignedDeploySize = $this->deployService->getDeploySize($notSignedDeploy);
+        $actualNotSignedDeploySize = DeployService::getDeploySize($notSignedDeploy);
 
         $this->assertEquals($expectedNotSignedDeploySize, $actualNotSignedDeploySize);
     }

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          ini-values: extension=secp256k1.so
+
+      - name: Clone libsecp256k1 repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
+        with:
+          owner: 'bitcoin-core'
+          repository: 'secp256k1'
+
+      - name: Configure secp256k1
+        run: cd secp256k1 && ./autogen.sh && ./configure --enable-experimental --enable-module-{ecdh,recovery} && make && sudo make install && cd ..
+
+      - name: Clone secp256k1-php repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
+        with:
+          owner: 'Bit-Wasp'
+          repository: 'secp256k1-php'
+
+      - name: Install secp256k1-php
+        run: cd secp256k1-php/secp256k1 && phpize && ./configure --with-secp256k1 && make && sudo make install && cd ..
+
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run test suite
+        run: composer run-script test
+        env:
+          CASPER_PHP_SDK_TEST_NODE_URL: "136.243.187.84:7777"

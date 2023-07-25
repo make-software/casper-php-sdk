@@ -2,6 +2,8 @@
 
 namespace Casper\Entity;
 
+use Casper\Util\DateUtil;
+
 use Casper\CLType\CLPublicKey;
 
 class DeployParams
@@ -53,7 +55,7 @@ class DeployParams
         $this->gasPrice = $gasPrice;
         $this->ttl = $ttl;
         $this->dependencies = $dependencies;
-        $this->timestamp = $timestamp ?? time();
+        $this->timestamp = $timestamp ?? DateUtil::nowTimestampMs();
     }
 
     public function getAccountPublicKey(): CLPublicKey
@@ -81,7 +83,7 @@ class DeployParams
         return $this->dependencies;
     }
 
-    public function getTimestamp(): ?int
+    public function getTimestamp(): int
     {
         return $this->timestamp;
     }

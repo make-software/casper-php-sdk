@@ -29,7 +29,7 @@ class DeployService
      *
      * @throws \Exception
      */
-    public function makeDeploy(
+    public static function makeDeploy(
         DeployParams $deployParams,
         DeployExecutable $session,
         DeployExecutable $payment
@@ -61,10 +61,13 @@ class DeployService
      *
      * @throws \Exception
      */
-    public function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
+    public static function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
         $signer = CLPublicKeySerializer::fromString(
-            KeysUtil::addPrefixToPublicKey($key->getSignatureAlgorithm(), $key->getPublicKey())
+            KeysUtil::addPrefixToPublicKey(
+                $key->getSignatureAlgorithm(),
+                $key->getPublicKey()
+            )
         );
         $signature = KeysUtil::addPrefixToPublicKey(
             $key->getSignatureAlgorithm(),
@@ -83,7 +86,7 @@ class DeployService
      *
      * @throws \Exception
      */
-    public function validateDeploy(Deploy $deploy): bool
+    public static function validateDeploy(Deploy $deploy): bool
     {
         $bodyHash = HashUtil::blake2bHash(
             array_merge($deploy->getPayment()->toBytes(), $deploy->getSession()->toBytes())
@@ -110,7 +113,7 @@ class DeployService
      *
      * @throws \Exception
      */
-    public function getDeploySize(Deploy $deploy): int
+    public static function getDeploySize(Deploy $deploy): int
     {
         $hashSize = count($deploy->getHash());
         $bodySize = count(array_merge($deploy->getPayment()->toBytes(), $deploy->getSession()->toBytes()));

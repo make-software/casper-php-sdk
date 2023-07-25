@@ -4,56 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c28836c7800135c137a59bd6278d974f",
+    "content-hash": "2cb7f13871fdd0e115b525c79fa30ac4",
     "packages": [
-        {
-            "name": "deemru/blake2b",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/deemru/Blake2b.git",
-                "reference": "d7bd270d820fcad53b9a30a620075f4039cd6967"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/deemru/Blake2b/zipball/d7bd270d820fcad53b9a30a620075f4039cd6967",
-                "reference": "d7bd270d820fcad53b9a30a620075f4039cd6967",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "deemru\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitrii Pichulin",
-                    "email": "deem@deem.ru"
-                }
-            ],
-            "description": "BLAKE2 hash function on pure PHP",
-            "homepage": "https://github.com/deemru/Blake2b",
-            "keywords": [
-                "BLAKE2",
-                "BLAKE2b",
-                "blake2b256",
-                "hash",
-                "wavesplatform"
-            ],
-            "support": {
-                "issues": "https://github.com/deemru/Blake2b/issues",
-                "source": "https://github.com/deemru/Blake2b/tree/master"
-            },
-            "time": "2019-02-03T14:36:24+00:00"
-        },
         {
             "name": "fgrosse/phpasn1",
             "version": "v2.3.0",

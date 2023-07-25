@@ -2,6 +2,8 @@
 
 namespace Casper\Serializer;
 
+use Casper\Util\DateUtil;
+
 use Casper\Entity\BlockInfo;
 
 class BlockInfoSerializer extends JsonSerializer
@@ -13,7 +15,7 @@ class BlockInfoSerializer extends JsonSerializer
     {
         return array(
             'hash' => $blockInfo->getHash(),
-            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $blockInfo->getTimestamp()),
+            'timestamp' => DateUtil::getFormattedDateFromTimestampMs($blockInfo->getTimestamp()),
             'era_id' => $blockInfo->getEraId(),
             'height' => $blockInfo->getHeight(),
             'state_root_hash' => $blockInfo->getStateRootHash(),
@@ -25,7 +27,7 @@ class BlockInfoSerializer extends JsonSerializer
     {
         return new BlockInfo(
             $json['hash'],
-            strtotime($json['timestamp']),
+            DateUtil::getTimestampMsFromDateString($json['timestamp']),
             $json['era_id'],
             $json['height'],
             $json['state_root_hash'],

@@ -2,6 +2,8 @@
 
 namespace Casper\Serializer;
 
+use Casper\Util\DateUtil;
+
 use Casper\Entity\BlockHeader;
 
 class BlockHeaderSerializer extends JsonSerializer
@@ -18,7 +20,7 @@ class BlockHeaderSerializer extends JsonSerializer
             'random_bit' => $blockHeader->isRandomBit(),
             'accumulated_seed' => $blockHeader->getAccumulatedSeed(),
             'era_end' => $blockHeader->getEraEnd() ? EraEndSerializer::toJson($blockHeader->getEraEnd()) : null,
-            'timestamp' => date('Y-m-d\TH:i:s.u\Z', $blockHeader->getTimestamp()),
+            'timestamp' => DateUtil::getFormattedDateFromTimestampMs($blockHeader->getTimestamp()),
             'era_id' => $blockHeader->getEraId(),
             'height' => $blockHeader->getHeight(),
             'protocol_version' => $blockHeader->getProtocolVersion(),
@@ -34,7 +36,7 @@ class BlockHeaderSerializer extends JsonSerializer
             $json['random_bit'],
             $json['accumulated_seed'],
             isset($json['era_end']) ? EraEndSerializer::fromJson($json['era_end']) : null,
-            strtotime($json['timestamp']),
+            DateUtil::getTimestampMsFromDateString($json['timestamp']),
             $json['era_id'],
             $json['height'],
             $json['protocol_version'],

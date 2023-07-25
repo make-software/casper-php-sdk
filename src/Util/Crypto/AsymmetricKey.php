@@ -88,9 +88,9 @@ abstract class AsymmetricKey
     /**
      * Verify hex-encoded signature
      *
-     * @param string $signature
+     * @param string $hexSignature
      * @param string $message
      * @return bool
      */
-    public abstract function verify(string $signature, string $message): bool;
+    public abstract function verify(string $hexSignature, string $message): bool;
 }

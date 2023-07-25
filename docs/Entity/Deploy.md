@@ -29,7 +29,7 @@ Returns [DeployHeader](DeployHeader.md) object
 ```php
 getPayment(): DeployExecutable
 ```
-Returns [DeployExecutable](DeployExecutable.md) object that representing a deploy payment
+Returns `DeployExecutable` object that representing a deploy payment
 
 ---
 ```php
@@ -41,7 +41,7 @@ Returns `true` if deploy payment is standard payment
 ```php
 getSession(): DeployExecutable
 ```
-Returns [DeployExecutable](DeployExecutable.md) object that representing a deploy session
+Returns `DeployExecutable` object that representing a deploy session
 
 ---
 ```php

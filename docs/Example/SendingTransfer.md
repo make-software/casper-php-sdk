@@ -14,6 +14,7 @@ $recipientPublicKey = Casper\Serializer\CLPublicKeySerializer::fromHex('recipien
 ```
 
 Create new transfer by calling `Casper\Entity\DeployExecutable::newTransfer` method with passed custom transfer id and transfer amount to this method
+
 ```php
 $transferId = 1;
 $transferAmount = 2500000000;
@@ -21,6 +22,7 @@ $transfer = Casper\Entity\DeployExecutable::newTransfer($transferId, $transferAm
 ```
 
 Create new standard payment by calling `Casper\Entity\DeployExecutable::newStandardPayment` method with passed payment amount
+
 ```php
 $paymentAmount = 10;
 $payment = Casper\Entity\DeployExecutable::newStandardPayment($paymentAmount);
@@ -31,12 +33,11 @@ Create deploy params and make new deploy
 $networkName = 'casper';
 $deployParams = new Casper\Entity\DeployParams($senderPublicKey, $networkName);
 
-$deployService = new Casper\Service\DeployService();
-$deploy = $deployService->makeDeploy($deployParams, $transfer, $payment);
+$deploy = DeployService::makeDeploy($deployParams, $transfer, $payment);
 ```
 
 Sign deploy and put to the network
 ```php
-$signedDeploy = $deployService->signDeploy($deploy, $senderKeyPair);
+$signedDeploy = DeployService::signDeploy($deploy, $senderKeyPair);
 $deployHash = $rpcClient->putDeploy($signedDeploy);
 ```

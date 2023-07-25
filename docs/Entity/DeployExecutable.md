@@ -1,9 +1,8 @@
 # DeployExecutable
 
 ```php
-static newStandardPayment($amount): self
+static newStandardPayment($amount): DeployExecutableModuleBytes
 ```
-Creates new standard payment and returns it
 ##### Parameters:
 
 | Name | Type | Description | Required |
@@ -12,9 +11,8 @@ Creates new standard payment and returns it
 
 ---
 ```php
-static newTransfer($id, $amount, $target, CLURef $sourcePurse = null): self
+static newTransfer($id, $amount, $target, CLURef $sourcePurse = null): DeployExecutableTransfer
 ```
-Creates new transfer and returns it
 ##### Parameters:
 
 | Name | Type | Description | Required |
@@ -26,78 +24,62 @@ Creates new transfer and returns it
 
 ---
 ```php
-toBytes(): array
+static newModuleBytes(string $hexModuleBytes, array $args): DeployExecutableModuleBytes
 ```
-Converts `DeployExecuatable` object to byte array
+##### Parameters:
 
-### Setters and getters for `DeployExecutable` internal objects
-#### [DeployExecutableModuleBytes](DeployExecutableModuleBytes.md)
-```php
-setModuleBytes(?DeployExecutableModuleBytes $moduleBytes): self
-```
-```php
-getModuleBytes(): ?DeployExecutableModuleBytes
-```
-```php
-isModuleBytes(): bool
-```
+| Name | Type               | Description              | Required |
+|---|--------------------|--------------------------|---|
+| `$hexModuleBytes`| `string`           | Hex-encoded module bytes | Yes |
+| `$args`| `DeployNamedArg[]` | Arguments                | Yes |
 
 ---
-#### [DeployExecutableTransfer](DeployExecutableTransfer.md)
 ```php
-setTransfer(?DeployExecutableTransfer $transfer): self
+static newStoredContractByHash(string $entrypoint, array $args, string $hexContractHash): DeployExecutableStoredContractByHash
 ```
-```php
-getTransfer(): ?DeployExecutableTransfer
-```
-```php
-isTransfer(): bool
-```
+##### Parameters:
+
+| Name | Type               | Description               | Required |
+|---|--------------------|---------------------------|---|
+| `$entrypoint`| `string`           | Entrypoint name           | Yes |
+| `$args`| `DeployNamedArg[]` | Arguments                 | Yes |
+| `$hexContractHash`| `string`           | Hex-encoded contract hash | Yes |
 
 ---
-#### [DeployExecutableStoredContractByHash](DeployExecutableStoredContractByHash.md)
 ```php
-setStoredContractByHash(?DeployExecutableStoredContractByHash $storedContractByHash): self
+static newStoredContractByName(string $entrypoint, array $args, string $contractAlias): DeployExecutableStoredContractByName
 ```
-```php
-getStoredContractByHash(): ?DeployExecutableStoredContractByHash
-```
-```php
-isStoredContractByHash(): bool
-```
+##### Parameters:
+
+| Name | Type               | Description     | Required |
+|---|--------------------|-----------------|---|
+| `$entrypoint`| `string`           | Entrypoint name | Yes |
+| `$args`| `DeployNamedArg[]` | Arguments       | Yes |
+| `$contractAlias`| `string`           | Contract alias  | Yes |
 
 ---
-#### [DeployExecutableStoredContractByName](DeployExecutableStoredContractByName.md)
 ```php
-setStoredContractByName(?DeployExecutableStoredContractByName $storedContractByName): self
+static newStoredContractPackageByHash(string $entrypoint, array $args, string $hexContractPackageHash, int $version = null): DeployExecutableStoredVersionedContractByHash
 ```
-```php
-getStoredContractByName(): ?DeployExecutableStoredContractByName
-```
-```php
-isStoredContractByName(): bool
-```
+##### Parameters:
+
+| Name               | Type               | Description                       | Required |
+|--------------------|--------------------|-----------------------------------|----------|
+| `$entrypoint`      | `string`           | Entrypoint name                   | Yes      |
+| `$args`            | `DeployNamedArg[]` | Arguments                         | Yes      |
+| `$hexContractHash` | `string`           | Hex-encoded contract package hash | Yes      |
+| `$version`         | `int`              | Contract package version          | No       |
 
 ---
-#### [DeployExecutableStoredVersionedContractByHash](DeployExecutableStoredVersionedContractByHash.md)
 ```php
-setStoredVersionedContractByHash(?DeployExecutableStoredVersionedContractByHash $storedVersionedContractByHash): self
+static newStoredContractPackageByName(string $entrypoint, array $args, string $contractPackageAlias, int $version = null): DeployExecutableStoredVersionedContractByName
 ```
-```php
-getStoredVersionedContractByHash(): ?DeployExecutableStoredVersionedContractByHash
-```
-```php
-isStoredVersionedContractByHash(): bool
-```
+##### Parameters:
 
----
-#### [DeployExecutableStoredVersionedContractByName](DeployExecutableStoredVersionedContractByName.md)
-```php
-setStoredVersionedContractByName(?DeployExecutableStoredVersionedContractByName $storedVersionedContractByName): self
-```
-```php
-getStoredVersionedContractByName(): ?DeployExecutableStoredVersionedContractByName
-```
-```php
-isStoredVersionedContractByName(): bool
-```
+| Name               | Type               | Description            | Required |
+|--------------------|--------------------|------------------------|----------|
+| `$entrypoint`      | `string`           | Entrypoint name        | Yes      |
+| `$args`            | `DeployNamedArg[]` | Arguments              | Yes      |
+| `$contractPackageAlias` | `string`           | Contract package alias | Yes      |
+| `$version`         | `int`              | Contract version       | No       |
+

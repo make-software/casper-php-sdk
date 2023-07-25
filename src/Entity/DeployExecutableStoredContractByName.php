@@ -4,7 +4,7 @@ namespace Casper\Entity;
 
 use Casper\Util\ByteUtil;
 
-class DeployExecutableStoredContractByName extends DeployExecutableItemInternal
+class DeployExecutableStoredContractByName extends DeployExecutable
 {
     protected const TAG = 2;
 
@@ -28,6 +28,9 @@ class DeployExecutableStoredContractByName extends DeployExecutableItemInternal
         return $this->entryPoint;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toBytes(): array
     {
         return array_merge(

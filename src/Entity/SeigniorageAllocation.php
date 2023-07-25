@@ -8,10 +8,6 @@ class SeigniorageAllocation
 
     private ?SeigniorageAllocationValidator $validator;
 
-    /**
-     * @param ?SeigniorageAllocationDelegator $delegator
-     * @param ?SeigniorageAllocationValidator $validator
-     */
     public function __construct(?SeigniorageAllocationDelegator $delegator, ?SeigniorageAllocationValidator $validator)
     {
         $this->delegator = $delegator;
