@@ -59,7 +59,7 @@ class RpcClientTest extends TestCase
     public function testGetDeployByFakeHash(): void
     {
         $fakeDeployHash = '1234567891234567891234567891234567891234567891234567891234567891';
-        $errorMessage = 'deploy not know';
+        $errorMessage = 'No such deploy';
 
         $this->expectException(RpcError::class);
         $this->expectExceptionMessage($errorMessage);
@@ -89,7 +89,7 @@ class RpcClientTest extends TestCase
     public function testGetBlockByFakeHash(): void
     {
         $fakeBlockHash = '1234567891234567891234567891234567891234567891234567891234567891';
-        $errorMessage = 'block not know';
+        $errorMessage = 'No such block';
 
         $this->expectException(RpcError::class);
         $this->expectExceptionMessage($errorMessage);
@@ -124,11 +124,16 @@ class RpcClientTest extends TestCase
     public function testGetStatus(): void
     {
         $status = $this->rpcClient->getStatus();
+        $this->assertNotEmpty($status->getApiVersion());
         $this->assertNotEmpty($status->getChainspecName());
         $this->assertNotEmpty($status->getStartingStateRootHash());
         $this->assertNotEmpty($status->getLastAddedBlockInfo()->getHash());
         $this->assertNotEmpty($status->getOurPublicSigningKey()->parsedValue());
         $this->assertNotEmpty($status->getBuildVersion());
+        $this->assertNotEmpty($status->getUptime());
+        $this->assertNotEmpty($status->getReactorState());
+        $this->assertNotEmpty($status->getLastProgress());
+        $this->assertNotEmpty($status->getAvailableBlockRange());
     }
 
     public function testGetAuctionState(): void
@@ -175,6 +180,20 @@ class RpcClientTest extends TestCase
     public function testGetAccountBalance(string $stateRootHash, Account $account): void
     {
         $accountBalance = $this->rpcClient->getAccountBalance($stateRootHash, $account->getMainPurse());
+        $this->assertGreaterThanOrEqual(0, gmp_cmp($accountBalance, 0));
+    }
+
+    /**
+     * @depends testGetStateRootHash
+     * @depends testGetAccount
+     */
+    public function testQueryBalance(string $stateRootHash, Account $account): void
+    {
+        $accountBalance = $this->rpcClient->queryBalance(
+            RpcClient::PURSE_IDENTIFIER_TYPE_UREF,
+            $account->getMainPurse()->parsedValue(),
+            $stateRootHash
+        );
         $this->assertGreaterThanOrEqual(0, gmp_cmp($accountBalance, 0));
     }
 
@@ -259,4 +278,12 @@ class RpcClientTest extends TestCase
         $globalState = $this->rpcClient->getGlobalStateByStateRootHash($stateRootHash, $deployHashFromTheTestnet);
         $this->assertEquals($deployHashFromTheTestnet, 'deploy-' . $globalState->getStoredValue()->getDeployInfo()->getDeployHash());
     }
+
+    public function testGetChainspecInfo(): void
+    {
+        $chainspecInfo = $this->rpcClient->getChainspecInfo();
+        $this->assertNotEmpty($chainspecInfo->getChainspecBytes());
+    }
+
+    //TODO: Add test for speculative_exec RPC method
 }
