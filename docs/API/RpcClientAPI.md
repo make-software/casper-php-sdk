@@ -119,6 +119,23 @@ Returns purse's balance from the network
 | `$balanceUref` | `CLURef` | Balance URef object | Yes |
 
 ---
+## Query balance
+```php
+queryBalance(
+    string $purseIdentifierType, 
+    string $purseIdentifier, 
+    string $stateRootHash = null
+): \GMP
+```
+Returns a purse’s balance from global state at a given [Block](../Entity/Block.md) or state root hash.
+### Parameters
+| Name | Type     | Description                                                                                                           | Required |
+|---|----------|-----------------------------------------------------------------------------------------------------------------------|----------|
+| `$purseIdentifierType` | `string` | Purse identifier type. Available values: `purse_uref`, `main_purse_under_public_key`, `main_purse_under_account_hash` | Yes      |
+| `$purseIdentifier` | `string` | Purse identifier                                                                                                      | Yes      |
+| `$stateRootHash` | `string` | Hex-encoded hash of the state root                                                                                                        | No       |
+
+---
 ## Get account balance URef by account hash
 ```php
 getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
@@ -238,3 +255,22 @@ Returns an [GlobalState](../Entity/GlobalState.md) object by the given state roo
 | `$stateRootHash` | `string` | Hex-encoded hash of the state root | Yes |
 | `$key` | `string` | `casper_types::Key` as formatted string | Yes |
 | `$path` | `array` | The path components starting from the key as base | No |
+
+---
+## Get chainspec info
+```php
+getChainspecInfo(): ChainspecRegistryBytes
+```
+Returns a [ChainspecRegistryBytes](../Entity/ChainspecRegistryBytes.md) object
+
+---
+## Speculative deploy
+```php
+speculativeDeploy(Deploy $signedDeploy, string $blockHash)
+```
+Puts a [Deploy](../Entity/Deploy.md) to a single node for speculative execution on that node only.
+### Parameters
+| Name | Type | Description | Required |
+|---|------|-------------|----|
+| `$signedDeploy` | `Deploy` | Signed [Deploy](../Entity/Deploy.md) object | Yes |
+| `$blockHash` | `string` | Hex-encoded hash of the block | Yes |

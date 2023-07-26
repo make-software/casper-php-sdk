@@ -1,6 +1,11 @@
 # Status
 
 ```php
+getApiVersion(): string
+```
+Returns node's RPC API version
+
+```php
 getChainspecName(): string
 ```
 Returns the chainspec name
@@ -46,3 +51,27 @@ Returns [NextUpgrade](NextUpgrade.md) object or `null`
 getPeers(): array
 ```
 Returns a list of [Peer](Peer.md) objects that connected to the network
+
+---
+```php
+getUptime(): string
+```
+Returns time that passed since the node has started.
+
+---
+```php
+getReactorState(): string
+```
+Returns node's reactor state
+
+---
+```php
+getLastProgress(): \DateTime
+```
+Returns node's last progress
+
+---
+```php
+getLastProgress(): BlockRange
+```
+Returns [BlockRange](BlockRange.md) object

@@ -12,6 +12,7 @@ class StatusSerializer extends JsonSerializer
     public static function toJson($status): array
     {
         return array(
+            'api_version' => $status->getApiVersion(),
             'chainspec_name' => $status->getChainspecName(),
             'starting_state_root_hash' => $status->getStartingStateRootHash(),
             'last_added_block_info' => BlockInfoSerializer::toJson($status->getLastAddedBlockInfo()),
@@ -20,6 +21,10 @@ class StatusSerializer extends JsonSerializer
             'build_version' => $status->getBuildVersion(),
             'next_upgrade' => $status->getNextUpgrade() ? NextUpgradeSerializer::toJson($status->getNextUpgrade()) : null,
             'peers' => PeerSerializer::toJsonArray($status->getPeers()),
+            'uptime' => $status->getUptime(),
+            'reactor_state' => $status->getReactorState(),
+            'last_progress' => $status->getLastProgress()->format('Y-m-d\TH:i:s.v\Z'),
+            'available_block_range' => BlockRangeSerializer::toJson($status->getAvailableBlockRange()),
         );
     }
 
@@ -29,6 +34,7 @@ class StatusSerializer extends JsonSerializer
     public static function fromJson(array $json): Status
     {
         return new Status(
+            $json['api_version'],
             $json['chainspec_name'],
             $json['starting_state_root_hash'],
             BlockInfoSerializer::fromJson($json['last_added_block_info']),
@@ -36,7 +42,11 @@ class StatusSerializer extends JsonSerializer
             $json['round_length'],
             $json['build_version'],
             isset($json['next_upgrade']) ? NextUpgradeSerializer::fromJson($json['next_upgrade']) : null,
-            PeerSerializer::fromJsonArray($json['peers'])
+            PeerSerializer::fromJsonArray($json['peers']),
+            $json['uptime'],
+            $json['reactor_state'],
+            new \DateTime($json['last_progress']),
+            BlockRangeSerializer::fromJson($json['available_block_range'])
         );
     }
 }
