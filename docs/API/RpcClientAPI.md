@@ -264,9 +264,9 @@ getChainspecInfo(): ChainspecRegistryBytes
 Returns a [ChainspecRegistryBytes](../Entity/ChainspecRegistryBytes.md) object
 
 ---
-## Speculative deploy
+## Speculative execution
 ```php
-speculativeDeploy(Deploy $signedDeploy, string $blockHash)
+speculativeExecution(Deploy $signedDeploy, string $blockHash): DeployExecutionResult
 ```
 Puts a [Deploy](../Entity/Deploy.md) to a single node for speculative execution on that node only.
 ### Parameters
