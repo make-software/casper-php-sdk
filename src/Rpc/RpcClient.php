@@ -4,9 +4,11 @@ namespace Casper\Rpc;
 
 use Casper\Serializer\AccountSerializer;
 use Casper\Serializer\AuctionStateSerializer;
+use Casper\Serializer\ChainspecRegistryBytesSerializer;
 use Casper\Serializer\CLAccountHashSerializer;
 use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Serializer\CLURefSerializer;
+use Casper\Serializer\DeployExecutionResultSerializer;
 use Casper\Serializer\EraSummarySerializer;
 use Casper\Serializer\GlobalStateSerializer;
 use Casper\Serializer\PeerSerializer;
@@ -23,7 +25,9 @@ use Casper\CLType\CLPublicKey;
 use Casper\Entity\Account;
 use Casper\Entity\AuctionState;
 use Casper\Entity\Block;
+use Casper\Entity\ChainspecRegistryBytes;
 use Casper\Entity\Deploy;
+use Casper\Entity\DeployExecutionResult;
 use Casper\Entity\EraSummary;
 use Casper\Entity\GlobalState;
 use Casper\Entity\Peer;
@@ -53,6 +57,13 @@ class RpcClient
     private const RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK = 'chain_get_era_info_by_switch_block';
     private const RPC_METHOD_GET_DICTIONARY_ITEM = 'state_get_dictionary_item';
     private const RPC_METHOD_QUERY_GLOBAL_STATE = 'query_global_state';
+    private const RPC_METHOD_SPECULATIVE_EXEC = 'speculative_exec';
+    private const RPC_METHOD_QUERY_BALANCE = 'query_balance';
+    private const RPC_METHOD_INFO_GET_CHAINSPEC = 'info_get_chainspec';
+
+    public const PURSE_IDENTIFIER_TYPE_UREF = 'purse_uref';
+    public const PURSE_IDENTIFIER_TYPE_MAIN_PURSE_UNDER_PUBLIC_KEY = 'main_purse_under_public_key';
+    public const PURSE_IDENTIFIER_TYPE_MAIN_PURSE_UNDER_ACCOUNT_HASH = 'main_purse_under_account_hash';
 
     private string $nodeUrl;
 
@@ -228,11 +239,35 @@ class RpcClient
             self::RPC_METHOD_GET_ACCOUNT_BALANCE,
             array(
                 'state_root_hash' => $stateRootHash,
-                'purse_uref' => CLURefSerializer::toString($balanceUref),
+                self::PURSE_IDENTIFIER_TYPE_UREF => CLURefSerializer::toString($balanceUref),
             )
         );
 
         return gmp_init($response['balance_value']);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalance(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        string $stateRootHash = null
+    ): \GMP
+    {
+        $response = $this->rpcCallMethod(
+            self::RPC_METHOD_QUERY_BALANCE,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => $stateRootHash
+                    ? array('StateRootHash' => $stateRootHash)
+                    : null
+            )
+        );
+
+        return gmp_init($response['balance']);
     }
 
     /**
@@ -370,6 +405,9 @@ class RpcClient
         return GlobalStateSerializer::fromJson($response);
     }
 
+    /**
+     * @throws RpcError
+     */
     public function getGlobalStateByStateRootHash(string $stateRootHash, string $key, array $path = []): GlobalState
     {
         $response = $this->rpcCallMethod(
@@ -384,6 +422,36 @@ class RpcClient
         );
 
         return GlobalStateSerializer::fromJson($response);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getChainspecInfo(): ChainspecRegistryBytes
+    {
+        return ChainspecRegistryBytesSerializer::fromJson(
+            $this->rpcCallMethod(self::RPC_METHOD_INFO_GET_CHAINSPEC)['chainspec_bytes']
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function speculativeExecution(Deploy $signedDeploy, string $blockHash = null): DeployExecutionResult
+    {
+        $params = array(
+            'deploy' => DeploySerializer::toJson($signedDeploy)
+        );
+
+        if ($blockHash !== null) {
+            $params['block_identifier'] = array(
+                'Hash' => $blockHash
+            );
+        }
+
+        return DeployExecutionResultSerializer::fromJson(
+            $this->rpcCallMethod(self::RPC_METHOD_SPECULATIVE_EXEC, $params)
+        );
     }
 
     /**

@@ -6,6 +6,8 @@ use Casper\CLType\CLPublicKey;
 
 class Status
 {
+    private string $apiVersion;
+
     private string $chainspecName;
 
     private string $startingStateRootHash; // Hash
@@ -20,12 +22,21 @@ class Status
 
     private ?NextUpgrade $nextUpgrade;
 
+    private string $uptime;
+
+    private string $reactorState;
+
+    private \DateTime $lastProgress;
+
+    private BlockRange $availableBlockRange;
+
     /**
      * @var Peer[]
      */
     private array $peers;
 
     public function __construct(
+        string $apiVersion,
         string $chainspecName,
         string $startingStateRootHash,
         BlockInfo $lastAddedBlockInfo,
@@ -33,9 +44,14 @@ class Status
         ?string $roundLength,
         string $buildVersion,
         ?NextUpgrade $nextUpgrade,
-        array $peers
+        array $peers,
+        string $uptime,
+        string $reactorState,
+        \DateTime $lastProgress,
+        BlockRange $availableBlockRange
     )
     {
+        $this->apiVersion = $apiVersion;
         $this->chainspecName = $chainspecName;
         $this->startingStateRootHash = $startingStateRootHash;
         $this->lastAddedBlockInfo = $lastAddedBlockInfo;
@@ -44,6 +60,15 @@ class Status
         $this->buildVersion = $buildVersion;
         $this->nextUpgrade = $nextUpgrade;
         $this->peers = $peers;
+        $this->uptime = $uptime;
+        $this->reactorState = $reactorState;
+        $this->lastProgress = $lastProgress;
+        $this->availableBlockRange = $availableBlockRange;
+    }
+
+    public function getApiVersion(): string
+    {
+        return $this->apiVersion;
     }
 
     public function getChainspecName(): string
@@ -84,5 +109,25 @@ class Status
     public function getPeers(): array
     {
         return $this->peers;
+    }
+
+    public function getUptime(): string
+    {
+        return $this->uptime;
+    }
+
+    public function getReactorState(): string
+    {
+        return $this->reactorState;
+    }
+
+    public function getLastProgress(): \DateTime
+    {
+        return $this->lastProgress;
+    }
+
+    public function getAvailableBlockRange(): BlockRange
+    {
+        return $this->availableBlockRange;
     }
 }
