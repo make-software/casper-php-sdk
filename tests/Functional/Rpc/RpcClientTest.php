@@ -59,7 +59,7 @@ class RpcClientTest extends TestCase
     public function testGetDeployByFakeHash(): void
     {
         $fakeDeployHash = '1234567891234567891234567891234567891234567891234567891234567891';
-        $errorMessage = 'deploy not know';
+        $errorMessage = 'No such deploy';
 
         $this->expectException(RpcError::class);
         $this->expectExceptionMessage($errorMessage);
@@ -89,7 +89,7 @@ class RpcClientTest extends TestCase
     public function testGetBlockByFakeHash(): void
     {
         $fakeBlockHash = '1234567891234567891234567891234567891234567891234567891234567891';
-        $errorMessage = 'block not know';
+        $errorMessage = 'No such block';
 
         $this->expectException(RpcError::class);
         $this->expectExceptionMessage($errorMessage);
