@@ -13,7 +13,7 @@ class DeployExecutionResultSerializer extends JsonSerializer
     {
         return array(
             'block_hash' => $deployExecutionResult->getBlockHash(),
-            'execution_result' => DeployExecutionResultDataSerializer::toJson($deployExecutionResult->getData())
+            'execution_result' => DeployExecutionResultDataSerializer::toJson($deployExecutionResult->getResult())
         );
     }
 

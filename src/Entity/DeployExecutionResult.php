@@ -6,12 +6,12 @@ class DeployExecutionResult
 {
     private string $blockHash;
 
-    private DeployExecutionResultData $data;
+    private DeployExecutionResultData $result;
 
-    public function __construct(string $blockHash, DeployExecutionResultData $data)
+    public function __construct(string $blockHash, DeployExecutionResultData $result)
     {
         $this->blockHash = $blockHash;
-        $this->data = $data;
+        $this->result = $result;
     }
 
     public function getBlockHash(): string
@@ -19,8 +19,8 @@ class DeployExecutionResult
         return $this->blockHash;
     }
 
-    public function getData(): DeployExecutionResultData
+    public function getResult(): DeployExecutionResultData
     {
-        return $this->data;
+        return $this->result;
     }
 }

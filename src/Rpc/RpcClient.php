@@ -437,7 +437,7 @@ class RpcClient
     /**
      * @throws RpcError
      */
-    public function speculativeDeploy(Deploy $signedDeploy, string $blockHash = null): DeployExecutionResult
+    public function speculativeExecution(Deploy $signedDeploy, string $blockHash = null): DeployExecutionResult
     {
         $params = array(
             'deploy' => DeploySerializer::toJson($signedDeploy)
