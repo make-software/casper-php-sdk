@@ -101,6 +101,9 @@ $latestBlockHash = $latestBlock->getHash();
 - [getDictionaryItemByURef](docs/API/RpcClientAPI.md#Get-dictionary-item)
 - [getGlobalStateByBlock](docs/API/RpcClientAPI.md#Get-global-state-by-block)
 - [getGlobalStateByStateRootHash](docs/API/RpcClientAPI.md#Get-global-state-by-state-root-hash)
+- [queryBalance](docs/API/RpcClientAPI.md#Query-balance)
+- [getChainspecInfo](docs/API/RpcClientAPI.md#Get-chainspec-info)
+- [speculativeExecution](docs/API/RpcClientAPI.md#Speculative-execution)
 
 ### DeployService
 - [makeDeploy](docs/API/DeployServiceAPI.md#Make-deploy)
