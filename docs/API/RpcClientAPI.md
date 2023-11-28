@@ -4,12 +4,13 @@ Class for interacting with the network via RPC
 ---
 ## Constructor
 ```php
-__constructor(string $nodeUrl)
+__constructor(string $nodeUrl, string $bearerToken = null)
 ```
 ### Parameters
-| Name | Type | Description | Required |
-|---|---|---|---|
-| `$nodeUrl` | `string` | Full node url string | Yes |
+| Name           | Type | Description                | Required |
+|----------------|---|----------------------------|---|
+| `$nodeUrl`     | `string` | Full node url string       | Yes |
+| `$bearerToken` | `string` | Authorization bearer token | Yes |
 
 ---
 ## Put deploy
