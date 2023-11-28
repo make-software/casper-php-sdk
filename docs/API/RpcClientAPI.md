@@ -8,9 +8,9 @@ __constructor(string $nodeUrl, string $bearerToken = null)
 ```
 ### Parameters
 | Name           | Type | Description                | Required |
-|----------------|---|----------------------------|---|
-| `$nodeUrl`     | `string` | Full node url string       | Yes |
-| `$bearerToken` | `string` | Authorization bearer token | Yes |
+|----------------|---|----------------------------|----------|
+| `$nodeUrl`     | `string` | Full node url string       | Yes      |
+| `$bearerToken` | `string` | Authorization bearer token | No       |
 
 ---
 ## Put deploy
