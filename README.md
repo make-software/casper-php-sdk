@@ -31,10 +31,12 @@ extension=secp256k1.so
 
 ## Usage
 ### Creating RpcClient
-Create `RpcClient` by passing node url to constructor
+Create `RpcClient` by passing node url and headers (optional) to constructor
 ```php
 $nodeUrl = 'http://127.0.0.1:7777';
-$client = new Casper\Rpc\RpcClient($nodeUrl);
+$headers = array('Authorization' => 'Bearer 6ae6c8b31f09df244019ffef60c274e4'); // Optional
+
+$client = new Casper\Rpc\RpcClient($nodeUrl, $headers);
 ```
 
 ### RPC call examples

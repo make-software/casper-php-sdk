@@ -4,12 +4,13 @@ Class for interacting with the network via RPC
 ---
 ## Constructor
 ```php
-__constructor(string $nodeUrl)
+__constructor(string $nodeUrl, array $headers = array())
 ```
 ### Parameters
-| Name | Type | Description | Required |
-|---|---|---|---|
-| `$nodeUrl` | `string` | Full node url string | Yes |
+| Name       | Type     | Description          | Required |
+|------------|----------|----------------------|----------|
+| `$nodeUrl` | `string` | Full node url string | Yes      |
+| `$headers` | `array`  | Additional headers   | No       |
 
 ---
 ## Put deploy

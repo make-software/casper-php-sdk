@@ -67,11 +67,14 @@ class RpcClient
 
     private string $nodeUrl;
 
+    private array $headers;
+
     private ?string $lastApiVersion = null;
 
-    public function __construct(string $nodeUrl)
+    public function __construct(string $nodeUrl, array $headers = array())
     {
         $this->nodeUrl = $nodeUrl;
+        $this->headers = $headers;
     }
 
     public function getLastApiVersion(): ?string
@@ -461,20 +464,23 @@ class RpcClient
     {
         $url = $this->nodeUrl . '/rpc';
         $curl = curl_init($url);
-        $data = array(
-            'id' => self::ID,
-            'jsonrpc' => self::JSON_RPC,
-            'method' => $method,
-            'params' => $params
-        );
+
+        $headers = ['Accept: application/json', 'Content-type: application/json'];
+        foreach ($this->headers as $name => $value) {
+            $headers[] = "$name: $value";
+        }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Accept: application/json',
-            'Content-type: application/json',
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(
+            array(
+                'id' => self::ID,
+                'jsonrpc' => self::JSON_RPC,
+                'method' => $method,
+                'params' => $params
+            )
         ));
 
         $response = curl_exec($curl);
