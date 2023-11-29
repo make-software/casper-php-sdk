@@ -4,7 +4,7 @@ Class for interacting with the network via RPC
 ---
 ## Constructor
 ```php
-__constructor(string $nodeUrl, string $headers = null)
+__constructor(string $nodeUrl, array $headers = array())
 ```
 ### Parameters
 | Name       | Type     | Description          | Required |
