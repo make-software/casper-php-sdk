@@ -67,14 +67,14 @@ class RpcClient
 
     private string $nodeUrl;
 
-    private ?string $bearerToken = null;
+    private array $headers;
 
     private ?string $lastApiVersion = null;
 
-    public function __construct(string $nodeUrl, string $bearerToken = null)
+    public function __construct(string $nodeUrl, array $headers = array())
     {
         $this->nodeUrl = $nodeUrl;
-        $this->bearerToken = $bearerToken;
+        $this->headers = $headers;
     }
 
     public function getLastApiVersion(): ?string
@@ -466,8 +466,8 @@ class RpcClient
         $curl = curl_init($url);
 
         $headers = ['Accept: application/json', 'Content-type: application/json'];
-        if ($this->bearerToken !== null) {
-            $headers[] = 'Authorization: Bearer ' . $this->bearerToken;
+        foreach ($this->headers as $name => $value) {
+            $headers[] = "$name: $value";
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
