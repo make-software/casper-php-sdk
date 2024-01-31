@@ -9,7 +9,7 @@ composer require make-software/casper-php-sdk
 ### IMPORTANT
 For using `Secp256K1` keys you need to install and enable [secp256k1-php](https://github.com/Bit-Wasp/secp256k1-php) extension:
 ```bash
-git clone git@github.com:bitcoin-core/secp256k1 && \
+git clone https://github.com/bitcoin-core/secp256k1.git && \
     cd secp256k1 && \
     ./autogen.sh && \
     ./configure --enable-experimental --enable-module-{ecdh,recovery} && \
@@ -17,7 +17,7 @@ git clone git@github.com:bitcoin-core/secp256k1 && \
     cd ../
 ```
 ```bash
-git clone git@github.com:Bit-Wasp/secp256k1-php && \
+git clone https://github.com/Bit-Wasp/secp256k1-php.git && \
     cd secp256k1-php/secp256k1 && \
     phpize && \ 
     ./configure --with-secp256k1 && \  
