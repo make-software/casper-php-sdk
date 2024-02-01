@@ -16,7 +16,8 @@ git clone git@github.com:bitcoin-core/secp256k1 && \
     make && sudo make install && \
     cd ../
 ```
-```bash
+
+```
 git clone git@github.com:Bit-Wasp/secp256k1-php && \
     cd secp256k1-php/secp256k1 && \
     phpize && \ 
@@ -24,6 +25,17 @@ git clone git@github.com:Bit-Wasp/secp256k1-php && \
     make && sudo make install && \
     cd ../../
 ```
+
+(Optional) PHP8.x.x versions are likely to get a compilation error. Repo compatible with PHP 8.x.x. 
+```bash
+git clone https://github.com/enderkus/secp256k1-php.git && \
+    cd secp256k1-php/secp256k1 && \
+    phpize && \ 
+    ./configure --with-secp256k1 && \  
+    make && sudo make install && \
+    cd ../../
+```
+
 Enable extension by adding the following line to your `php.ini` file
 ```
 extension=secp256k1.so
