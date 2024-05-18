@@ -78,7 +78,7 @@ abstract class AsymmetricKey
     abstract public function exportPrivateKeyInPem(): string;
 
     /**
-     * Sign the message and retrun hex-encoded signature
+     * Sign the message and return hex-encoded signature
      *
      * @param string $message
      * @return string

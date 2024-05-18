@@ -48,7 +48,7 @@ class RpcClientTest extends TestCase
 
     public function testGetDeploy(): void
     {
-        $deployHashFromTheTestnet = '7ab7208819bead36b7143757c3d4b7d0d749e5fd2e49b7ae58d490ea3d323371';
+        $deployHashFromTheTestnet = '9fb1ad39812d87d473672fa17c0da3360804106c2b08716b82d692420e40a65e';
 
         $deploy = $this->rpcClient->getDeploy($deployHashFromTheTestnet);
         $this->assertEquals(ByteUtil::hexToByteArray($deployHashFromTheTestnet), $deploy->getHash());

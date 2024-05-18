@@ -5,31 +5,45 @@ namespace Casper\Util\Crypto;
 use Casper\Util\ByteUtil;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Signature\Signature;
+use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
+use Mdanter\Ecc\Crypto\Signature\Signer;
+use Mdanter\Ecc\Crypto\Signature\SignHasher;
 use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Math\GmpMathInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
+
+use Casper\Util\NumUtil;
 
 /**
  * Secp256K1 key implementation
  */
 final class Secp256K1Key extends AsymmetricKey
 {
-    protected const RESULT_OK = 1;
-    protected const HASHING_ALGORITHM = 'sha256';
+    private const HASHING_ALGORITHM = 'sha256';
 
-    protected PrivateKeyInterface $privateKeyObject;
+    private GmpMathInterface $adapter;
+
+    private GeneratorPoint $generator;
+
+    private PrivateKeyInterface $privateKeyObject;
 
     public function __construct(PrivateKeyInterface $privateKeyObject = null)
     {
-        $this->privateKeyObject = $privateKeyObject ??
-            EccFactory::getSecgCurves()
+        $this->adapter = EccFactory::getAdapter();
+        $this->generator = EccFactory::getSecgCurves()
+            ->generator256k1(null, true);
+        $this->privateKeyObject = $privateKeyObject ?? EccFactory::getSecgCurves()
                 ->generator256k1()
                 ->createPrivateKey();
 
         $privateKey = ByteUtil::hexToString(gmp_strval($this->privateKeyObject->getSecret(), 16));
-        $publicKey= ByteUtil::hexToString($this->getCompressedPublicKeyHex());
+        $publicKey = ByteUtil::hexToString($this->getCompressedPublicKeyHex());
 
         parent::__construct($publicKey, $privateKey, self::ALGO_SECP255K1);
     }
@@ -48,7 +62,6 @@ final class Secp256K1Key extends AsymmetricKey
 
     /**
      * @inheritDoc
-     * @return string
      */
     public function exportPublicKeyInPem(): string
     {
@@ -58,7 +71,6 @@ final class Secp256K1Key extends AsymmetricKey
 
     /**
      * @inheritDoc
-     * @return string
      */
     public function exportPrivateKeyInPem(): string
     {
@@ -68,71 +80,52 @@ final class Secp256K1Key extends AsymmetricKey
 
     /**
      * @inheritDoc
-     * @param string $message
-     * @return string
-     *
      * @throws \Exception
      */
     public function sign(string $message): string
     {
-        $context = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
+        $hash = (new SignHasher('sha256', $this->adapter))
+            ->makeHash($message, $this->generator);
 
-        $signature = null;
-        $signResult = secp256k1_ecdsa_sign(
-            $context,
-            $signature,
-            hash(self::HASHING_ALGORITHM, $message, true),
-            $this->privateKey
-        );
+        $randomK = RandomGeneratorFactory::getHmacRandomGenerator($this->privateKeyObject, $hash, self::HASHING_ALGORITHM)
+            ->generate($this->generator->getOrder());
 
-        if ($signResult !== self::RESULT_OK) {
-            throw new \Exception("Failed to create signature");
+        $signature = (new Signer($this->adapter))
+            ->sign($this->privateKeyObject, $hash, $randomK);
+
+        $r = $signature->getR();
+        $s = $signature->getS();
+
+        /**
+         * In ECDSA (Elliptic Curve Digital Signature Algorithm), a signature consists of two components, r and s.
+         * The value of s can be in the range [1, n-1], where n is the order of the elliptic curve group.
+         * However, for the sake of security and standardization, it is common practice to ensure that s is the
+         * smallest possible value. This is achieved by ensuring s <= n/2. If s is greater than n/2, it is replaced with n - s
+         */
+        $n = $this->privateKeyObject->getPoint()->getOrder();
+        if ($s > $n / 2) {
+            $s = $n - $s;
         }
 
-        $signatureSerialized = '';
-        secp256k1_ecdsa_signature_serialize_compact($context, $signatureSerialized, $signature);
-
-        return ByteUtil::stringToHex($signatureSerialized);
+        return NumUtil::padNumberLeft($r) . NumUtil::padNumberLeft($s);
     }
 
     /**
      * @inheritDoc
-     * @param string $hexSignature
-     * @param string $message
-     * @return bool
-     *
      * @throws \Exception
      */
     public function verify(string $hexSignature, string $message): bool
     {
-        $context = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
+        try {
+            $hash = (new SignHasher(self::HASHING_ALGORITHM))->makeHash($message, $this->generator);
+            $publicKey = $this->privateKeyObject->getPublicKey();
+            $signature = $this->hexToSignature($hexSignature);
 
-        $publicKey = null;
-        $publicKeyParseResult = secp256k1_ec_pubkey_parse($context, $publicKey, $this->publicKey);
-
-        if ($publicKeyParseResult !== self::RESULT_OK) {
-            throw new \Exception("Failed to parse public key");
+            return (new Signer($this->adapter))
+                ->verify($publicKey, $signature, $hash);
+        } catch (\Exception $e) {
+            return false;
         }
-
-        $signature = null;
-        $signatureParseResult = secp256k1_ecdsa_signature_parse_compact(
-            $context,
-            $signature,
-            ByteUtil::hexToString($hexSignature)
-        );
-
-        if ($signatureParseResult !== self::RESULT_OK) {
-            throw new \Exception("Failed to parse DER signature");
-        }
-
-        $isVerified = secp256k1_ecdsa_verify(
-            $context,
-            $signature,
-            hash(self::HASHING_ALGORITHM, $message, true),
-            $publicKey
-        );
-
-        return $isVerified === self::RESULT_OK;
     }
 
     private function getCompressedPublicKeyHex(): string
@@ -151,5 +144,26 @@ final class Secp256K1Key extends AsymmetricKey
         $prefix = gmp_strval(gmp_mod($yPointValue, 2)) === '1' ? '03' : '02';
 
         return $prefix . $xPointValueHex;
+    }
+
+    private function hexToSignature(string $hex): SignatureInterface
+    {
+        $hex = mb_strtolower($hex);
+
+        if (strpos($hex, '0x') >= 0) {
+            $hex = str_replace('0x', '', $hex);
+        }
+
+        if (mb_strlen($hex) !== 128) {
+            throw new \InvalidArgumentException('Incorrect hex length');
+        }
+
+        $rHex = mb_substr($hex, 0, 64);
+        $sHex = mb_substr($hex, 64, 64);
+
+        $r = gmp_init($rHex, 16);
+        $s = gmp_init($sHex, 16);
+
+        return new Signature($r, $s);
     }
 }
