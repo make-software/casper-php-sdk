@@ -90,22 +90,11 @@ final class Secp256K1Key extends AsymmetricKey
         $randomK = RandomGeneratorFactory::getHmacRandomGenerator($this->privateKeyObject, $hash, self::HASHING_ALGORITHM)
             ->generate($this->generator->getOrder());
 
-        $signature = (new Signer($this->adapter))
+        $signature = (new Signer($this->adapter, true))
             ->sign($this->privateKeyObject, $hash, $randomK);
 
         $r = $signature->getR();
         $s = $signature->getS();
-
-        /**
-         * In ECDSA (Elliptic Curve Digital Signature Algorithm), a signature consists of two components, r and s.
-         * The value of s can be in the range [1, n-1], where n is the order of the elliptic curve group.
-         * However, for the sake of security and standardization, it is common practice to ensure that s is the
-         * smallest possible value. This is achieved by ensuring s <= n/2. If s is greater than n/2, it is replaced with n - s
-         */
-        $n = $this->privateKeyObject->getPoint()->getOrder();
-        if ($s > $n / 2) {
-            $s = $n - $s;
-        }
 
         return NumUtil::padNumberLeft($r) . NumUtil::padNumberLeft($s);
     }
