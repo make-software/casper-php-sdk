@@ -28,4 +28,4 @@ jobs:
       - name: Run test suite
         run: composer run-script test
         env:
-          CASPER_PHP_SDK_TEST_NODE_URL: "65.21.83.240:7777"
+          CASPER_PHP_SDK_TEST_NODE_URL: "95.216.240.135:7777"
