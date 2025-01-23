@@ -13,8 +13,8 @@
     "ext-sodium": "*",
     "ext-gmp": "*",
     "ext-mbstring": "*",
-    "mdanter/ecc": "^1.0",
-    "ionux/phactor": "1.0.8"
+    "ionux/phactor": "1.0.8",
+    "paragonie/ecc": "^2.3"
   },
   "autoload": {
     "psr-4": {
