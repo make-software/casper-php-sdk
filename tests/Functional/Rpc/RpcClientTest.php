@@ -28,6 +28,7 @@ class RpcClientTest extends TestCase
         }
 
         $this->rpcClient = new RpcClient($nodeUrl);
+        sleep(10);
     }
 
     protected function tearDown(): void
