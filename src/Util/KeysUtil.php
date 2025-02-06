@@ -26,9 +26,6 @@ class KeysUtil
     }
 
     /**
-     * @param int $signatureAlgorithm
-     * @param string $hexPublicKey
-     * @return string
      * @throws \Exception
      */
     public static function addPrefixToPublicKey(int $signatureAlgorithm, string $hexPublicKey): string

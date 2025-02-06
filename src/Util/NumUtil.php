@@ -11,8 +11,6 @@ class NumUtil
         }
 
         $numberString = gmp_strval($number, $base);
-        $paddedString = str_pad($numberString, $length, $padString, STR_PAD_LEFT);
-
-        return $paddedString;
+        return str_pad($numberString, $length, $padString, STR_PAD_LEFT);
     }
 }

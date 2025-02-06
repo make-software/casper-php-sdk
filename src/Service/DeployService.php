@@ -2,17 +2,17 @@
 
 namespace Casper\Service;
 
-use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Util\ByteUtil;
 use Casper\Util\Crypto\AsymmetricKey;
 use Casper\Util\HashUtil;
 use Casper\Util\KeysUtil;
 
-use Casper\Entity\Deploy;
-use Casper\Entity\DeployApproval;
-use Casper\Entity\DeployExecutable;
-use Casper\Entity\DeployHeader;
-use Casper\Entity\DeployParams;
+use Casper\Types\Approval;
+use Casper\Types\CLValue\CLPublicKey;
+use Casper\Types\Deploy;
+use Casper\Types\DeployExecutable;
+use Casper\Types\DeployHeader;
+use Casper\Types\DeployParams;
 
 /**
  * Class that allows performs operations around Deploy object
@@ -63,7 +63,7 @@ class DeployService
      */
     public static function signDeploy(Deploy $deploy, AsymmetricKey $key): Deploy
     {
-        $signer = CLPublicKeySerializer::fromString(
+        $signer = CLPublicKey::fromHex(
             KeysUtil::addPrefixToPublicKey(
                 $key->getSignatureAlgorithm(),
                 $key->getPublicKey()
@@ -75,7 +75,7 @@ class DeployService
         );
 
         return $deploy
-            ->pushApproval(new DeployApproval($signer, $signature));
+            ->pushApproval(new Approval($signer, $signature));
     }
 
     /**
@@ -121,7 +121,7 @@ class DeployService
         $approvalsSize = 0;
 
         foreach ($deploy->getApprovals() as $approval) {
-            $approvalsSize += (strlen(CLPublicKeySerializer::toHex($approval->getSigner())) + strlen($approval->getSignature())) / 2;
+            $approvalsSize += (strlen($approval->getSigner()->toHex()) + strlen($approval->getSignature())) / 2;
         }
 
         return $hashSize + $bodySize + $headerSize + $approvalsSize;

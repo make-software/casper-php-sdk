@@ -2,7 +2,7 @@
 
 namespace Casper\Util;
 
-use Casper\Entity\ToBytesConvertible;
+use Casper\Types\ToBytesConvertible;
 
 class ByteUtil
 {
@@ -163,7 +163,7 @@ class ByteUtil
                 throw new \Exception("Value out-of-bounds, value: $bigNumberValue");
             }
         }
-        elseif (gmp_cmp(0, $bigNumberValue) === 1 || gmp_cmp($bigNumberValue, $maxUIntValue) === 1) {
+        else if (gmp_cmp(0, $bigNumberValue) === 1 || gmp_cmp($bigNumberValue, $maxUIntValue) === 1) {
             throw new \Exception("Value out-of-bounds, value: $bigNumberValue");
         }
 

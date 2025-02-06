@@ -4,9 +4,6 @@ namespace Casper\Util\Crypto;
 
 use Casper\Util\ByteUtil;
 
-/**
- * Base class for asymmetric keys implementation
- */
 abstract class AsymmetricKey
 {
     public const ALGO_ED25519 = 1;

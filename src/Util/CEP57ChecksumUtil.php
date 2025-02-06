@@ -7,9 +7,6 @@ class CEP57ChecksumUtil
     private const HEX_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 
     /**
-     * @param string $hex
-     * @return bool
-     *
      * @throws \Exception
      */
     public static function hasChecksum(string $hex): bool
@@ -20,10 +17,10 @@ class CEP57ChecksumUtil
             if ($char >= '0' && $char <= '9') {
                 $mix |= 0x00;
             }
-            elseif ($char >= 'a' && $char <= 'f') {
+            else if ($char >= 'a' && $char <= 'f') {
                 $mix |= 0x01;
             }
-            elseif ($char >= 'A' && $char <= 'F') {
+            else if ($char >= 'A' && $char <= 'F') {
                 $mix |= 0x02;
             }
             else {
@@ -35,9 +32,6 @@ class CEP57ChecksumUtil
     }
 
     /**
-     * @param array $bytes
-     * @return string
-     *
      * @throws \Exception
      */
     public static function encode(array $bytes): string
@@ -57,9 +51,6 @@ class CEP57ChecksumUtil
     }
 
     /**
-     * @param string $hex
-     * @return array
-     *
      * @throws \Exception
      */
     public static function decode(string $hex): array
@@ -79,12 +70,6 @@ class CEP57ChecksumUtil
         return $bytes;
     }
 
-    /**
-     * @param array $bytes
-     * @return int[]
-     *
-     * @throws \Exception
-     */
     private static function byteToNibbles(array $bytes): array
     {
         foreach ($bytes as $byte) {
@@ -92,13 +77,9 @@ class CEP57ChecksumUtil
             $nibbles[] = $byte & 0x0F;
         }
 
-        return $nibbles;
+        return $nibbles ?? [];
     }
 
-    /**
-     * @param array $bytes
-     * @return int[]
-     */
     private static function bytesToBitsCycle(array $bytes): array
     {
         for ($i = 0; $i < count($bytes); $i++) {
@@ -107,6 +88,6 @@ class CEP57ChecksumUtil
             }
         }
 
-        return $bits;
+        return $bits ?? [];
     }
 }

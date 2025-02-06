@@ -5,11 +5,8 @@ namespace Casper\Util;
 class HashUtil
 {
     /**
-     * @param int[]
-     * @param int $length
-     * @return int[]
-     *
      * @throws \SodiumException
+     * @throws \Exception
      */
     public static function blake2bHash(array $bytes, int $length = 32): array
     {

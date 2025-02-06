@@ -20,9 +20,6 @@ use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 
 use Casper\Util\NumUtil;
 
-/**
- * Secp256K1 key implementation
- */
 final class Secp256K1Key extends AsymmetricKey
 {
     private const HASHING_ALGORITHM = 'sha256';

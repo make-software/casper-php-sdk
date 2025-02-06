@@ -139,7 +139,7 @@ class RpcClientTest extends TestCase
 
     public function testGetAuctionState(): void
     {
-        $auctionState = $this->rpcClient->getAuctionState();
+        $auctionState = $this->rpcClient->getLatestAuctionInfo();
         $this->assertNotEmpty($auctionState->getStateRootHash());
         $this->assertGreaterThan(0, $auctionState->getBlockHeight());
 
@@ -156,7 +156,7 @@ class RpcClientTest extends TestCase
      */
     public function testGetStateRootHash(Block $latestBlock): string
     {
-        $stateRootHash = $this->rpcClient->getStateRootHash($latestBlock->getHash());
+        $stateRootHash = $this->rpcClient->getStateRootHashByHash($latestBlock->getHash());
         $this->assertMatchesRegularExpression('/[a-fA-F\d]{64}/', $stateRootHash);
 
         return $stateRootHash;
@@ -168,7 +168,7 @@ class RpcClientTest extends TestCase
         $accountPublicKeyFromTheTestnet = CLPublicKeySerializer::fromHex('011b5b2e370411b6df3a3d8ac0063b35e2003994a634dba48dd5422247fc1e7c41');
         $accountHashFromTheTestnet = 'account-hash-7203e3b0592b7ed4f63552829c5887c493e525fb35b842aed68c56bec38f4e6b';
 
-        $account = $this->rpcClient->getAccount($blockHashFromTheTestnet, $accountPublicKeyFromTheTestnet);
+        $account = $this->rpcClient->getAccountInfoByBlockHash($blockHashFromTheTestnet, $accountPublicKeyFromTheTestnet);
         $this->assertEquals($account->getAccountHash()->parsedValue(), $accountHashFromTheTestnet);
 
         return $account;
@@ -180,7 +180,7 @@ class RpcClientTest extends TestCase
      */
     public function testGetAccountBalance(string $stateRootHash, Account $account): void
     {
-        $accountBalance = $this->rpcClient->getAccountBalance($stateRootHash, $account->getMainPurse());
+        $accountBalance = $this->rpcClient->getBalanceByStateRootHash($stateRootHash, $account->getMainPurse());
         $this->assertGreaterThanOrEqual(0, gmp_cmp($accountBalance, 0));
     }
 
@@ -190,8 +190,8 @@ class RpcClientTest extends TestCase
      */
     public function testQueryBalance(string $stateRootHash, Account $account): void
     {
-        $accountBalance = $this->rpcClient->queryBalance(
-            RpcClient::PURSE_IDENTIFIER_TYPE_UREF,
+        $accountBalance = $this->rpcClient->queryBalanceByStateRootHash(
+            'purse_uref',
             $account->getMainPurse()->parsedValue(),
             $stateRootHash
         );
@@ -224,11 +224,11 @@ class RpcClientTest extends TestCase
      * @depends testGetStateRootHash
      * @depends testGetAccount
      */
-    public function testGetBlockState(string $stateRootHash, Account $account): void
+    public function testGetStateItem(string $stateRootHash, Account $account): void
     {
         $accountHash = $account->getAccountHash()->parsedValue();
 
-        $blockState = $this->rpcClient->getBlockState($stateRootHash, $accountHash);
+        $blockState = $this->rpcClient->getStateItem($stateRootHash, $accountHash);
         $this->assertNotNull($blockState->getAccount());
         $this->assertEquals($accountHash, $blockState->getAccount()->getAccountHash()->parsedValue());
     }
@@ -237,7 +237,7 @@ class RpcClientTest extends TestCase
     {
         $blockHashFromTheTestnet = 'a1f829cff2389cf6637ed89fb2fab48351b1278c131ee8445e1e28333c9a44d0';
 
-        $blockTransfers = $this->rpcClient->getBlockTransfers($blockHashFromTheTestnet);
+        $blockTransfers = $this->rpcClient->getBlockTransfersByHash($blockHashFromTheTestnet);
         $this->assertNotEmpty($blockTransfers);
     }
 
@@ -245,7 +245,7 @@ class RpcClientTest extends TestCase
     {
         $switchingBlockHashFromTheTestnet = 'de8649985929090b7cb225e35a5a7b4087fb8fcb3d18c8c9a58da68e4eda8a2e';
 
-        $eraSummary = $this->rpcClient->getEraSummaryBySwitchBlockHash($switchingBlockHashFromTheTestnet);
+        $eraSummary = $this->rpcClient->getEraInfoByBlockHash($switchingBlockHashFromTheTestnet);
         $this->assertEquals(1, $eraSummary->getEraId());
         $this->assertEquals($switchingBlockHashFromTheTestnet, strtolower($eraSummary->getBlockHash()));
         $this->assertNotNull($eraSummary->getStoredValue()->getEraInfo());
@@ -266,7 +266,7 @@ class RpcClientTest extends TestCase
         $blockHashFromTheTestnet = '009516c04e6cb56d1d9b43070fd45cd80bf968739d39555282d8e66a8194e2e3';
         $deployHashFromTheTestnet = 'deploy-39cf80560c87af0e69eb4a2c49f2404842244eafc63c497a6c8eb92f89b3c102';
 
-        $globalState = $this->rpcClient->getGlobalStateByBlock($blockHashFromTheTestnet, $deployHashFromTheTestnet);
+        $globalState = $this->rpcClient->queryGlobalStateByBlockHash($blockHashFromTheTestnet, $deployHashFromTheTestnet);
         $this->assertEquals($deployHashFromTheTestnet, 'deploy-' . $globalState->getStoredValue()->getDeployInfo()->getDeployHash());
     }
 
@@ -274,7 +274,7 @@ class RpcClientTest extends TestCase
     {
         $blockHashFromTheTestnet = '009516c04e6cb56d1d9b43070fd45cd80bf968739d39555282d8e66a8194e2e3';
         $deployHashFromTheTestnet = 'deploy-39cf80560c87af0e69eb4a2c49f2404842244eafc63c497a6c8eb92f89b3c102';
-        $stateRootHash = $this->rpcClient->getStateRootHash($blockHashFromTheTestnet);
+        $stateRootHash = $this->rpcClient->getStateRootHashByHash($blockHashFromTheTestnet);
 
         $globalState = $this->rpcClient->getGlobalStateByStateRootHash($stateRootHash, $deployHashFromTheTestnet);
         $this->assertEquals($deployHashFromTheTestnet, 'deploy-' . $globalState->getStoredValue()->getDeployInfo()->getDeployHash());
@@ -282,7 +282,7 @@ class RpcClientTest extends TestCase
 
     public function testGetChainspecInfo(): void
     {
-        $chainspecInfo = $this->rpcClient->getChainspecInfo();
+        $chainspecInfo = $this->rpcClient->getChainspec();
         $this->assertNotEmpty($chainspecInfo->getChainspecBytes());
     }
 

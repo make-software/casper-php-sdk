@@ -2,26 +2,27 @@
 
 namespace Casper\Service;
 
-use Casper\Entity\DeployNamedArg;
-use Casper\Rpc\RpcClient;
 use Casper\Util\ByteUtil;
 use Casper\Util\Crypto\AsymmetricKey;
 
-use Casper\CLType\CLPublicKey;
+use Casper\Rpc\Client;
+use Casper\Rpc\RpcError;
 
-use Casper\Entity\Deploy;
-use Casper\Entity\DeployExecutable;
-use Casper\Entity\DeployParams;
+use Casper\Types\CLValue\CLPublicKey;
+use Casper\Types\Deploy;
+use Casper\Types\DeployExecutable;
+use Casper\Types\DeployParams;
+use Casper\Types\NamedArg;
 
 class ContractService
 {
-    private RpcClient $rpcClient;
+    private Client $client;
 
     private string $contractHash;
 
     /**
      * @param array $wasm                   Bytes array representation of a WebAssembly compiled smart contract
-     * @param DeployNamedArg[] $args        The runtime arguments for the installment deploy
+     * @param NamedArg[] $args              The runtime arguments for the installment deploy
      * @param string $paymentAmount         The gas payment in motes, where 1 mote = 10^-9 CSPR
      * @param CLPublicKey $sender           CLPublicKey of the sender of the installment deploy
      * @param string $chainName             The name of the network the installment deploy will be sent to. You can get the network name of a node by calling the REST endpoint `:8888/status`
@@ -37,7 +38,8 @@ class ContractService
         CLPublicKey $sender,
         string $chainName,
         array $signingKeys
-    ): Deploy {
+    ): Deploy
+    {
         $deploy = DeployService::makeDeploy(
             new DeployParams($sender, $chainName),
             DeployExecutable::newModuleBytes(ByteUtil::byteArrayToHex($wasm), $args),
@@ -52,47 +54,33 @@ class ContractService
     }
 
     /**
-     * @param RpcClient $rpcClient
-     * @param array $wasm
-     * @param DeployNamedArg[] $args
-     * @param string $paymentAmount
-     * @param CLPublicKey $sender
-     * @param string $chainName
-     * @param AsymmetricKey[] $signingKeys
-     *
-     * @return string
-     * @throws \Casper\Rpc\RpcError
+     * @throws RpcError
+     * @throws \Exception
      */
     public static function install(
-        RpcClient $rpcClient,
+        Client $client,
         array $wasm,
         array $args,
         string $paymentAmount,
         CLPublicKey $sender,
         string $chainName,
         array $signingKeys
-    ): string {
-        return $rpcClient->putDeploy(
-            self::createInstallDeploy(
-                $wasm,
-                $args,
-                $paymentAmount,
-                $sender,
-                $chainName,
-                $signingKeys
-            )
-        );
+    ): string
+    {
+        return $client
+            ->putDeploy(self::createInstallDeploy($wasm, $args, $paymentAmount, $sender, $chainName, $signingKeys))
+            ->getDeployHash();
     }
 
-    public function __construct(RpcClient $rpcClient, string $contractHash)
+    public function __construct(Client $client, string $contractHash)
     {
-        $this->rpcClient = $rpcClient;
+        $this->client = $client;
         $this->contractHash = $contractHash;
     }
 
     /**
      * @param string $entrypoint            Name of an entrypoint of a smart contract that you wish to call
-     * @param DeployNamedArg[] $args        The runtime arguments for the deploy
+     * @param NamedArg[] $args              The runtime arguments for the deploy
      * @param string $paymentAmount         The gas payment in motes, where 1 mote = 10^-9 CSPR.
      * @param CLPublicKey $sender           CLPublicKey of the sender of the deploy
      * @param string $chainName             The name of the network the installment deploy will be sent to. You can get the network name of a node by calling the REST endpoint `:8888/status`
@@ -110,7 +98,8 @@ class ContractService
         string $chainName,
         array $signingKeys,
         int $ttl = DeployParams::DEFAULT_TTL
-    ): Deploy {
+    ): Deploy
+    {
         $deploy = DeployService::makeDeploy(
             new DeployParams($sender, $chainName, 1, $ttl),
             DeployExecutable::newStoredContractByHash($entrypoint, $args, $this->contractHash),
@@ -125,16 +114,8 @@ class ContractService
     }
 
     /**
-     * @param string $entrypoint
-     * @param DeployNamedArg[] $args
-     * @param string $paymentAmount
-     * @param CLPublicKey $sender
-     * @param string $chainName
-     * @param AsymmetricKey[] $signingKeys
-     * @param int $ttl
-     *
-     * @return string
-     * @throws \Casper\Rpc\RpcError
+     * @throws RpcError
+     * @throws \Exception
      */
     public function callEntryPoint(
         string $entrypoint,
@@ -144,18 +125,14 @@ class ContractService
         string $chainName,
         array $signingKeys,
         int $ttl = DeployParams::DEFAULT_TTL
-    ): string {
-        return $this->rpcClient
+    ): string
+    {
+        return $this->client
             ->putDeploy(
                 self::createCallEntryPointDeploy(
-                    $entrypoint,
-                    $args,
-                    $paymentAmount,
-                    $sender,
-                    $chainName,
-                    $signingKeys,
-                    $ttl
+                    $entrypoint, $args, $paymentAmount, $sender, $chainName, $signingKeys, $ttl
                 )
-            );
+            )
+            ->getDeployHash();
     }
 }

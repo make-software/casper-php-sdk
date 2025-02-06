@@ -5,9 +5,6 @@ namespace Casper\Util\Crypto;
 use Casper\Util\ByteUtil;
 use Casper\Util\KeysUtil;
 
-/**
- * Ed25519 key implementation
- */
 final class Ed25519Key extends AsymmetricKey
 {
     /**

@@ -2,133 +2,135 @@
 
 namespace Casper\Rpc;
 
-use Casper\Serializer\AccountSerializer;
-use Casper\Serializer\AuctionStateSerializer;
-use Casper\Serializer\ChainspecRegistryBytesSerializer;
-use Casper\Serializer\CLAccountHashSerializer;
-use Casper\Serializer\CLPublicKeySerializer;
-use Casper\Serializer\CLURefSerializer;
-use Casper\Serializer\DeployExecutionResultSerializer;
-use Casper\Serializer\EraSummarySerializer;
-use Casper\Serializer\GlobalStateSerializer;
-use Casper\Serializer\PeerSerializer;
-use Casper\Serializer\BlockSerializer;
-use Casper\Serializer\DeploySerializer;
-use Casper\Serializer\StatusSerializer;
-use Casper\Serializer\StoredValueSerializer;
-use Casper\Serializer\TransferSerializer;
+use Casper\Rpc\ResultTypes\ChainGetBlockResult;
+use Casper\Rpc\ResultTypes\ChainGetBlockResultV1Compatible;
+use Casper\Rpc\ResultTypes\ChainGetBlockTransfersResult;
+use Casper\Rpc\ResultTypes\ChainGetEraInfoResult;
+use Casper\Rpc\ResultTypes\ChainGetEraSummaryResult;
+use Casper\Rpc\ResultTypes\ChainGetStateRootHashResult;
+use Casper\Rpc\ResultTypes\InfoGetChainspecResult;
+use Casper\Rpc\ResultTypes\InfoGetDeployResult;
+use Casper\Rpc\ResultTypes\InfoGetPeerResult;
+use Casper\Rpc\ResultTypes\InfoGetRewardResult;
+use Casper\Rpc\ResultTypes\InfoGetStatusResult;
+use Casper\Rpc\ResultTypes\InfoGetTransactionResult;
+use Casper\Rpc\ResultTypes\InfoGetTransactionResultV1Compatible;
+use Casper\Rpc\ResultTypes\InfoGetValidatorChangesResult;
+use Casper\Rpc\ResultTypes\PutDeployResult;
+use Casper\Rpc\ResultTypes\PutTransactionResult;
+use Casper\Rpc\ResultTypes\QueryBalanceDetailsResult;
+use Casper\Rpc\ResultTypes\QueryBalanceResult;
+use Casper\Rpc\ResultTypes\QueryGlobalStateResult;
+use Casper\Rpc\ResultTypes\StateGetAccountInfoResult;
+use Casper\Rpc\ResultTypes\StateGetAuctionInfoResult;
+use Casper\Rpc\ResultTypes\StateGetBalanceResult;
+use Casper\Rpc\ResultTypes\StateGetDictionaryResult;
+use Casper\Rpc\ResultTypes\StateGetEntityResult;
+use Casper\Rpc\ResultTypes\StateGetItemResult;
+use Casper\Types\CLValue\CLAccountHash;
+use Casper\Types\CLValue\CLPublicKey;
 
-use Casper\CLType\CLAccountHash;
-use Casper\CLType\CLURef;
-use Casper\CLType\CLPublicKey;
-
-use Casper\Entity\Account;
-use Casper\Entity\AuctionState;
-use Casper\Entity\Block;
-use Casper\Entity\ChainspecRegistryBytes;
-use Casper\Entity\Deploy;
-use Casper\Entity\DeployExecutionResult;
-use Casper\Entity\EraSummary;
-use Casper\Entity\GlobalState;
-use Casper\Entity\Peer;
-use Casper\Entity\Status;
-use Casper\Entity\StoredValue;
-use Casper\Entity\Transfer;
+use Casper\Types\Deploy;
+use Casper\Types\Serializer\DeploySerializer;
+use Casper\Types\Serializer\TransactionSerializer;
+use Casper\Types\Transaction;
 
 /**
  * Class for interacting with the network via RPC
  */
-class RpcClient
+class RpcClient implements Client
 {
-    private const ID = 1;
-    private const JSON_RPC = '2.0';
+    private const RPC_METHOD_INFO_GET_DEPLOY = 'info_get_deploy';
+    private const RPC_METHOD_INFO_GET_TRANSACTION = 'info_get_transaction';
 
-    private const RPC_METHOD_PUT_DEPLOY = 'account_put_deploy';
-    private const RPC_METHOD_GET_DEPLOY_INFO = 'info_get_deploy';
-    private const RPC_METHOD_GET_BLOCK_INFO = 'chain_get_block';
-    private const RPC_METHOD_GET_PEERS = 'info_get_peers';
-    private const RPC_METHOD_GET_STATUS = 'info_get_status';
-    private const RPC_METHOD_GET_VALIDATORS_INFO = 'state_get_auction_info';
-    private const RPC_METHOD_GET_STATE_ROOT_HASH = 'chain_get_state_root_hash';
-    private const RPC_METHOD_GET_BLOCK_STATE = 'state_get_item';
-    private const RPC_METHOD_GET_BLOCK_TRANSFERS = 'chain_get_block_transfers';
-    private const RPC_METHOD_GET_ACCOUNT_INFO = 'state_get_account_info';
-    private const RPC_METHOD_GET_ACCOUNT_BALANCE = 'state_get_balance';
-    private const RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK = 'chain_get_era_info_by_switch_block';
-    private const RPC_METHOD_GET_DICTIONARY_ITEM = 'state_get_dictionary_item';
+    private const RPC_METHOD_ACCOUNT_PUT_DEPLOY = 'account_put_deploy';
+    private const RPC_METHOD_ACCOUNT_PUT_TRANSACTION = 'account_put_transaction';
+    private const RPC_METHOD_CHAIN_GET_BLOCK = 'chain_get_block';
+    private const RPC_METHOD_INFO_GET_PEERS = 'info_get_peers';
+    private const RPC_METHOD_INFO_GET_STATUS = 'info_get_status';
+    private const RPC_METHOD_STATE_GET_AUCTION_INFO = 'state_get_auction_info';
+    private const RPC_METHOD_CHAIN_GET_STATE_ROOT_HASH = 'chain_get_state_root_hash';
+    private const RPC_METHOD_STATE_GET_ITEM = 'state_get_item';
+    private const RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS = 'chain_get_block_transfers';
+    private const RPC_METHOD_STATE_GET_ACCOUNT_INFO = 'state_get_account_info';
+    private const RPC_METHOD_STATE_GET_BALANCE = 'state_get_balance';
+    private const RPC_METHOD_CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK = 'chain_get_era_info_by_switch_block';
+    private const RPC_METHOD_STATE_GET_DICTIONARY_ITEM = 'state_get_dictionary_item';
     private const RPC_METHOD_QUERY_GLOBAL_STATE = 'query_global_state';
-    private const RPC_METHOD_SPECULATIVE_EXEC = 'speculative_exec';
     private const RPC_METHOD_QUERY_BALANCE = 'query_balance';
+    private const RPC_METHOD_QUERY_BALANCE_DETAILS = 'query_balance_details';
     private const RPC_METHOD_INFO_GET_CHAINSPEC = 'info_get_chainspec';
+    private const RPC_METHOD_INFO_GET_VALIDATOR_CHANGES = 'info_get_validator_changes';
+    private const RPC_METHOD_STATE_GET_ENTITY = 'state_get_entity';
+    private const RPC_METHOD_CHAIN_GET_ERA_SUMMARY = 'chain_get_era_summary';
+    private const RPC_METHOD_INFO_GET_REWARD = 'info_get_reward';
 
     public const PURSE_IDENTIFIER_TYPE_UREF = 'purse_uref';
     public const PURSE_IDENTIFIER_TYPE_MAIN_PURSE_UNDER_PUBLIC_KEY = 'main_purse_under_public_key';
     public const PURSE_IDENTIFIER_TYPE_MAIN_PURSE_UNDER_ACCOUNT_HASH = 'main_purse_under_account_hash';
 
-    private string $nodeUrl;
+    private Handler $handler;
 
-    private array $headers;
-
-    private ?string $lastApiVersion = null;
-
-    public function __construct(string $nodeUrl, array $headers = array())
+    public function __construct(Handler $handler)
     {
-        $this->nodeUrl = $nodeUrl;
-        $this->headers = $headers;
-    }
-
-    public function getLastApiVersion(): ?string
-    {
-        return $this->lastApiVersion;
-    }
-
-    /**
-     * Put deploy into the network
-     *
-     * @param Deploy $deploy
-     * @return string
-     *
-     * @throws RpcError
-     */
-    public function putDeploy(Deploy $deploy): string
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_PUT_DEPLOY,
-            array(
-                'deploy' => DeploySerializer::toJson($deploy)
-            )
-        );
-
-        return $response['deploy_hash'];
-    }
-
-    /**
-     * Obtain a deploy from the network by deploy hash
-     *
-     * @param string $deployHash
-     * @return Deploy
-     *
-     * @throws \Exception
-     */
-    public function getDeploy(string $deployHash): Deploy
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_DEPLOY_INFO,
-            array(
-                'deploy_hash' => $deployHash
-            )
-        );
-
-        return DeploySerializer::fromJson($response['deploy']);
+        $this->handler = $handler;
     }
 
     /**
      * @throws RpcError
      */
-    public function getBlockByHash(string $blockHash): Block
+    public function getLatestAuctionInfo(): StateGetAuctionInfoResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_BLOCK_INFO,
+        return StateGetAuctionInfoResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_STATE_GET_AUCTION_INFO)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getAuctionInfoByHash(string $blockHash): StateGetAuctionInfoResult
+    {
+        return StateGetAuctionInfoResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_STATE_GET_AUCTION_INFO, array(
+                'block_identifier' => array(
+                    'Hash' => $blockHash
+                )
+            ))
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getAuctionInfoByHeight(int $blockHeight): StateGetAuctionInfoResult
+    {
+        return StateGetAuctionInfoResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_STATE_GET_AUCTION_INFO, array(
+                'block_identifier' => array(
+                    'Height' => $blockHeight
+                )
+            ))
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEraInfoLatest(): ChainGetEraInfoResult
+    {
+        return ChainGetEraInfoResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEraInfoByBlockHash(string $blockHash): ChainGetEraInfoResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK,
             array(
                 'block_identifier' => array(
                     'Hash' => $blockHash
@@ -136,232 +138,158 @@ class RpcClient
             )
         );
 
-        if (isset($response['block']) && $response['block']['hash'] !== $blockHash) {
-            throw new RpcError('Returned block does not have a matching hash');
-        }
-
-        return BlockSerializer::fromJson($response['block']);
+        return ChainGetEraInfoResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
      */
-    public function getBlockByHeight(int $height): Block
+    public function getEraInfoByBlockHeight(int $blockHeight): ChainGetEraInfoResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_BLOCK_INFO,
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK,
             array(
                 'block_identifier' => array(
-                    'Height' => $height
+                    'Height' => $blockHeight
                 )
             )
         );
 
-        if (isset($response['block']) && $response['block']['header']['height'] !== $height) {
-            throw new RpcError('Returned block does not have a matching height');
-        }
-
-        return BlockSerializer::fromJson($response['block']);
+        return ChainGetEraInfoResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
      */
-    public function getLatestBlock(): Block
+    public function GetValidatorChangesInfo(): InfoGetValidatorChangesResult
     {
-        return BlockSerializer::fromJson(
-            $this->rpcCallMethod(self::RPC_METHOD_GET_BLOCK_INFO)['block']
-        );
-    }
-
-    /**
-     * @return Peer[]
-     * @throws RpcError
-     */
-    public function getPeers(): array
-    {
-        return PeerSerializer::fromJsonArray(
-            $this->rpcCallMethod(self::RPC_METHOD_GET_PEERS)['peers']
-        );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function getStatus(): Status
-    {
-        return StatusSerializer::fromJson(
-            $this->rpcCallMethod(self::RPC_METHOD_GET_STATUS)
+        return InfoGetValidatorChangesResult::fromJson(
+            $this->processRequest(self::RPC_METHOD_INFO_GET_VALIDATOR_CHANGES)
         );
     }
 
     /**
      * @throws RpcError
      */
-    public function getAuctionState(): AuctionState
+    public function getLatestBalance(string $purseURef): StateGetBalanceResult
     {
-        return AuctionStateSerializer::fromJson(
-            $this->rpcCallMethod(self::RPC_METHOD_GET_VALIDATORS_INFO)['auction_state']
+        return self::getBalanceByStateRootHash(
+            $purseURef,
+            self::getStateRootHashLatest()->getStateRootHash()
         );
     }
 
     /**
      * @throws RpcError
      */
-    public function getStateRootHash(string $blockHash = ''): string
+    public function getBalanceByStateRootHash(string $purseURef, string $stateRootHash): StateGetBalanceResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_STATE_ROOT_HASH,
-            $blockHash ? [array('Hash' => $blockHash)] : []
-        );
-
-        return $response['state_root_hash'];
-    }
-
-    public function getAccount(string $blockHash, CLPublicKey $publicKey): Account
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_ACCOUNT_INFO,
-            array(
-                'block_identifier' => array(
-                    'Hash' => $blockHash
-                ),
-                'public_key' => CLPublicKeySerializer::toHex($publicKey),
-            )
-        );
-
-        return AccountSerializer::fromJson($response['account']);
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function getAccountBalance(string $stateRootHash, CLURef $balanceUref): \GMP
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_ACCOUNT_BALANCE,
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_BALANCE,
             array(
                 'state_root_hash' => $stateRootHash,
-                self::PURSE_IDENTIFIER_TYPE_UREF => CLURefSerializer::toString($balanceUref),
+                'purse_uref' => $purseURef,
             )
         );
 
-        return gmp_init($response['balance_value']);
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function queryBalance(
-        string $purseIdentifierType,
-        string $purseIdentifier,
-        string $stateRootHash = null
-    ): \GMP
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_QUERY_BALANCE,
-            array(
-                'purse_identifier' => array(
-                    $purseIdentifierType => $purseIdentifier
-                ),
-                'state_identifier' => $stateRootHash
-                    ? array('StateRootHash' => $stateRootHash)
-                    : null
-            )
-        );
-
-        return gmp_init($response['balance']);
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function getAccountBalanceUrefByAccountHash(string $stateRootHash, CLAccountHash $accountHash): CLURef
-    {
-        return $this->getBlockState($stateRootHash, $accountHash->parsedValue())
-            ->getAccount()
-            ->getMainPurse();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function getAccountBalanceUrefByPublicKey(string $stateRootHsh, CLPublicKey $publicKey): CLURef
-    {
-        return $this->getAccountBalanceUrefByAccountHash(
-            $stateRootHsh,
-            CLAccountHashSerializer::fromString($publicKey->toAccountHashString())
-        );
+        return StateGetBalanceResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
      * @throws \Exception
      */
-    public function getBlockState(string $stateRootHash, string $key, array $path = []): StoredValue
+    public function getDeploy(string $deployHash): InfoGetDeployResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_BLOCK_STATE,
-            array(
-                'state_root_hash' => $stateRootHash,
-                'key' => $key,
-                'path' => $path,
-            )
-        );
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_DEPLOY, array(
+            'deploy_hash' => $deployHash
+        ));
 
-        return StoredValueSerializer::fromJson($response['stored_value']);
-    }
-
-    /**
-     * @return Transfer[]
-     * @throws RpcError
-     */
-    public function getBlockTransfers(string $blockHash = null): array
-    {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_BLOCK_TRANSFERS,
-            array('block_identifier' => ($blockHash ? array('Hash' => $blockHash) : null))
-        );
-
-        return TransferSerializer::fromJsonArray($response['transfers']);
+        return InfoGetDeployResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
+     * @throws \Exception
      */
-    public function getEraSummaryBySwitchBlockHash(string $blockHash): ?EraSummary
+    public function getDeployFinalizedApproval(string $deployHash): InfoGetDeployResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
-            array(
-                'block_identifier' => array(
-                    'Hash' => $blockHash
-                )
-            )
-        );
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_DEPLOY, array(
+            'deploy_hash' => $deployHash,
+            'finalized_approvals' => true
+        ));
 
-        return isset($response['era_summary'])
-            ? EraSummarySerializer::fromJson($response['era_summary'])
-            : null;
+        return InfoGetDeployResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
+     * @throws \Exception
      */
-    public function getEraSummaryBySwitchBlockHeight(int $height): ?EraSummary
+    public function getTransactionByTransactionHash(string $transactionHash): InfoGetTransactionResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_ERA_INFO_BY_SWITCH_BLOCK,
-            array(
-                'block_identifier' => array(
-                    'Height' => $height
-                )
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_TRANSACTION, array(
+            'transaction_hash' => array(
+                'Version1' => $transactionHash
             )
-        );
+        ));
 
-        return isset($response['era_summary'])
-            ? EraSummarySerializer::fromJson($response['era_summary'])
-            : null;
+        return InfoGetTransactionResult::fromInfoGetTransactionResultV1Compatible(
+            InfoGetTransactionResultV1Compatible::fromJSON($result)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getTransactionByDeployHash(string $deployHash): InfoGetTransactionResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_TRANSACTION, array(
+            'transaction_hash' => array(
+                'Deploy' => $deployHash
+            )
+        ));
+
+        return InfoGetTransactionResult::fromInfoGetTransactionResultV1Compatible(
+            InfoGetTransactionResultV1Compatible::fromJSON($result)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getTransactionFinalizedApprovalByTransactionHash(string $transactionHash): InfoGetTransactionResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_TRANSACTION, array(
+            'transaction_hash' => array(
+                'Version1' => $transactionHash
+            ),
+            'finalized_approvals' => true
+        ));
+
+        return InfoGetTransactionResult::fromInfoGetTransactionResultV1Compatible(
+            InfoGetTransactionResultV1Compatible::fromJSON($result)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getTransactionFinalizedApprovalByDeployHash(string $deployHash): InfoGetTransactionResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_INFO_GET_TRANSACTION, array(
+            'transaction_hash' => array(
+                'Deploy' => $deployHash
+            ),
+            'finalized_approvals' => true
+        ));
+
+        return InfoGetTransactionResult::fromInfoGetTransactionResultV1Compatible(
+            InfoGetTransactionResultV1Compatible::fromJSON($result)
+        );
     }
 
     /**
@@ -371,10 +299,10 @@ class RpcClient
         string $stateRootHash,
         string $dictionaryItemKey,
         string $seedUref
-    ): StoredValue
+    ): StateGetDictionaryResult
     {
-        $response = $this->rpcCallMethod(
-            self::RPC_METHOD_GET_DICTIONARY_ITEM,
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_DICTIONARY_ITEM,
             array(
                 'state_root_hash' => $stateRootHash,
                 'dictionary_identifier' => array(
@@ -386,15 +314,99 @@ class RpcClient
             )
         );
 
-        return StoredValueSerializer::fromJson($response['stored_value']);
+        return StateGetDictionaryResult::fromJSON($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getDictionaryItemByContractNamedKey(
+        string $stateRootHash,
+        string $dictionaryItemKey,
+        string $dictionaryName
+    ): StateGetDictionaryResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_DICTIONARY_ITEM,
+            array(
+                'state_root_hash' => $stateRootHash,
+                'dictionary_identifier' => array(
+                    'ContractNamedKey' => array(
+                        'dictionary_name' => $dictionaryName,
+                        'dictionary_item_key' => $dictionaryItemKey,
+                    )
+                )
+            )
+        );
+
+        return StateGetDictionaryResult::fromJSON($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getDictionaryItemByAccountNamedKey(
+        string $stateRootHash,
+        string $dictionaryItemKey,
+        string $dictionaryName
+    ): StateGetDictionaryResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_DICTIONARY_ITEM,
+            array(
+                'state_root_hash' => $stateRootHash,
+                'dictionary_identifier' => array(
+                    'AccountNamedKey' => array(
+                        'dictionary_name' => $dictionaryName,
+                        'dictionary_item_key' => $dictionaryItemKey,
+                    )
+                )
+            )
+        );
+
+        return StateGetDictionaryResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getStateItem(string $stateRootHash, string $key, array $path = []): StateGetItemResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_ITEM,
+            array(
+                'state_root_hash' => $stateRootHash,
+                'key' => $key,
+                'path' => $path,
+            )
+        );
+
+        return StateGetItemResult::fromJson($result);
     }
 
     /**
      * @throws RpcError
      */
-    public function getGlobalStateByBlock(string $blockHash, string $key, array $path = []): GlobalState
+    public function queryLatestGlobalState(string $key, array $path = []): QueryGlobalStateResult
     {
-        $response = $this->rpcCallMethod(
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_GLOBAL_STATE,
+            array(
+                'key' => $key,
+                'path' => $path,
+            )
+        );
+
+        return QueryGlobalStateResult::fromJson($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryGlobalStateByBlockHash(string $blockHash, string $key, array $path = []): QueryGlobalStateResult
+    {
+        $result = $this->processRequest(
             self::RPC_METHOD_QUERY_GLOBAL_STATE,
             array(
                 'state_identifier' => array(
@@ -405,15 +417,34 @@ class RpcClient
             )
         );
 
-        return GlobalStateSerializer::fromJson($response);
+        return QueryGlobalStateResult::fromJson($result);
     }
 
     /**
      * @throws RpcError
      */
-    public function getGlobalStateByStateRootHash(string $stateRootHash, string $key, array $path = []): GlobalState
+    public function queryGlobalStateByBlockHeight(int $blockHeight, string $key, array $path = []): QueryGlobalStateResult
     {
-        $response = $this->rpcCallMethod(
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_GLOBAL_STATE,
+            array(
+                'state_identifier' => array(
+                    'BlockHeight' => $blockHeight
+                ),
+                'key' => $key,
+                'path' => $path,
+            )
+        );
+
+        return QueryGlobalStateResult::fromJson($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryGlobalStateByStateRootHash(string $stateRootHash, string $key, array $path = []): QueryGlobalStateResult
+    {
+        $result = $this->processRequest(
             self::RPC_METHOD_QUERY_GLOBAL_STATE,
             array(
                 'state_identifier' => array(
@@ -424,78 +455,707 @@ class RpcClient
             )
         );
 
-        return GlobalStateSerializer::fromJson($response);
+        return QueryGlobalStateResult::fromJson($result);
     }
 
     /**
      * @throws RpcError
      */
-    public function getChainspecInfo(): ChainspecRegistryBytes
+    public function getAccountInfoByBlockHash(string $blockHash, CLPublicKey $publicKey): StateGetAccountInfoResult
     {
-        return ChainspecRegistryBytesSerializer::fromJson(
-            $this->rpcCallMethod(self::RPC_METHOD_INFO_GET_CHAINSPEC)['chainspec_bytes']
-        );
-    }
-
-    /**
-     * @throws RpcError
-     */
-    public function speculativeExecution(Deploy $signedDeploy, string $blockHash = null): DeployExecutionResult
-    {
-        $params = array(
-            'deploy' => DeploySerializer::toJson($signedDeploy)
-        );
-
-        if ($blockHash !== null) {
-            $params['block_identifier'] = array(
+        $result = $this->processRequest(self::RPC_METHOD_STATE_GET_ACCOUNT_INFO, array(
+            'block_identifier' => array(
                 'Hash' => $blockHash
-            );
-        }
+            ),
+            'public_key' => $publicKey->toHex(),
+        ));
 
-        return DeployExecutionResultSerializer::fromJson(
-            $this->rpcCallMethod(self::RPC_METHOD_SPECULATIVE_EXEC, $params)
-        );
+        return StateGetAccountInfoResult::fromJSON($result);
     }
 
     /**
      * @throws RpcError
      */
-    private function rpcCallMethod(string $method, array $params = array()): array
+    public function getAccountInfoByBlockHeight(int $blockHeight, CLPublicKey $publicKey): StateGetAccountInfoResult
     {
-        $url = $this->nodeUrl . '/rpc';
-        $curl = curl_init($url);
+        $result = $this->processRequest(self::RPC_METHOD_STATE_GET_ACCOUNT_INFO, array(
+            'block_identifier' => array(
+                'Height' => $blockHeight
+            ),
+            'public_key' => $publicKey->toHex(),
+        ));
 
-        $headers = ['Accept: application/json', 'Content-type: application/json'];
-        foreach ($this->headers as $name => $value) {
-            $headers[] = "$name: $value";
-        }
+        return StateGetAccountInfoResult::fromJSON($result);
+    }
 
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(
+    /**
+     * @throws RpcError
+     */
+    public function getEntityByAccountHashAndBlockHash(CLAccountHash $accountHash, string $blockHash): StateGetEntityResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_ENTITY,
             array(
-                'id' => self::ID,
-                'jsonrpc' => self::JSON_RPC,
-                'method' => $method,
-                'params' => $params
+                'entity_identifier' => array(
+                    'AccountHash' => $accountHash->parsedValue(),
+                ),
+                'block_identifier' => array(
+                    'Hash' => $blockHash,
+                )
+            )
+        );
+
+        return StateGetEntityResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEntityByAccountHashAndBlockHeight(CLAccountHash $accountHash, int $blockHeight): StateGetEntityResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_ENTITY,
+            array(
+                'entity_identifier' => array(
+                    'AccountHash' => $accountHash->parsedValue(),
+                ),
+                'block_identifier' => array(
+                    'Height' => $blockHeight,
+                )
+            )
+        );
+
+        return StateGetEntityResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEntityByPublicKeyAndBlockHash(CLPublicKey $publicKey, string $blockHash): StateGetEntityResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_ENTITY,
+            array(
+                'entity_identifier' => array(
+                    'PublicKey' => $publicKey->parsedValue(),
+                ),
+                'block_identifier' => array(
+                    'Hash' => $blockHash,
+                )
+            )
+        );
+
+        return StateGetEntityResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEntityByPublicKeyAndBlockHeight(CLPublicKey $publicKey, int $blockHeight): StateGetEntityResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_STATE_GET_ENTITY,
+            array(
+                'entity_identifier' => array(
+                    'PublicKey' => $publicKey->parsedValue(),
+                ),
+                'block_identifier' => array(
+                    'Height' => $blockHeight,
+                )
+            )
+        );
+
+        return StateGetEntityResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getLatestBlock(): ChainGetBlockResult
+    {
+        return ChainGetBlockResult::fromChainGetBlockResultV1Compatible(
+            ChainGetBlockResultV1Compatible::fromJSON(
+                $this->processRequest(self::RPC_METHOD_CHAIN_GET_BLOCK)
+            )
+        );
+    }
+
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getBlockByHash(string $blockHash): ChainGetBlockResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_CHAIN_GET_BLOCK, array(
+            'block_identifier' => array(
+                'Hash' => $blockHash
             )
         ));
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+        return ChainGetBlockResult::fromChainGetBlockResultV1Compatible(
+            ChainGetBlockResultV1Compatible::fromJSON($result)
+        );
+    }
 
-        $decodedResponse = json_decode($response, true);
+    /**
+     * @throws RpcError
+     * @throws \Exception
+     */
+    public function getBlockByHeight(int $blockHeight): ChainGetBlockResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_CHAIN_GET_BLOCK, array(
+            'block_identifier' => array(
+                'Height' => $blockHeight
+            )
+        ));
 
-        if ($decodedResponse === null || isset($decodedResponse['error'])) {
-            $message = $decodedResponse['error']['message'] ?? 'Empty response';
-            $code = $decodedResponse['error']['code'] ?? 0;
+        return ChainGetBlockResult::fromChainGetBlockResultV1Compatible(
+            ChainGetBlockResultV1Compatible::fromJSON($result)
+        );
+    }
 
-            throw new RpcError($message, $code);
+    /**
+     * @throws RpcError
+     */
+    public function getLatestBlockTransfers(): ChainGetBlockTransfersResult
+    {
+        return ChainGetBlockTransfersResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getBlockTransfersByHash(string $blockHash = null): ChainGetBlockTransfersResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS,
+            array(
+                'block_identifier' => array(
+                    'Hash' => $blockHash
+                )
+            )
+        );
+
+        return ChainGetBlockTransfersResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getBlockTransfersByHeight(int $blockHeight = null): ChainGetBlockTransfersResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS,
+            array(
+                'block_identifier' => array(
+                    'Height' => $blockHeight
+                )
+            )
+        );
+
+        return ChainGetBlockTransfersResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEraSummaryLatest(): ChainGetEraSummaryResult
+    {
+        return ChainGetEraSummaryResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_CHAIN_GET_ERA_SUMMARY)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEraSummaryByHash(string $blockHash): ChainGetEraSummaryResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_ERA_SUMMARY,
+            array(
+                'block_identifier' => array(
+                    'Hash' => $blockHash
+                )
+            )
+        );
+
+        return ChainGetEraSummaryResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getEraSummaryByHeight(int $blockHeight): ChainGetEraSummaryResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_CHAIN_GET_ERA_SUMMARY,
+            array(
+                'block_identifier' => array(
+                    'Height' => $blockHeight
+                )
+            )
+        );
+
+        return ChainGetEraSummaryResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getStateRootHashLatest(): ChainGetStateRootHashResult
+    {
+        return ChainGetStateRootHashResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_CHAIN_GET_STATE_ROOT_HASH)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getStateRootHashByHash(string $blockHash): ChainGetStateRootHashResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_CHAIN_GET_STATE_ROOT_HASH, array(
+            'block_identifier' => array(
+                'Hash' => $blockHash
+            )
+        ));
+
+        return ChainGetStateRootHashResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getStateRootHashByHeight(int $blockHeight): ChainGetStateRootHashResult
+    {
+        $result = $this->processRequest(self::RPC_METHOD_CHAIN_GET_STATE_ROOT_HASH, array(
+            'block_identifier' => array(
+                'Height' => $blockHeight
+            )
+        ));
+
+        return ChainGetStateRootHashResult::fromJSON($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getStatus(): InfoGetStatusResult
+    {
+        return InfoGetStatusResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_INFO_GET_STATUS)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getPeers(): InfoGetPeerResult
+    {
+        return InfoGetPeerResult::fromJSON(
+            $this->processRequest(self::RPC_METHOD_INFO_GET_PEERS)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryLatestBalance(string $purseIdentifierType, string $purseIdentifier): QueryBalanceResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE_DETAILS,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                )
+            )
+        );
+
+        return QueryBalanceResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceByBlockHeight(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        int $blockHeight
+    ): QueryBalanceResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'BlockHeight' => $blockHeight
+                )
+            )
+        );
+
+        return QueryBalanceResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceByBlockHash(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        string $blockHash
+    ): QueryBalanceResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'BlockHash' => $blockHash
+                )
+            )
+        );
+
+        return QueryBalanceResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceByStateRootHash(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        string $stateRootHash
+    ): QueryBalanceResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'StateRootHash' => $stateRootHash
+                )
+            )
+        );
+
+        return QueryBalanceResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryLatestBalanceDetails(
+        string $purseIdentifierType,
+        string $purseIdentifier
+    ): QueryBalanceDetailsResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE_DETAILS,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+            )
+        );
+
+        return QueryBalanceDetailsResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceDetailsByBlockHash(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        string $blockHash
+    ): QueryBalanceDetailsResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE_DETAILS,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'BlockHash' => $blockHash
+                )
+            )
+        );
+
+        return QueryBalanceDetailsResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceDetailsByBlockHeight(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        int $blockHeight
+    ): QueryBalanceDetailsResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE_DETAILS,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'BlockHeight' => $blockHeight
+                )
+            )
+        );
+
+        return QueryBalanceDetailsResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function queryBalanceDetailsByStateRootHash(
+        string $purseIdentifierType,
+        string $purseIdentifier,
+        string $stateRootHash
+    ): QueryBalanceDetailsResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_QUERY_BALANCE_DETAILS,
+            array(
+                'purse_identifier' => array(
+                    $purseIdentifierType => $purseIdentifier
+                ),
+                'state_identifier' => array(
+                    'StateRootHash' => $stateRootHash
+                )
+            )
+        );
+
+        return QueryBalanceDetailsResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getChainspec(): InfoGetChainspecResult
+    {
+        return InfoGetChainspecResult::fromJson(
+            $this->processRequest(self::RPC_METHOD_INFO_GET_CHAINSPEC)
+        );
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getLatestValidatorReward(CLPublicKey $validator): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue()
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getValidatorRewardByEraID(CLPublicKey $validator, int $eraID): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'era_identifier' => array(
+                    'Era' => $eraID
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getValidatorRewardByBlockHash(CLPublicKey $validator, string $blockHash): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'era_identifier' => array(
+                    'Block' => array(
+                        'Hash' => $blockHash
+                    )
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getValidatorRewardByBlockHeight(CLPublicKey $validator, int $blockHeight): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'era_identifier' => array(
+                    'Block' => array(
+                        'Height' => $blockHeight
+                    )
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getLatestDelegatorReward(CLPublicKey $validator, CLPublicKey $delegator): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'delegator' => $delegator->parsedValue(),
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getDelegatorRewardByEraID(
+        CLPublicKey $validator,
+        CLPublicKey $delegator,
+        int $eraID
+    ): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'delegator' => $delegator->parsedValue(),
+                'era_identifier' => array(
+                    'Era' => $eraID
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getDelegatorRewardByBlockHash(
+        CLPublicKey $validator,
+        CLPublicKey $delegator,
+        string $blockHash
+    ): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'delegator' => $delegator->parsedValue(),
+                'era_identifier' => array(
+                    'Block' => array(
+                        'Hash' => $blockHash
+                    )
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function getDelegatorRewardByBlockHeight(
+        CLPublicKey $validator,
+        CLPublicKey $delegator,
+        int $blockHeight
+    ): InfoGetRewardResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_INFO_GET_REWARD,
+            array(
+                'validator' => $validator->parsedValue(),
+                'delegator' => $delegator->parsedValue(),
+                'era_identifier' => array(
+                    'Block' => array(
+                        'Height' => $blockHeight
+                    )
+                )
+            )
+        );
+
+        return InfoGetRewardResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function putDeploy(Deploy $deploy): PutDeployResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_ACCOUNT_PUT_DEPLOY,
+            array(
+                'deploy' => DeploySerializer::toJson($deploy)
+            )
+        );
+
+        return PutDeployResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    public function putTransaction(Transaction $transaction): PutTransactionResult
+    {
+        $result = $this->processRequest(
+            self::RPC_METHOD_ACCOUNT_PUT_TRANSACTION,
+            array(
+                'transaction' => TransactionSerializer::toJson($transaction)
+            )
+        );
+
+        return PutTransactionResult::fromJSON($result);
+    }
+
+    /**
+     * @throws RpcError
+     */
+    private function processRequest(string $method, array $params = array()): ?array
+    {
+        $rpcResponse = $this->handler
+            ->processCall(new RpcRequest($method, $params));
+
+        if ($rpcResponse->getError()) {
+            throw $rpcResponse->getError();
         }
 
-        $this->lastApiVersion = $decodedResponse['result']['api_version'];
-        return $decodedResponse['result'];
+        return $rpcResponse->getResult();
     }
 }
