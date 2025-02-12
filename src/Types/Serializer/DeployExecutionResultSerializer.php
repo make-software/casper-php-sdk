@@ -21,7 +21,7 @@ class DeployExecutionResultSerializer extends JsonSerializer
     {
         return new DeployExecutionResult(
             $json['block_hash'],
-            ExecutionResultV1Serializer::fromJson($json['execution_result'])
+            ExecutionResultV1Serializer::fromJson($json['result'])
         );
     }
 }

@@ -3,8 +3,7 @@
 namespace Casper\Rpc\ResultTypes;
 
 use Casper\Types\ExecutionInfo;
-use Casper\Types\Serializer\ExecutionInfoSerializer;
-use Casper\Types\Serializer\TransactionSerializer;
+use Casper\Types\InitiatorAddr;
 use Casper\Types\Transaction;
 
 class InfoGetTransactionResult extends AbstractResult
@@ -36,13 +35,25 @@ class InfoGetTransactionResult extends AbstractResult
                 );
             }
         }
+        else if ($infoGetTransactionResultV1Compatible->getDeploy()) {
+            if ($infoGetTransactionResultV1Compatible->getExecutionResults()) {
+                $executionInfo = ExecutionInfo::fromV1(
+                    $infoGetTransactionResultV1Compatible->getExecutionResults(),
+                    $infoGetTransactionResultV1Compatible->getBlockHeight(),
+                    new InitiatorAddr($infoGetTransactionResultV1Compatible->getDeploy()->getHeader()->getPublicKey(), null)
+                );
+            }
 
-//        return new self(
-//            $json['api_version'],
-//            $json,
-//            TransactionSerializer::fromJson($json['transaction']),
-//            $json['execution_info'] ? ExecutionInfoSerializer::fromJson($json['execution_info']) : null
-//        );
+            return new self(
+                $infoGetTransactionResultV1Compatible->getRawJSON(),
+                Transaction::newTransactionFromDeploy(
+                    $infoGetTransactionResultV1Compatible->getDeploy()
+                ),
+                $executionInfo ?? $infoGetTransactionResultV1Compatible->getExecutionInfo()
+            );
+        }
+
+        throw new \Exception('Incorrect RPC response structure');
     }
 
     public function __construct(

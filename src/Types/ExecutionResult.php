@@ -2,6 +2,8 @@
 
 namespace Casper\Types;
 
+use Casper\Types\Serializer\TransformSerializer;
+
 class ExecutionResult
 {
     private ?InitiatorAddr $initiatorAddr;
@@ -31,6 +33,50 @@ class ExecutionResult
     private ?ExecutionResultV1 $originExecutionResultV1;
 
     private ?ExecutionResultV2 $originExecutionResultV2;
+
+    public static function fromV1(ExecutionResultV1 $executionResultV1, ?InitiatorAddr $initiatorAddr = null): self
+    {
+        if ($executionResultV1->getSuccess()) {
+            $transforms = [];
+            $transfers = [];
+
+            foreach ($executionResultV1->getSuccess()->getEffect()->getTransforms() as $transform) {
+                $transforms[] = $transform;
+
+                if (is_array($transform->getKind()) && !array_key_exists('WriteTransfer', $transform->getKind())) {
+                    continue;
+                }
+
+                $writeTransfer = $transform->getKind();
+                if($writeTransfer === null) {
+                    continue;
+                }
+
+                $transfers[] = $writeTransfer;
+            }
+
+            $consumed = $executionResultV1->getSuccess()->getCost();
+            return new self(
+                $initiatorAddr, null, gmp_init(0), $consumed, gmp_init(0), null, $transfers, null, $transforms, $executionResultV1, null
+            );
+        }
+        else if ($executionResultV1->getFailure()) {
+            $transforms = [];
+            foreach ($executionResultV1->getFailure()->getEffect()->getTransforms() as $transform) {
+                $transforms[] = TransformSerializer::fromJson($transform);
+            }
+
+            $errorMessage = $executionResultV1->getFailure()->getErrorMessage();
+            $consumed = $executionResultV1->getFailure()->getCost();
+
+            return new self(
+                $initiatorAddr, $errorMessage, null, $consumed, null, null, null, null, $transforms, $executionResultV1, null
+            );
+        }
+        else {
+            throw new \Exception('Invalid ExecutionResultV1 structure');
+        }
+    }
 
     public function __construct(
         ?InitiatorAddr $initiatorAddr,

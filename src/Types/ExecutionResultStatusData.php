@@ -4,8 +4,6 @@ namespace Casper\Types;
 
 class ExecutionResultStatusData
 {
-    private string $status;
-
     private Effect $effect;
 
     /**
@@ -15,20 +13,14 @@ class ExecutionResultStatusData
 
     private \GMP $cost;
 
-    private ?string $errorMessage = null;
+    private ?string $errorMessage;
 
-    public function __construct(string $status, Effect $effect, array $transfers, \GMP $cost, ?string $errorMessage)
+    public function __construct(Effect $effect, array $transfers, \GMP $cost, ?string $errorMessage = null)
     {
-        $this->status = $status;
         $this->effect = $effect;
         $this->transfers = $transfers;
         $this->cost = $cost;
         $this->errorMessage = $errorMessage;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
     }
 
     public function getEffect(): Effect

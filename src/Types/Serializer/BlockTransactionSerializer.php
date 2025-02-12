@@ -11,7 +11,10 @@ class BlockTransactionSerializer extends JsonSerializer
      */
     public static function toJson($blockTransaction): array
     {
-        return array();
+        return array(
+            'category' => $blockTransaction->getCategory(),
+            $blockTransaction->getVersion() => $blockTransaction->getHash()
+        );
     }
 
     public static function fromJson(array $json): BlockTransaction

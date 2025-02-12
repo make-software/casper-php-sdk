@@ -46,38 +46,9 @@ class ExecutionResultSerializer extends JsonSerializer
             );
         }
         else if (isset($json['Version1'])) {
-            $executionResultV1 = ExecutionResultV1Serializer::fromJson($json['Version1']);
-
-            // TODO: Implement from Version1
-            if ($executionResultV1->getSuccess()) {
-//                $transforms = [];
-//                foreach ($executionResultV1->getSuccess()->getEffect()->getTransforms() as $transform) {
-//                    $transforms[] = TransformSerializer::fromJson($transform);
-//
-//                    if ($transform->)
-//                }
-//
-//                $consumed = $executionResultV1->getSuccess()->getCost();
-//                return new ExecutionResult(
-//                    null, null, 0, $consumed, 0, null, $transfers, null, $transforms, $executionResultV1, null
-//                );
-            }
-            else if ($executionResultV1->getFailure()) {
-                $transforms = [];
-                foreach ($executionResultV1->getFailure()->getEffect()->getTransforms() as $transform) {
-                    $transforms[] = TransformSerializer::fromJson($transform);
-                }
-
-                $errorMessage = $executionResultV1->getFailure()->getErrorMessage();
-                $consumed = $executionResultV1->getFailure()->getCost();
-
-                return new ExecutionResult(
-                    null, $errorMessage, null, $consumed, null, null, null, null, $transforms, $executionResultV1, null
-                );
-            }
-            else {
-                throw new \Exception('Invalid ExecutionResultV1 structure');
-            }
+            return ExecutionResult::fromV1(
+                ExecutionResultV1Serializer::fromJson($json['Version1'])
+            );
         }
 
         throw new \Exception('Incorrect RPC response structure');

@@ -22,6 +22,9 @@ class AccountSerializer extends JsonSerializer
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function fromJson(array $json): Account
     {
         return new Account(

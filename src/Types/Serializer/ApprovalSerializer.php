@@ -18,6 +18,9 @@ class ApprovalSerializer extends JsonSerializer
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function fromJson(array $json): Approval
     {
         return new Approval(

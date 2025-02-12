@@ -1114,6 +1114,8 @@ class RpcClient implements Client
         return InfoGetRewardResult::fromJSON($result);
     }
 
+    // TODO: Complete putTransaction and putDeploy
+
     /**
      * @throws RpcError
      */

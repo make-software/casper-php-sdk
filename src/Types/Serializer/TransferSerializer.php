@@ -4,9 +4,10 @@ namespace Casper\Types\Serializer;
 
 use Casper\Types\CLValue\CLAccountHash;
 use Casper\Types\CLValue\CLURef;
+use Casper\Types\InitiatorAddr;
+use Casper\Types\TransactionHash;
 use Casper\Types\Transfer;
 use Casper\Types\TransferV1;
-use Casper\Types\TransferV2;
 
 class TransferSerializer extends JsonSerializer
 {
@@ -41,9 +42,14 @@ class TransferSerializer extends JsonSerializer
 
     /**
      * @throws \Exception
+     * @return Transfer|string
      */
-    public static function fromJson(array $json): Transfer
+    public static function fromJson($json)
     {
+        if (is_string($json)) {
+            return $json;
+        }
+
         if (isset($json['Version2'])) {
             $transferV2 = TransferV2Serializer::fromJson($json['Version2']);
             return new Transfer(
@@ -64,20 +70,18 @@ class TransferSerializer extends JsonSerializer
                 $json['id']
             );
 
-            //TODO: Serialize TransferV1
-
-//            return new Transfer(
-//                TransactionHashSerializer::fromJson($transferV1->getDeployHash()),
-//                $transferV1->getFrom(),
-//                $transferV1->getTo(),
-//                $transferV1->getSource(),
-//                $transferV1->getTarget(),
-//                $transferV1->getAmount(),
-//                $transferV1->getGas(),
-//                $transferV1->getId(),
-//                $transferV1,
-//                null
-//            );
+            return new Transfer(
+                new TransactionHash($transferV1->getDeployHash(), null),
+                new InitiatorAddr(null, $transferV1->getFrom()),
+                $transferV1->getTo(),
+                $transferV1->getSource(),
+                $transferV1->getTarget(),
+                $transferV1->getAmount(),
+                $transferV1->getGas(),
+                $transferV1->getId(),
+                $transferV1,
+                null
+            );
         }
 
         throw new \Exception('Unknown Transfer type');

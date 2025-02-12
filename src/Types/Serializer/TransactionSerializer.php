@@ -9,10 +9,23 @@ class TransactionSerializer extends JsonSerializer
 {
     /**
      * @param Transaction $transaction
+     * @throws \Exception
      */
     public static function toJson($transaction): array
     {
-        return array();
+        return array(
+            'hash' => $transaction->getHash(),
+            'chain_name' => $transaction->getChainName(),
+            'timestamp' => DateTimeUtil::getFormattedDateFromTimestampMs($transaction->getTimestamp()),
+            'ttl' => DateTimeUtil::ttlToString($transaction->getTtl()),
+            'initiator_addr' => InitiatorAddrSerializer::toJson($transaction->getInitiatorAddr()),
+            'pricing_mode' => PricingModeSerializer::toJson($transaction->getPricingMode()),
+            'args' => $transaction->getArgs(),
+            'target' => $transaction->getTarget(),
+            'entry_point' => $transaction->getEntryPoint(),
+            'scheduling' => $transaction->getScheduling(),
+            'approvals' => ApprovalSerializer::toJsonArray($transaction->getApprovals()),
+        );
     }
 
     public static function fromJson(array $json): Transaction

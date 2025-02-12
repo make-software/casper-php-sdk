@@ -18,6 +18,9 @@ class AssociatedKeySerializer extends JsonSerializer
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function fromJson(array $json): AssociatedKey
     {
         return new AssociatedKey(

@@ -11,7 +11,18 @@ class ExecutionResultV1Serializer extends JsonSerializer
      */
     public static function toJson($executionResultV1): array
     {
-        return array();
+        if ($executionResultV1->getSuccess()) {
+            return array(
+                'Success' => ExecutionResultStatusDataSerializer::toJson($executionResultV1->getSuccess())
+            );
+        }
+        else if ($executionResultV1->getFailure()) {
+            return array(
+                'Failure' => ExecutionResultStatusDataSerializer::toJson($executionResultV1->getFailure())
+            );
+        }
+
+        throw new \Exception('Unable deserialize ExecutionResultV1');
     }
 
     /**

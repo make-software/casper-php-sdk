@@ -13,7 +13,7 @@ class InfoGetDeployResult extends AbstractResult
 {
     private Deploy $deploy;
 
-    private ExecutionInfo $executionResults;
+    private ?ExecutionInfo $executionResults;
 
     /**
      * @var DeployExecutionResult[]
@@ -28,7 +28,7 @@ class InfoGetDeployResult extends AbstractResult
         return new self(
             $json,
             DeploySerializer::fromJson($json['deploy']),
-            ExecutionInfoSerializer::fromJSON($json['execution_info']),
+            isset($json['execution_info']) ? ExecutionInfoSerializer::fromJSON($json['execution_info']) : null,
             isset($json['execution_results']) ? DeployExecutionResultSerializer::fromJsonArray($json['execution_results']) : null
         );
     }
@@ -36,7 +36,7 @@ class InfoGetDeployResult extends AbstractResult
     public function __construct(
         array $rawJSON,
         Deploy $deploy,
-        ExecutionInfo $executionResults,
+        ?ExecutionInfo $executionResults,
         ?array $executionResultsV1
     )
     {
@@ -51,7 +51,7 @@ class InfoGetDeployResult extends AbstractResult
         return $this->deploy;
     }
 
-    public function getExecutionResults(): ExecutionInfo
+    public function getExecutionResults(): ?ExecutionInfo
     {
         return $this->executionResults;
     }
