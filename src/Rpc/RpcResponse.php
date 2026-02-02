@@ -22,10 +22,18 @@ class RpcResponse
         $response->result = $data['result'] ?? null;
 
         if ($response->result === null || isset($data['error'])) {
-            $response->error = new RpcError(
-                $data['error']['message'] ?? $data['message'] ?? 'Empty response',
-                $data['error']['code'] ?? 0
-            );
+            $errorMessage = $data['error']['message'] ?? $data['message'] ?? 'Empty response';
+            $errorCode = $data['error']['code'] ?? 0;
+            
+            if (isset($data['error']['data'])) {
+                $errorData = $data['error']['data'];
+                if (is_array($errorData) || is_object($errorData)) {
+                    $errorData = json_encode($errorData);
+                }
+                $errorMessage .= '. Data: ' . $errorData;
+            }
+
+            $response->error = new RpcError($errorMessage, $errorCode);
         }
 
         return $response;

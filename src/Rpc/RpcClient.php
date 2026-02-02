@@ -628,7 +628,7 @@ class RpcClient implements Client
     /**
      * @throws RpcError
      */
-    public function getBlockTransfersByHash(string $blockHash = null): ChainGetBlockTransfersResult
+    public function getBlockTransfersByHash(?string $blockHash = null): ChainGetBlockTransfersResult
     {
         $result = $this->processRequest(
             self::RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS,
@@ -645,7 +645,7 @@ class RpcClient implements Client
     /**
      * @throws RpcError
      */
-    public function getBlockTransfersByHeight(int $blockHeight = null): ChainGetBlockTransfersResult
+    public function getBlockTransfersByHeight(?int $blockHeight = null): ChainGetBlockTransfersResult
     {
         $result = $this->processRequest(
             self::RPC_METHOD_CHAIN_GET_BLOCK_TRANSFERS,

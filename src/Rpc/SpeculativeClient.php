@@ -19,7 +19,7 @@ class SpeculativeClient
     /**
      * @throws RpcError
      */
-    public function speculativeExecByBlockHash(Deploy $signedDeploy, string $blockHash = null): SpeculativeExecResult
+    public function speculativeExecByBlockHash(Deploy $signedDeploy, ?string $blockHash = null): SpeculativeExecResult
     {
         $params = array(
             'deploy' => DeploySerializer::toJson($signedDeploy)
@@ -39,7 +39,7 @@ class SpeculativeClient
     /**
      * @throws RpcError
      */
-    public function speculativeExecByBlockHeight(Deploy $signedDeploy, int $blockHeight = null): SpeculativeExecResult
+    public function speculativeExecByBlockHeight(Deploy $signedDeploy, ?int $blockHeight = null): SpeculativeExecResult
     {
         $params = array(
             'deploy' => DeploySerializer::toJson($signedDeploy)

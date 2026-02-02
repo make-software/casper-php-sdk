@@ -4,16 +4,16 @@ namespace Tests\Functional\Services;
 
 use PHPUnit\Framework\TestCase;
 
-use Casper\Serializer\CLPublicKeySerializer;
 use Casper\Util\ByteUtil;
 use Casper\Util\Crypto\Ed25519Key;
+use Casper\Types\CLValue\CLPublicKey;
 
 use Casper\Service\DeployService;
 
-use Casper\Entity\Deploy;
-use Casper\Entity\DeployApproval;
-use Casper\Entity\DeployExecutable;
-use Casper\Entity\DeployParams;
+use Casper\Types\Deploy;
+use Casper\Types\Approval;
+use Casper\Types\DeployExecutable;
+use Casper\Types\DeployParams;
 
 class DeployServiceTest extends TestCase
 {
@@ -22,14 +22,14 @@ class DeployServiceTest extends TestCase
      */
     public function testMakeDeploy(): Deploy
     {
-        $senderPublicKey = CLPublicKeySerializer::fromAsymmetricKey(new Ed25519Key());
+        $senderPublicKey = CLPublicKey::fromAsymmetricKey(new Ed25519Key());
         $networkName = 'test-network';
         $deployParams = new DeployParams($senderPublicKey, $networkName);
 
         $transferId = 1;
         $transferAmount = 2500000000;
         $fakePublicKeyHex = '0202181123456789693bcd1066f00abe6759c588efe94504a7c9911be77ec365c08e';
-        $recipientPublicKey = CLPublicKeySerializer::fromHex($fakePublicKeyHex);
+        $recipientPublicKey = CLPublicKey::fromHex($fakePublicKeyHex);
         $transfer = DeployExecutable::newTransfer($transferId, $transferAmount, $recipientPublicKey);
 
         $paymentAmount = 10;
@@ -79,7 +79,7 @@ class DeployServiceTest extends TestCase
         $this->assertNotEmpty($approvals);
 
         $approval = $approvals[0];
-        $this->assertInstanceOf(DeployApproval::class, $approval);
+        $this->assertInstanceOf(Approval::class, $approval);
         $this->assertEquals(
             $ed25519KeyPair->getPublicKey(),
             ByteUtil::byteArrayToHex($approval->getSigner()->value())

@@ -19,6 +19,9 @@ class TransformSerializer extends JsonSerializer
 
     public static function fromJson(array $json): Transform
     {
-        return new Transform($json['key'], $json['kind']);
+        $key = $json['key'] ?? '';
+        $kind = $json['kind'] ?? ($json['transform'] ?? ($json['value'] ?? null));
+
+        return new Transform($key, $kind);
     }
 }

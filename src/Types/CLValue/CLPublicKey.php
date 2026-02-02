@@ -24,8 +24,15 @@ final class CLPublicKey extends CLValue
     /**
      * @throws \Exception
      */
-    public function __construct(array $rawPublicKey, CLPublicKeyTag $tag)
+    public function __construct(array $rawPublicKey, $tag)
     {
+        if (is_int($tag)) {
+            $tag = new CLPublicKeyTag($tag);
+        }
+        if (!$tag instanceof CLPublicKeyTag) {
+            throw new \InvalidArgumentException('Invalid public key tag type');
+        }
+
         $this->assertRawPublicKeyLengthIsValid($rawPublicKey, $tag);
         $this->data = $rawPublicKey;
         $this->tag = $tag;

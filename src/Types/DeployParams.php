@@ -47,7 +47,7 @@ class DeployParams
         int $gasPrice = self::DEFAULT_GAS_PRICE,
         int $ttl = self::DEFAULT_TTL,
         array $dependencies = [],
-        int $timestamp = null
+        ?int $timestamp = null
     )
     {
         $this->accountPublicKey = $accountPublicKey;

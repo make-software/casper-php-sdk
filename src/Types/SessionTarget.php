@@ -13,7 +13,7 @@ class SessionTarget
     public function __construct(
         DeployExecutableModuleBytes $moduleBytes,
         TransactionRuntime $runtime,
-        bool $isInstallUpgrade = null
+        ?bool $isInstallUpgrade = null
     )
     {
         $this->moduleBytes = $moduleBytes;

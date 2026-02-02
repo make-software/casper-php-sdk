@@ -15,7 +15,7 @@ abstract class DeployExecutable implements ToBytesConvertible
         return self::newModuleBytes('', [new NamedArg('amount', new CLU512($amount))]);
     }
 
-    public static function newTransfer($id, $amount, $target, CLURef $sourcePurse = null): DeployExecutableTransfer
+    public static function newTransfer($id, $amount, $target, ?CLURef $sourcePurse = null): DeployExecutableTransfer
     {
         if (!in_array(get_class($target), [CLURef::class, CLPublicKey::class])) {
             throw new \Exception('Please specify target');
@@ -63,7 +63,7 @@ abstract class DeployExecutable implements ToBytesConvertible
         string $entrypoint,
         array $args,
         string $hexContractPackageHash,
-        int $version = null
+        ?int $version = null
     ): DeployExecutableStoredVersionedContractByHash {
         return (new DeployExecutableStoredVersionedContractByHash($hexContractPackageHash, $entrypoint, $version))
             ->setArgs($args);
@@ -73,7 +73,7 @@ abstract class DeployExecutable implements ToBytesConvertible
         string $entrypoint,
         array $args,
         string $contractPackageAlias,
-        int $version = null
+        ?int $version = null
     ): DeployExecutableStoredVersionedContractByName {
         return (new DeployExecutableStoredVersionedContractByName($contractPackageAlias, $entrypoint, $version))
             ->setArgs($args);

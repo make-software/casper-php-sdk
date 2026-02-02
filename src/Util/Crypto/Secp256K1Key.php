@@ -30,7 +30,7 @@ final class Secp256K1Key extends AsymmetricKey
 
     private PrivateKeyInterface $privateKeyObject;
 
-    public function __construct(PrivateKeyInterface $privateKeyObject = null)
+    public function __construct(?PrivateKeyInterface $privateKeyObject = null)
     {
         $this->adapter = EccFactory::getAdapter();
         $this->generator = EccFactory::getSecgCurves()

@@ -18,6 +18,10 @@ class HttpHandler implements Handler
     {
         $curl = curl_init($this->url);
 
+        if ($curl === false) {
+            throw new \RuntimeException('Failed to initialize cURL');
+        }
+
         $headers = [
             'Accept: application/json',
             'Content-type: application/json'
@@ -34,8 +38,22 @@ class HttpHandler implements Handler
         curl_setopt($curl, CURLOPT_POSTFIELDS, $params->toJson());
 
         $rawResponse = curl_exec($curl);
-        curl_close($curl);
 
-        return RpcResponse::fromArray(json_decode($rawResponse, true));
+        if ($rawResponse === false) {
+            $error = curl_error($curl);
+            throw new \RuntimeException('cURL request failed: ' . $error);
+        }
+
+        if (!is_string($rawResponse)) {
+            throw new \RuntimeException('Unexpected response type from cURL');
+        }
+
+        $decoded = json_decode($rawResponse, true);
+
+        if (!is_array($decoded)) {
+            throw new \RuntimeException('Invalid JSON response from RPC server: ' . $rawResponse);
+        }
+
+        return RpcResponse::fromArray($decoded);
     }
 }

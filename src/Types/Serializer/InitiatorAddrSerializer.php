@@ -34,8 +34,8 @@ class InitiatorAddrSerializer extends JsonSerializer
     public static function fromJson(array $json): InitiatorAddr
     {
         return new InitiatorAddr(
-            $json['PublicKey'] ? CLPublicKey::fromHex($json['PublicKey']) : null,
-            $json['AccountHash'] ? CLAccountHash::fromString($json['AccountHash']) : null
+            isset($json['PublicKey']) ? CLPublicKey::fromHex($json['PublicKey']) : null,
+            isset($json['AccountHash']) ? CLAccountHash::fromString($json['AccountHash']) : null
         );
     }
 }

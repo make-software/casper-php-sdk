@@ -17,7 +17,7 @@ class InfoGetStatusResult extends AbstractResult
 
     private string $chainSpecName;
 
-    private MinimalBlockInfo $lastAddedBlockInfo;
+    private ?MinimalBlockInfo $lastAddedBlockInfo;
 
     private ?NextUpgrade $nextUpgrade;
 
@@ -46,23 +46,27 @@ class InfoGetStatusResult extends AbstractResult
 
     public static function fromJSON(array $json): self
     {
+        $lastAddedBlockInfo = isset($json['last_added_block_info'])
+            ? MinimalBlockInfoSerializer::fromJSON($json['last_added_block_info'])
+            : null;
+
         return new self(
             $json,
-            $json['protocol_version'],
-            $json['build_version'],
-            $json['chainspec_name'],
-            MinimalBlockInfoSerializer::fromJSON($json['last_added_block_info']),
-            $json['next_upgrade'] ? NextUpgradeSerializer::fromJSON($json['next_upgrade']) : null,
-            $json['our_public_signing_key'],
-            PeerSerializer::fromJsonArray($json['peers']),
-            $json['round_length'],
-            $json['starting_state_root_hash'],
-            $json['uptime'],
-            $json['reactor_state'],
-            new \DateTime($json['last_progress']),
-            $json['latest_switch_block_hash'],
-            $json['available_block_ranges'],
-            $json['block_sync']
+            $json['protocol_version'] ?? $json['api_version'] ?? '',
+            $json['build_version'] ?? '',
+            $json['chainspec_name'] ?? '',
+            $lastAddedBlockInfo,
+            isset($json['next_upgrade']) ? NextUpgradeSerializer::fromJSON($json['next_upgrade']) : null,
+            $json['our_public_signing_key'] ?? '',
+            isset($json['peers']) ? PeerSerializer::fromJsonArray($json['peers']) : [],
+            $json['round_length'] ?? '',
+            $json['starting_state_root_hash'] ?? '',
+            $json['uptime'] ?? '',
+            $json['reactor_state'] ?? '',
+            isset($json['last_progress']) ? new \DateTime($json['last_progress']) : new \DateTime(),
+            $json['latest_switch_block_hash'] ?? '',
+            $json['available_block_ranges'] ?? $json['available_block_range'] ?? null,
+            $json['block_sync'] ?? []
         );
     }
 
@@ -71,7 +75,7 @@ class InfoGetStatusResult extends AbstractResult
         string $protocolVersion,
         string $buildVersion,
         string $chainSpecName,
-        MinimalBlockInfo $lastAddedBlockInfo,
+        ?MinimalBlockInfo $lastAddedBlockInfo,
         ?NextUpgrade $nextUpgrade,
         string $outPublicSigningKey,
         array $peers,
@@ -118,7 +122,7 @@ class InfoGetStatusResult extends AbstractResult
         return $this->chainSpecName;
     }
 
-    public function getLastAddedBlockInfo(): MinimalBlockInfo
+    public function getLastAddedBlockInfo(): ?MinimalBlockInfo
     {
         return $this->lastAddedBlockInfo;
     }
@@ -129,6 +133,11 @@ class InfoGetStatusResult extends AbstractResult
     }
 
     public function getOutPublicSigningKey(): string
+    {
+        return $this->outPublicSigningKey;
+    }
+
+    public function getOurPublicSigningKey(): string
     {
         return $this->outPublicSigningKey;
     }
